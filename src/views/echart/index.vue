@@ -1,23 +1,23 @@
 <template>
   <div class="app-container">
-    <div class="chart_contain">
-      <ve-line :data="chartData" :settings="chartSettings" :loading="loading"></ve-line>
-    </div>
+    <!-- <div class="chart_contain">
+      <ve-line :data="chartData" :settings="chartSettings" :loading="loading" width="450px"></ve-line>
+    </div> -->
     
     <div class="chart_contain">
-      <ve-line :data="chartData" :settings="chartSettings2" :extend="extend" :loading="loading"></ve-line>
+      <ve-line :data="chartData" :settings="chartSettings2" :extend="extend" :loading="loading" width="450px"></ve-line>
     </div>
 
     <div class="chart_contain">
-      <ve-histogram :data="chartData_h" :settings="chartSettings3" :extend="extend2"></ve-histogram>
+      <ve-histogram :data="chartData_h" :settings="chartSettings3" :extend="extend2" width="450px"></ve-histogram>
     </div>
 
     <div class="chart_contain">
-      <ve-pie :data="chartData_p" :settings="chartSettings_p" :extend="extend_p"></ve-pie>
+      <ve-pie :data="chartData_p" :settings="chartSettings_p" :extend="extend_p" width="450px"></ve-pie>
     </div>
 
     <div class="chart_contain">
-      <ve-gauge :data="chartData_g" :settings="chartSettings_g"></ve-gauge>
+      <ve-gauge :data="chartData_g" :settings="chartSettings_g" width="450px"></ve-gauge>
     </div>
   </div>
 </template>
@@ -171,16 +171,22 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  background: #f0f2f5 
+  flex-direction: row;
+  background: #f0f2f5;
+  flex-wrap:wrap
 }
 .chart_contain {
   height: 500px;
-  width: 800px;
+  width: 600px;
   border: 1px solid #eeeeee;
-  padding: 50px;
+  padding: 5px;
   background: #ffffff;
-  margin-top: 30px
+  margin-top: 30px;
+  margin-left: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 </style>
 
