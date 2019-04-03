@@ -100,18 +100,18 @@ export default {
         }
       },
 
-      // plugin: [
-      //   "ToolBar", //手动调焦插件
-      //   {
-      //     pName: "MapType",
-      //     defaultType: 0,
-      //     events: {
-      //       init(o) {
-      //         console.log(4, o);
-      //       }
-      //     }
-      //   } //卫星路况插件
-      // ], //引入插件
+      plugin: [
+        // "ToolBar", //手动调焦插件
+        {
+          pName: "MapType",
+          defaultType: 0,
+          events: {
+            init(o) {
+              console.log(4, o);
+            }
+          }
+        } //卫星路况插件
+      ], //引入插件
       windows: [],
       window: "",
       icons: "../../../static/tinymce4.7.5/skins/lightgray/img/marker3.png"

@@ -102,6 +102,19 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/project_info',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'ProjectInfo',
+        component: () => import('@/views/project_info/index'),
+        meta: { title: '项目信息查询', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/tree_table',
     component: Layout,
     children: [
