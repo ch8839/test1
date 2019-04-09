@@ -5,6 +5,7 @@
       vid="amapDemo"
       :center="center"
       :zoom="zoom"
+      :plugin="plugin"
       :events="events"
       class="amap-demo"
     >

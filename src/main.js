@@ -36,9 +36,10 @@ import VueAMap from 'vue-amap'
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: '41566098d1f6cc04ff44f5c827379950',
-  plugin: ['AMap.MapType','AMap.Geocoder'],
-  v: '1.4.9'
+  plugin: ['AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType','AMap.Geocoder'],
+  v: '1.4.4'
 })
+
 
 Vue.use(ElementUI, { locale })
 Vue.component(VeLine.name, VeLine)

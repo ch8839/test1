@@ -1,44 +1,50 @@
 <template>
   <div class="project-info-container">
     <div class="content-head">
-    <el-cascader
-      expand-trigger="hover"
-      :options="options"
-      clearable 
-      v-model="selectedOptions"
-      @change="handleChange"
-    ></el-cascader>
-  </div>
+      <el-cascader
+        expand-trigger="hover"
+        :options="options"
+        clearable
+        v-model="selectedOptions"
+        @change="handleChange"
+      ></el-cascader>
+    </div>
 
-     <el-table v-loading="listLoading" :data="ground_list" border stripe style="width: 100%">
+    <el-table v-loading="listLoading" :data="ground_list" border stripe style="width: 100%">
       <el-table-column type="expand">
-      <template slot-scope="props">
-      <div class="drop-container">
-        <div class="table2-container">
-        <el-table
-      :data="pollutionList"
-      class="drop_table">
-      <el-table-column
-        prop="pollution"
-        label="指标">
+        <template slot-scope="props"> 
+          <div v-if="props.row.point_element[0].ispollution==3" class="nodata">今日数据尚未更新</div>
+          <div class="drop-container" v-else>
+            <div class="table2-container">
+              <el-table :data="props.row.point_element" class="drop_table">
+                <el-table-column label="指标">
+                  <template slot-scope="scope">
+                    <span :class="{pollution: scope.row.ispollution}">{{ element_Map.get(scope.row.element) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="数值">
+                  <template slot-scope="scope">
+                    <span :class="{pollution: scope.row.ispollution}">{{ scope.row.value||'ND'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="参考值">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.reference }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="chart_contain">
+              <ve-histogram
+                :data="handleChartData(props.row.point_element)"
+                :settings="chartSettings3"
+                width="450px"
+              ></ve-histogram>
+            </div>
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column
-        prop="value"
-        label="数值">
-      </el-table-column>
-      <el-table-column
-        prop="reference"
-        label="参考值">
-      </el-table-column>
-    </el-table>
-        </div>
-    <div class="chart_contain">
-      <ve-histogram :data="chartData_h" :settings="chartSettings3" :extend="extend2" width="450px"></ve-histogram>
-    </div>
-    </div>
-      </template>
-    </el-table-column>
-      <el-table-column prop='point_num' label="点位编号" align="center" sortable>
+      <el-table-column prop="point_num" label="点位编号" align="center" sortable>
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.point_num }}</span>
         </template>
@@ -50,172 +56,213 @@
       </el-table-column>
       <el-table-column label="具体位置" width="180" align="center">
         <template slot-scope="scope">
-          <router-link :to="{ path: '/map/index', params: { data:scope.row }}"><i class="el-icon-location-outline"></i>
+          <router-link :to="{ path: '/map/index', params: { data:scope.row }}">
+            <i class="el-icon-location-outline"></i>
           </router-link>
           <span style="margin-left: 10px">{{ scope.row.point_address }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="污染物" width="180" align="center">
+      <el-table-column label="点位描述" width="160" align="center">
         <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.remarks}}</span>
+          <span style="margin-left: 10px">{{ scope.row.point_intro }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="检测值" width="100" align="center">
+      <el-table-column label="污染物" align="center">
         <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.sampling_time }}</span>
+           <template  v-if="scope.row.point_element[0].ispollution==3">
+            <el-tag >今日数据尚未更新</el-tag>
+          </template>
+          <template v-else>
+            <el-tag type="danger" v-for="(item,index) in handlePollutionList(scope.row.point_element)" :key="index">{{element_Map.get(item.element)}}</el-tag>
+          </template>        
         </template>
       </el-table-column>
-      <el-table-column label="参考值" width="100" align="center">
-        <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.reference||'2' }}</span>       
-        </template>
-      </el-table-column>
+     
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" @click="getHistory(scope.$index, scope.row)">历史数据</el-button>
+          <el-button size="mini" @click="getAllHistory(scope.row.point_num)">历史数据</el-button>
           <el-button size="mini" type="danger" @click="getDetailInfo(scope.$index, scope.row)">详情信息</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="收货地址" :visible.sync="dialogHistoryVisible">
-  <el-table :data="gridData">
-    <el-table-column property="date" label="日期" ></el-table-column>
-    <el-table-column property="name" label="姓名" ></el-table-column>
-    <el-table-column property="address" label="地址"></el-table-column>
-  </el-table>
-</el-dialog>
+    <el-dialog title="历史数据" :visible.sync="dialogHistoryVisible" >
+
+      <el-select v-model="fliter_element" multiple placeholder="请选择">
+        <el-option
+          v-for="(item,index) in element_options"
+          :key="index"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+
+      <el-date-picker
+        v-model="fliter_date"
+        type="daterange"
+        range-separator="~"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        value-format="yyyy.MM.dd">
+      </el-date-picker>
+
+      <el-button type="primary" @click="fliterElement" size="medium">查询</el-button>
+
+      <el-table :data="HistoryList2" :row-class-name="isPollutionRow"  height="350">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column property="date" label="日期"></el-table-column>
+        <el-table-column label="元素">
+          <template slot-scope="scope">
+          <span>{{ element_Map.get(scope.row.element) }}</span>
+        </template>
+        </el-table-column>
+        <el-table-column property="value" label="数值"></el-table-column>
+        <el-table-column property="reference" label="参考值"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getAll} from "@/api/project_info"
-import { getGroundList} from "@/api/ground_info"
+import { getAll } from "@/api/project_info";
+import { getGroundList, getAllHistoryData } from "@/api/ground_info";
+
 
 export default {
   data() {
     return {
       selectedOptions: [],
-      ground_list:[],
+      ground_list: [],
       listLoading: false,
-      dialogHistoryVisible:false,
-      element_list:['PH值','砷','镉','铬','铜','铅','汞','镍','锑','铍','钴','锌','银','铊','锡','硒','钼','矾'],
-
-       gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-
-        chartData_h: {
-        columns: ["元素", "数值", "参考值"],
-        rows: [
-          { 元素: 'PH值', 数值: 8.01, 参考值: 6},
-          { 元素: '铬', 数值: 20.6, 参考值: 5},
-          { 元素: '汞', 数值: 3.6, 参考值: 4},
-          { 元素: '镍', 数值: 8.95, 参考值: 9},
-          { 元素: '锑', 数值: 36.5, 参考值: 16}
-        ]
-      },
-
+      dialogHistoryVisible: false,
+      // element_list:['PH值','砷','镉','铬','铜','铅','汞','镍','锑','铍','钴','锌','银','铊','锡','硒','钼','矾'],
+      element_Map: new Map([['PH', 'PH值'], ['arsenic', '砷'], ['cadmium', '镉'], ['chromium', '铬'], ['copper', '铜'], ['lead','铅']
+    , ['mercury','汞'], ['nickel','镍'], ['antimony', '锑'], ['beryllium', '铍'], ['cobalt', '钴'], ['zinc', '锌'], ['silver', '银'], ['thallium', '铊'],
+  ['tin', '锡'], ['selenium', '硒'], ['molybdenum', '钼'], ['Alum', '矾']]),
+      HistoryList: [],
+      HistoryList2: [],
+      element_options: [],
+      fliter_element: [],
+      fliter_date:'',
       chartSettings3: {
-        //  metrics: ['访问用户', '下单用户'],
-        showLine: ["参考值"],
-        // axisSite: { right: ["下单率"] }, //设置右y轴指标
-        // yAxisType: ["KMB", "percent"], //数据格式
-        // yAxisName: ["数值", "比率"] //设置双y轴
-      },
-
-       extend2: {
-        // series: {
-        //   label: { show: true, position: "top" }
-        // }
+        showLine: ["reference"],
+        labelMap: {
+          element: "元素",
+          value: "数值",
+          reference: "参考值"
+        } 
       },
     };
   },
   methods: {
-    handleChange(value) {   
-      if(value.length==3){
-        console.log("选项值", value)
-        this.getList()
+    /* 点击第三级目录时触发的事件 */
+    handleChange(value) {
+      if (value.length == 3) {
+        console.log("选项值", value);
+        this.getList();
       }
     },
 
-    async getList(){
-      this.listLoading = true
+     /* 根据传递过来的表格参数返回图表的数据格式 */
+    handleChartData(params){
+      let params_copy = JSON.parse(JSON.stringify(params))
+      
+      let rows_arr = params_copy.map(item=>{
+        item.element = this.element_Map.get(item.element) //根据element做Map映射获得对应的元素名称
+        delete item.ispollution
+        return item
+      })
+      console.log('rows_arr', rows_arr)
+      return {
+        columns: ["element", "value", "reference"],
+        rows: rows_arr
+      }
+    },
+
+    /* 根据传递过来的表格参数返回受污染的元素列表 ，然后v-for遍历数组在table中渲染受污染的元素 */
+    handlePollutionList(params){
+      return params.filter(item=>{
+        return item.ispollution
+      })
+    },
+
+     /* 判断是否为污染元素，如果是动态改变class标红显示 */
+    isPollutionRow({row, rowIndex}) {
+        if (row.ispollution) {
+          return 'pollution-row';
+        } else{
+          return '';
+        }
+      },
+
+     /* 历史数据筛选 */
+    fliterElement(){
+      console.log('fliter_element', this.fliter_element)
+      let options1 = this.fliter_element //元素筛选项，数组形式
+      let options2 = this.fliter_date //时间间隔筛选项，数组形式
+  
+      this.HistoryList2 = this.HistoryList.filter(item=>{
+        if(options1.length&&!options1.includes('all')&&!options1.includes(item.element)){
+          return false //判断元素筛选项有值且不为all(全部)，再判断历史列表中的元素中有哪些包含在选项元素中，不包含就返回false,过滤掉该数据
+        }
+        if(options2.length){
+          let res1 = item.date.split('.').join('')
+          let res2 = options2[0].split('.').join('')
+          let res3 = options2[1].split('.').join('')
+          let isSelectedDate = res1>=res2&&res1<=res3 //将形式为2019.04.08这样的时间格式转化为20180408,通过判断数字大小来筛选对应时间间隔的数据
+          if(!isSelectedDate){
+            return false
+          }else{
+            return true
+          }
+        }
+        return true //选项1或选项2为空，表示无筛选项，返回对应的全部数据
+        
+      })
+      
+    },
+
+    /* 请求api获取该地块对应的所有监测点位 */
+    async getList() {
+      this.listLoading = true;
       let res = await getGroundList(this.selectedOptions)
-      let res2 = await getGroundList(this.selectedOptions)
       this.listLoading = false
       this.ground_list = res.data.res
-      console.log(res)
+      console.log("ground_list", res)
     },
 
-    async getHistory(){
+    /* 请求api获取该监测点位的所有历史数据，并清空上次查询留下的查询条件 */
+    async getAllHistory(point_num) {
       this.dialogHistoryVisible = true
+      let res = await getAllHistoryData(point_num)
+      this.HistoryList = res.data.res
+      this.HistoryList2 = res.data.res
+      this.fliter_element = []
+      this.fliter_date = []
+      console.log('HistoryList', this.HistoryList)
+
+      //返回的数据是所有的历史纪录，需要对数组去重生成该监测点位具有的元素筛选项，并转换为element-ui选择器的格式
+      let element_options_arr = res.data.res.filter((item,index,self)=>{
+        return index==self.indexOf(item)
+      }) 
+      this.element_options = element_options_arr.map(item=>{
+        return item = {value:item.element,label:this.element_Map.get(item.element)}
+      })
+      this.element_options.unshift({value:'all',label:'全部'}) //在选项头部添加一条全部
     },
 
-    getPollutionList(){
-     
+    /* 点击跳转到地图页面 */
+    getDetailInfo(index, data) {
+      this.$router.push({ path: "/echart/index", query: { index, data } });
     },
-
-    getDetailInfo(index, data){
-      this.$router.push({path:'/echart/index', query:{index, data}})
-    },
-
+    
+    /* 生成三级选择器的树形数据 */
     async getData() {
-      // let res = [{
-      //   value: '31010720190001',
-      //   label: '桃浦601',
-      //  }]
       let Alldata = await getAll()
       let project_Info = Alldata.data.res
-      console.log(project_Info)
-     
-      // var test_data = [
-      //   {
-      //     area: "0001",
-      //     assess_type: 1,
-      //     ground_name: "桃浦601",
-      //     ground_num: "21212"
-      //   },
-      //   {
-      //     area: "0001",
-      //     assess_type: 1,
-      //     ground_name: "桃浦602",
-      //     ground_num: "34213123"
-      //   },
-      //   {
-      //     area: "0002",
-      //     assess_type: 2,
-      //     ground_name: "桃浦603",
-      //     ground_num: "435345"
-      //   },
-      //   {
-      //     area: "0003",
-      //     assess_type: 2,
-      //     ground_name: "桃浦604",
-      //     ground_num: "654645"
-      //   },
-      //   {
-      //     area: "0005",
-      //     assess_type: 3,
-      //     ground_name: "桃浦605",
-      //     ground_num: "654645"
-      //   }
-      // ];
+      console.log("project_Info", project_Info) //普通格式数组，需转化为树形格式
 
+      //第一层for循环遍历第一级选择器选项，由于第二级选项为固定，本项目采取静态数据，然后把第二级选项数据循环push到每个第一级chilren下
       for (let i = 0; i < this.options.length; i++) {
         let secondOptions_temp = [
           {
@@ -233,45 +280,53 @@ export default {
             label: "治理修复",
             children: []
           }
-        ];
-        let secondOptions_copy = JSON.parse(JSON.stringify(secondOptions_temp));
+        ]
+        // 因为secondOptions_temp后续将作不同修改，需要深拷贝防止对其引用地址造成干扰
+        let secondOptions_copy = JSON.parse(JSON.stringify(secondOptions_temp)) 
         this.options[i].children.push(secondOptions_copy);
 
+        //第二层for循环遍历第二层选择器选项
         for (let j = 0; j < secondOptions_copy.length; j++) {
           let value_1 = this.options[i].value;
-          let value_2 = secondOptions_copy[j].value;
+          let value_2 = secondOptions_copy[j].value
 
+          //把前两级选项的值赋值给变量，再对之前请求到的普通格式数组筛选出对应的数据
           let res = project_Info.filter(item => {
-            return item.area == value_1 && item.assess_type == value_2;
-          });
-          console.log(res);
+            return item.area == value_1 && item.assess_type == value_2
+          })
 
           let tree_data = [];
 
+          //转换为需要的chilren数据格式
           if (res.length) {
             for (let z = 0; z < res.length; z++) {
               tree_data.push({
                 value: res[z].ground_num,
                 label: res[z].ground_name
-              });
+              })
             }
           }
-          secondOptions_copy[j].children = tree_data
-
+          //push给第二级的chilren
+          secondOptions_copy[j].children = tree_data;
         }
-        this.options[i].children = secondOptions_copy
+        //令第一级的children等于已经处理好的（已push children的）第二级目录
+        this.options[i].children = secondOptions_copy;
       }
-      this.selectedOptions = [this.options[0].value, this.options[0].children[0].value, this.options[0].children[0].children[0].value]
-      console.log(this.options);
-      
+      //初始选项
+      this.selectedOptions = [
+        this.options[0].value,
+        this.options[0].children[0].value,
+        this.options[0].children[0].children[0].value
+      ]
+      this.handleChange(this.selectedOptions)
+      console.log("options", this.options)   //打印树形数据
     }
   },
 
   mounted() {
-    console.log(this.options)
     this.getData()
   },
-  
+
   computed: {
     options() {
       let arr = [
@@ -303,74 +358,46 @@ export default {
       ];
 
       return arr;
-    },
-
-    pollutionList(){
-       let list = [
-        {
-          pollution_element:0,
-          value:8.01,
-          reference:6
-        },
-        {
-          pollution_element:3,
-          value:20.6,
-          reference:1
-        },
-        {
-          pollution_element:6,
-          value:3.6,
-          reference:3
-        },
-        {
-          pollution_element:7,
-          value:8.95,
-          reference:5
-        },
-        {
-          pollution_element:8,
-          value:36.5,
-          reference:1
-        },
-      ]
-
-      return list.map((item)=>{
-          item.pollution=this.element_list[item.pollution_element]
-          return item
-        })
     }
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
- .project-info-container{
-   padding: 30px;
-   .content-head{
-     margin-bottom: 30px
-   }
-   .el-input{
-     width: 280px
-   }
-  
-  .drop_table{
-    width:100%;
+.project-info-container {
+  padding: 30px;
+  .content-head {
+    margin-bottom: 30px;
   }
-  .drop_table td, .drop_table th{ 
-      border-right:none !important
+  .el-input {
+    width: 280px;
   }
-  .drop-container{
+
+  .drop_table {
+    width: 100%;
+  }
+  .drop_table td,
+  .drop_table th {
+    border-right: none !important;
+  }
+  .drop-container {
     display: flex;
     justify-content: space-around;
-    align-items: center
-    
+    align-items: center;
   }
-  .table2-container{
-    flex: 1
+  .table2-container {
+    flex: 1;
   }
-  .chart_contain{
-    margin-left: 30px
+  .chart_contain {
+    margin-left: 30px;
   }
- }
+  .pollution,.nodata{
+    color: rgba(245, 75, 75, 0.933)
+
+  }
+  .pollution-row{
+    background: rgba(245, 75, 75, 0.933)
+  }
+}
 </style>
 
