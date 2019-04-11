@@ -35,7 +35,7 @@
     "sequelize": "^3.30.4",
     "v-charts": "^1.19.0",
     "vue": "2.5.17",
-    "vue-amap": "^0.5.8",
+    "vue-amap": "^0.5.9",
     "vue-router": "3.0.1",
     "vuex": "3.0.1"
   },

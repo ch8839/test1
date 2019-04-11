@@ -3,13 +3,26 @@ const groundInfoSchema = theDatabase.import('../schema/ground_info.js');
 const elementInfoSchema = theDatabase.import('../schema/element_info.js'); 
 
 
-const getAllGroundData = async function(ground_num){
-    const AllGroundtData = await groundInfoSchema.findAll({
+const getAllGroundData = async function(ground_num, currentPage, page_size){
+    console.log('currentPage',currentPage)
+    console.log('page_size',page_size)
+    const AllGroundtData = await groundInfoSchema.findAndCountAll({
+        limit: page_size,
+        offset: (currentPage-1) * page_size,
         where:{
             ground_num: ground_num
         }
     })
 
+    return AllGroundtData
+}
+
+const getAllGroundData2 = async function(ground_num){
+    const AllGroundtData = await groundInfoSchema.findAll({
+        where:{
+            ground_num: ground_num
+        }
+    })
     return AllGroundtData
 }
 
@@ -30,6 +43,7 @@ const getAllHistory = async function(params){
 module.exports = {
     getAllGroundData,
     getElementData,
-    getAllHistory
+    getAllHistory,
+    getAllGroundData2
 
 }

@@ -15,6 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import echarts from 'echarts'
 import VeLine from 'v-charts/lib/line.common'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
@@ -36,8 +37,7 @@ import VueAMap from 'vue-amap'
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: '41566098d1f6cc04ff44f5c827379950',
-  plugin: ['AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType','AMap.Geocoder'],
-  v: '1.4.4'
+  plugin: ['AMap.MapType'],
 })
 
 

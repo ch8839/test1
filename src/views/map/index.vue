@@ -5,9 +5,9 @@
       vid="amapDemo"
       :center="center"
       :zoom="zoom"
-      :plugin="plugin"
       :events="events"
       class="amap-demo"
+      :plugin="plugin"
     >
       <el-amap-marker
         v-for="(marker, index) in markers"
@@ -19,7 +19,9 @@
         :key="index"
       >
         <div class="marker_contain">
-          <div class="marker_content">
+          <div class="marker_content" 
+          :class="[{ marker_style1: marker.count>100 },{ marker_style2: marker.count< 99 },{ marker_style3: marker.count==0 },
+          { marker_style4: marker.ground_type==1 },{ marker_style5: marker.ground_type==2 },{ marker_style6: marker.ground_type==3 },]">
             <div>{{marker.content}}</div>
             <div>{{marker.count}}</div>
           </div>
@@ -30,44 +32,62 @@
         </div>
       </el-amap-marker>
       <el-amap-info-window v-if="window" :position="window.position" :visible="window.visible">
-        <div class="windows_contain">
-          <div class="windows_title">{{window.content}}</div>
-          <h1>设备分布：</h1>
-          <div class="windows_content" v-for="(item,index) in markerInfo_list" :key="index">
-            <p>{{item.info}}</p>
-            <p>{{item.value}}</p>
+        <div>
+          <div class="windows_title" align="center">{{window.content}}</div>            
+          
+          <div class="windows_content">
+          <el-table 
+              :data="tableData.filter(data => !search || data.element.toLowerCase().includes(search.toLowerCase()))"
+              height="300"
+              border
+              size:mimi
+              style="width: 60% height: 60%" 
+               >
+              <el-table-column
+                prop= "point_number"
+                label="监测点位"
+                align="center"
+                width=155px>
+              </el-table-column>
+              <el-table-column
+                prop="depth"
+                label="深度"
+                align="center"
+                >
+              </el-table-column>
+              <el-table-column
+                prop="element"
+                label="污染物"
+                align="center">
+              </el-table-column>
+               <el-table-column
+                prop="value"
+                label="污染值"
+                align="center">
+              </el-table-column>
+            </el-table> 
           </div>
+          <el-badge  class="item">
+          <el-button size="small" type="info" icon="el-icon-message" round align="center"><a href="/table/index">详细信息</a></el-button>
+          </el-badge>
         </div>
       </el-amap-info-window>
     </el-amap>
   </div>
 </template>
 <script>
-import { getMarkerInfo } from "@/api/marker_data";
+import { getMarkerInfo, getMapPhByID } from "@/api/marker_data"
+import axios from 'axios'
 export default {
   name: "amap-page",
-  data() {
+  // data() {
+  data: function() {
     return {
-      markerInfo_list: [
-        {
-          info: "G表",
-          value: 22
-        },
-        {
-          info: "P表",
-          value: 6
-        },
-        {
-          info: "LoRa表",
-          value: 18
-        },
-        {
-          info: "Z表",
-          value: 3
-        }
-      ],
+      tableData:[],
+      isnormal:{marker_style1:true,marker_style2:false,marker_style3:false},
       markers: [],
-      zoom: 11,
+      zoom: 12,
+      search:"",
       center: [121.457624, 31.27586],
       events: {
         init: o => {
@@ -75,7 +95,9 @@ export default {
           console.log(2, this.$refs.map.$$getInstance()); //获取地图实例
           o.getCity(result => {
             console.log(3, result);
+
           })
+        
         },
         moveend: () => {},
         zoomchange: () => {},
@@ -100,12 +122,12 @@ export default {
           });
         }
       },
-
       plugin: [
-        // "ToolBar", //手动调焦插件
+        //"ToolBar", //手动调焦插件
         {
           pName: "MapType",
           defaultType: 0,
+          showRoad:true,
           events: {
             init(o) {
               console.log(4, o);
@@ -115,59 +137,57 @@ export default {
       ], //引入插件
       windows: [],
       window: "",
-      icons: "../../../static/tinymce4.7.5/skins/lightgray/img/marker3.png"
+      //icons: "../../../static/tinymce4.7.5/skins/lightgray/img/marker3.png"
     };
   },
+
   methods: {
-    Marker_Click(index) {
+    async Marker_Click(index,number) {
       console.log(`id为${index}`);
       this.windows.forEach(window => {
         window.visible = false;
       });
+      this.zoom=16;
       this.window = this.windows[index];
       this.$nextTick(() => {
         this.window.visible = true;
+        this.center = this.window.position
+        this.zoom=15
+      });  
+      //let res2 = await axios.get('https://www.easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/tab');
+      let res3 = await getMapPhByID(number);
+      // let table_data = res2.data.tableData;
+      let table_data = res3.data.res;
+      let tableData=table_data.map((item,index) =>{
+        item.id=index;
+        return item; 
       });
-    }
+      console.log("项目体信息",tableData);
+      this.tableData = tableData;
+    },
   },
-  async mounted() {
-    // let res2 = await axios.get('https://www.easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map')
-    // let res_markers = res2.data.data
-    let res = await getMarkerInfo()
-    console.log("mapres", res);
-    let res_markers = res.data.res;
 
-    // let res_markers=[
-    //   {
-    //      position: [121.9973285, 31.30515044],
-    //      content:'我是位置1'
-    //   },
-    //   {
-    //      position: [121.5673285, 31.63515044],
-    //      content:'我是位置2'
-    //   },
-    //   {
-    //      position: [121.2173285, 31.57515044],
-    //      content:'我是位置3'
-    //   },
-    //   {
-    //      position: [121.4173285, 31.18515044],
-    //      content:'我是位置4'
-    //   }
-    // ]
+  async mounted() {
+    let res = await axios.get('https://www.easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map')
+    let res_markers = res.data.data
+    // let res = await getMarkerInfo()
+    // console.log("mapres", res);
+    // let res_markers = res.data.res;
+
     let arr = JSON.parse(JSON.stringify(res_markers)); //深拷贝取巧方式
 
     let markers = res_markers.map((item, index) => {
-      item.id = index;
+      item.id = index;        //index改为地块编号，return this.Marker_Click(index) index为地块编号
       item.position = [item.lng, item.lat];
       item.events = {};
       //  item.events.click=function(){
       //    console.log(`id为${index}`)
       //  } //这样写最然可行，但逻辑复杂时代码会显得繁杂
       // item.events.click=this.Marker_Click(index) //这种方式传递了index,然后直接执行了
-
+     
       item.events.click = () => {
-        return this.Marker_Click(index);
+        console.log('ground_number',item.ground_number);
+        return this.Marker_Click(index,item.ground_number);
       };
       item.visible = true;
       delete item.lng;
@@ -175,17 +195,18 @@ export default {
       return item;
       // item.icons="../../../static/tinymce4.7.5/skins/lightgray/img/marker3.png"
     });
-
     let windows = arr.map((item, index) => {
       item.visible = false;
       item.position = [item.lng + 0.0005, item.lat + 0.0005];
       return item;
     });
+
     console.log('markers', markers);
     console.log('windows', windows);
     this.markers = markers;
     this.windows = windows;
   }
+
 };
 </script>
 
@@ -194,7 +215,7 @@ export default {
   margin: 5px;
 }
 .amap-demo {
-  height: 690px;
+  height: 560px;
 }
 .prompt {
   border: 1px solid #eee;
@@ -211,16 +232,16 @@ export default {
   align-items: center;
   div:first-child {
     white-space: nowrap;
-    background-color: #ffffff;
-    color: #49b9eb;
+    //background-color: #ffffff;
+    //color: #49b9eb;
     font-weight: 800;
     padding: 8px;
     border-radius: 10px 0px 0px 10px;
     font-size: 11px;
   }
   div:nth-child(2) {
-    background-color: #49b9eb;
-    color: #ffffff;
+    //background-color: #49b9eb;
+    //color: #ffffff;
     border: 0px solid #fff;
     font-weight: 800;
     border: 1px solid #49b9eb;
@@ -230,23 +251,79 @@ export default {
   }
 }
 
+.marker_style1{
+  // div:first-child {
+  //   background-color: #ffffff;
+  //   color: #F56C6C;
+  // }
+  div:nth-child(2) {
+    background-color: #F56C6C;
+    color: #ffffff;
+  }
+}
+.marker_style2{
+  // div:first-child {
+  //   background-color: #ffffff;
+  //   color: #E6A23C;
+  // }
+  div:nth-child(2) {
+    background-color: #E6A23C;
+    color: #ffffff;
+  }
+}
+.marker_style3{
+  // div:first-child {
+  //   background-color: #ffffff;
+  //   color:#67C23A;
+  // }
+  div:nth-child(2) {
+    background-color: #67C23A;
+    color: #ffffff;
+  }
+}
+.marker_style4{
+  div:first-child {
+    background-color: #ffffff;
+    color: #F56C6C;
+  }
+  // div:nth-child(2) {
+  //   background-color: #F56C6C;
+  //   color: #ffffff;
+  // }
+}
+.marker_style5{
+  div:first-child {
+    background-color: #ffffff;
+    color: #E6A23C;
+  }
+  // div:nth-child(2) {
+  //   background-color: #E6A23C;
+  //   color: #ffffff;
+  // }
+}
+.marker_style6{
+  div:first-child {
+    background-color: #ffffff;
+    color:#67C23A;
+  }
+  // div:nth-child(2) {
+  //   background-color: #67C23A;
+  //   color: #ffffff;
+  // }
+}
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
 .marker_icon {
   margin-left: 25px;
 }
 
-.windows_contain {
-  // p:first-child{
-  //   font-size: 18px;
-  //   font-weight: bold;
-  //   color: #000;
-  // }
-}
-
 .windows_title {
   white-space: nowrap;
-  background-color: #f9f9f9;
-  padding: 8px 0px;
-  width: 260px;
+  background-color: #cccccc;
+  padding: 6px 0px;
+  width: 100%;
   color: #333333;
   font-size: 16px;
   font-weight: bold;
@@ -254,7 +331,7 @@ export default {
 }
 .windows_content {
   display: flex;
-  padding: 10px 0px;
+  padding: 1px 0px;
   font-size: 15px;
   p {
     margin: 5px 0;
