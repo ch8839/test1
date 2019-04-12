@@ -24,6 +24,9 @@ npm install --registry=https://registry.npm.taobao.org
 # Serve with hot reload at localhost:9528
 npm run dev
 
+# koa-serve at localhost:9098
+npm run server
+
 # Build for production with minification
 npm run build
 
