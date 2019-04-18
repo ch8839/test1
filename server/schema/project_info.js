@@ -42,7 +42,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     remarks: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      defaultValue: ''
+    },
+    count: {
+      type: DataTypes.STRING(11),
+      allowNull: true
     }
   }, {
     tableName: 'project_info'

@@ -1,5 +1,5 @@
 /* jshint indent: 2 */
-//把通过sequelize.define()返回的Pet称为Model，它表示一个数据模型
+
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {

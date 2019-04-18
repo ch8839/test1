@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50643
+Source Server         : test
+Source Server Version : 50641
 Source Host           : localhost:3306
 Source Database       : test
 
 Target Server Type    : MYSQL
-Target Server Version : 50643
+Target Server Version : 50641
 File Encoding         : 65001
 
-Date: 2019-04-09 14:32:27
+Date: 2019-04-17 22:13:40
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,7 +21,9 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `element_info`;
 CREATE TABLE `element_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ground_num` varchar(255) DEFAULT NULL,
   `point_num` varchar(255) DEFAULT NULL,
+  `point_depth` varchar(255) DEFAULT NULL,
   `PH` double(30,3) DEFAULT NULL,
   `arsenic` double(30,3) DEFAULT NULL,
   `cadmium` double(30,3) DEFAULT NULL,
@@ -40,21 +42,39 @@ CREATE TABLE `element_info` (
   `selenium` double(30,3) DEFAULT NULL,
   `molybdenum` double(30,3) DEFAULT NULL,
   `Alum` double(30,3) DEFAULT NULL,
-  `date` varchar(255) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of element_info
 -- ----------------------------
-INSERT INTO `element_info` VALUES ('1', '31010720190001001', '5.010', '6.810', '0.090', '29.000', '27.320', '22.200', '0.662', '21.000', '0.336', '1.236', null, '95.300', null, '0.300', '2.000', '3.260', null, '0.451', '2019.04.07');
-INSERT INTO `element_info` VALUES ('2', '31010720190001001', '7.900', '6.200', '0.030', '31.000', '26.320', '26.200', '0.362', '31.000', '0.136', '1.236', '18.236', '95.300', '0.220', '0.300', '2.000', '2.480', '0.300', '0.451', '2019.04.09');
-INSERT INTO `element_info` VALUES ('3', '31010720190001002', '4.600', '1.200', '0.070', '6.323', '21.236', '21.260', '0.125', '21.230', '0.265', '1.659', '13.201', '12.326', '0.456', '0.135', '3.000', '0.148', '0.135', '0.128', '2019.04.08');
-INSERT INTO `element_info` VALUES ('4', '31010720190001003', '6.265', '18.260', '0.156', '12.265', '13.248', '2.660', '2.660', '0.156', '12.160', '6.218', '23.218', '31.254', '13.290', '2.546', '4.000', '2.118', '2.546', '2.156', '2019.04.08');
-INSERT INTO `element_info` VALUES ('5', '31010720190001004', '4.265', '11.235', '0.196', '22.213', '16.226', '13.210', '0.956', '13.214', '0.962', '3.236', '13.208', '1.236', '33.215', '2.660', '5.000', '0.012', '2.660', '3.216', '2019.04.09');
-INSERT INTO `element_info` VALUES ('6', '31010720190001005', '6.322', '13.264', '0.197', '2.660', '2.660', '0.163', '7.216', '6.213', '13.314', '1.326', '2.660', '21.221', '2.218', '6.654', '6.000', '6.213', '6.654', '1.238', '2019.04.08');
-INSERT INTO `element_info` VALUES ('7', '31010720190001006', '4.216', '5.213', '16.214', '3.213', '4.213', '2.231', '3.216', '11.246', '7.265', '8.216', '9.213', '6.213', '2.300', '1.265', '7.000', '7.210', '1.265', '3.330', '2019.04.09');
-INSERT INTO `element_info` VALUES ('8', '31010720190001007', '6.320', '3.210', '0.326', '1.236', '8.260', '6.310', '9.210', '12.300', '16.210', '6.210', '7.160', '4.210', '2.660', '3.210', '8.000', '3.150', '3.210', '15.210', '2019.04.08');
-INSERT INTO `element_info` VALUES ('9', '31010720190001008', '6.210', '9.120', '9.130', '13.210', '10.260', '14.210', '21.160', '21.330', '2.660', '1.260', '1.560', '1.980', '1.320', '1.650', '9.000', '1.920', '1.650', '3.210', '2019.04.09');
-INSERT INTO `element_info` VALUES ('10', '31010720190001009', '6.210', '9.120', '9.130', null, '10.260', null, '21.160', null, '2.660', '1.260', '1.560', null, '1.320', null, '9.000', '1.920', null, '3.210', '2019.04.09');
+INSERT INTO `element_info` VALUES ('1', '31010720190001', '31010720190001001', '0-10', '5.010', '6.810', '0.090', '29.000', '27.320', null, '0.662', '21.000', null, '1.236', null, '95.300', null, '0.300', null, '3.260', null, '0.451', '2019-04-15 22:06:44');
+INSERT INTO `element_info` VALUES ('2', '31010720190001', '31010720190001001', '10-20', '7.900', null, '0.030', '31.000', '26.320', null, null, null, null, '1.236', '18.236', '95.300', '0.220', '0.300', null, '2.480', '0.300', '0.451', '2019-04-15 16:25:44');
+INSERT INTO `element_info` VALUES ('4', '31010720190001', '31010720190001002', '20-30', '6.265', '18.260', null, null, '13.248', null, null, null, null, '6.218', null, null, null, '2.546', null, '2.118', null, '2.156', '2019-04-15 22:06:44');
+INSERT INTO `element_info` VALUES ('6', '31010720190002', '31010720190002001', '0-10', '6.322', '13.264', null, null, '2.660', null, null, null, null, null, null, null, null, null, null, '6.213', null, null, '2019-04-15 22:06:44');
+INSERT INTO `element_info` VALUES ('7', '31010720190002', '31010720190002002', '10-20', '4.216', null, null, null, null, null, null, null, null, null, null, null, null, null, '7.000', '7.210', null, null, '2019-04-15 22:06:44');
+INSERT INTO `element_info` VALUES ('8', '31010720190003', '31010720190003001', '0-10', '6.320', null, null, null, null, '6.310', null, null, null, null, null, null, '2.660', null, '8.000', null, null, null, '2019-04-15 22:06:44');
+INSERT INTO `element_info` VALUES ('9', '31010720190001', '31010720190001001', '0-10', '5.010', '5.010', '0.090', null, null, '22.200', null, null, null, '1.236', null, null, null, null, null, null, null, null, '2019-04-16 22:06:44');
+INSERT INTO `element_info` VALUES ('10', '31010720190001', '31010720190001001', '10-20', '7.900', '7.900', '0.030', null, null, null, '0.362', null, null, null, '18.236', null, '0.220', null, null, null, null, null, '2019-04-16 16:25:44');
+INSERT INTO `element_info` VALUES ('11', '31010720190001', '31010720190001002', '20-30', '6.265', '6.265', null, '12.265', null, null, null, null, null, null, null, null, null, '2.546', '4.000', null, null, '2.156', '2019-04-16 22:06:44');
+INSERT INTO `element_info` VALUES ('12', '31010720190002', '31010720190002001', '0-10', '6.322', '6.322', null, '2.660', null, null, null, null, null, null, null, null, null, '6.654', null, null, null, '1.238', '2019-04-16 22:06:44');
+INSERT INTO `element_info` VALUES ('13', '31010720190002', '31010720190002002', '10-20', '4.216', '4.216', null, '3.213', null, null, null, '11.246', null, null, null, null, null, '1.265', null, null, null, null, '2019-04-16 22:06:44');
+INSERT INTO `element_info` VALUES ('14', '31010720190003', '31010720190003001', '0-10', '6.320', '6.320', null, '1.236', '8.260', null, null, '12.300', null, null, null, '4.210', '2.660', '3.210', null, '3.150', '3.210', null, '2019-04-16 22:06:44');
+INSERT INTO `element_info` VALUES ('15', '31110720190001', '31110720190001001', '0-10', '5.010', '5.010', null, '6.265', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('16', '31110720190001', '31110720190001002', '20-30', '7.900', '7.900', null, '6.322', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('17', '31110720190002', '31110720190002001', '10-20', '6.265', '6.265', '6.265', '4.216', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('18', '31110720190001', '31110720190001001', '0-10', '6.322', '6.322', '6.322', '6.320', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('19', '31110720190001', '31110720190001002', '20-30', '4.216', '4.216', '4.216', '5.010', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('20', '31110720190002', '31110720190002001', '10-20', '6.320', '6.320', '6.320', '7.900', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('21', '31210720190001', '31210720190001002', '0-10', '7.900', null, '7.900', '6.322', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('22', '31210720190001', '31210720190001002', '0-10', '6.265', null, '6.265', '4.216', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('23', '31210720190002', '31210720190002001', '20-30', '6.322', null, '6.322', '6.320', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('24', '31210720190002', '31210720190002001', '10-20', '4.216', null, '4.216', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('25', '31210720190001', '31210720190001001', '10-20', '5.010', null, '5.010', '6.265', null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-15 00:00:00');
+INSERT INTO `element_info` VALUES ('27', '31210720190001', '31210720190001001', '10-20', '6.320', null, '6.320', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('28', '31210720190001', '31210720190001002', '0-10', null, null, '5.010', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('29', '31210720190001', '31210720190001002', '0-10', null, null, '7.900', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('30', '31210720190002', '31210720190002001', '20-30', null, null, '6.265', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
+INSERT INTO `element_info` VALUES ('31', '31210720190002', '31210720190002001', '10-20', null, null, '6.322', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, '2019-04-16 00:00:00');
 SET FOREIGN_KEY_CHECKS=1;

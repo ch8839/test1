@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('element_info', {
+  return sequelize.define('real_time_element', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -10,15 +10,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     ground_num: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     point_num: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     point_depth: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     PH: {
       type: "DOUBLE(30,3)",
@@ -92,11 +92,16 @@ module.exports = function(sequelize, DataTypes) {
       type: "DOUBLE(30,3)",
       allowNull: true
     },
-    date: {
-      type: DataTypes.DATE,
+    count: {
+      type: DataTypes.STRING(11),
       allowNull: true
+    },
+    time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
-    tableName: 'element_info'
+    tableName: 'real_time_element'
   });
 };

@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     point_depth: {
-      type: "DOUBLE(30,8)",
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     ground_num: {
@@ -46,6 +46,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     remarks: {
       type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    count: {
+      type: DataTypes.INTEGER(11),
       allowNull: true
     }
   }, {

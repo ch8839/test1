@@ -1,15 +1,11 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('location_ph', {
+  return sequelize.define('unit_info', {
     id: {
       type: DataTypes.STRING(255),
       allowNull: false,
       primaryKey: true
-    },
-    locaton_number: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     },
     PH: {
       type: DataTypes.STRING(255),
@@ -82,12 +78,8 @@ module.exports = function(sequelize, DataTypes) {
     Alum: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    time: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     }
   }, {
-    tableName: 'location_ph'
+    tableName: 'unit_info'
   });
 };

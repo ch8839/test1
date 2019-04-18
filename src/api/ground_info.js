@@ -4,8 +4,12 @@ export function getGroundList(TableOptions){
     return request2.post('/ground/getGroundList', TableOptions)   
 }
 
-export function getAllHistoryData(point_num){
-    return request2.get('/ground/getAllHistoryData/'+ point_num)   
+export function getMarkerList(ground_num){
+    return request2.get('/ground/getMarkerList/' + ground_num)   
+}
+
+export function getAllHistoryData(HistoryTableOptions){
+    return request2.post('/ground/getAllHistoryData', HistoryTableOptions)   
 }
 
 export function getSpecifiedElementList(selectedOptions){

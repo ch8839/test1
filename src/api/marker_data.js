@@ -5,5 +5,9 @@ export function getMarkerInfo(){
 }
 
 export function getMapPhByID(ground_number){
-    return request2.get('/project/getMapPhByID/'+ ground_number) 
-    }
+    return request2.get('/project/getMapPhByID/'+ ground_number)   
+}
+
+export function getMarkerList(ground_number){
+    return request2.get('/data/getMarkerList/'+ ground_number)   
+}
