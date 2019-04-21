@@ -1,6 +1,6 @@
-const theDatabase = require('../config/db.js').theDb; //引入数据库
-const groundInfoSchema = theDatabase.import('../schema/ground_info.js'); 
-const elementInfoSchema = theDatabase.import('../schema/element_info.js'); 
+const theDatabase = require('../../config/db.js').theDb; //引入数据库
+const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
+const elementInfoSchema = theDatabase.import('../../schema/element_info.js'); 
 
 let getAllHistory = async function(point_num){
     const AllHistoryData = await elementInfoSchema.findAll({

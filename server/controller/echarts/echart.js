@@ -1,7 +1,7 @@
-const AllProjectDataModel = require('../models/echart.js')
-const AllEchartDataModel = require('../models/echart.js')
-const AllRadarDataModel = require('../models/echart.js')
-const AllGroundDataModel = require('../models/echart.js')
+const AllProjectDataModel = require('../../models/echarts/echart.js')
+const AllEchartDataModel = require('../../models/echarts/echart.js')
+const AllRadarDataModel = require('../../models/echarts/echart.js')
+const AllGroundDataModel = require('../../models/echarts/echart.js')
 
 const reference = new Map([['PH', 7.0], ['arsenic', 6.68], ['cadmium', 0.07], ['chromium', 38], ['copper', 28], ['lead', 25.3]
   , ['mercury', 0.312], ['nickel', 39], ['antimony', 0.19], ['beryllium', 2.94], ['cobalt', 12.6], ['zinc', 94.9], ['silver', 0.1], ['thallium', 8.05],
@@ -11,26 +11,26 @@ const element_Map = new Map([['PH', 'PH值'], ['arsenic', '砷'], ['cadmium', '�
   , ['mercury', '汞'], ['nickel', '镍'], ['antimony', '锑'], ['beryllium', '铍'], ['cobalt', '钴'], ['zinc', '锌'], ['silver', '银'], ['thallium', '铊'],
 ['tin', '锡'], ['selenium', '硒'], ['molybdenum', '钼'], ['Alum', '矾']])
 
-const getAll = async function () {
+const getAll = async function (ctx) {
   let AllProjectData = await AllProjectDataModel.getAllProjectData()
 
   if (AllProjectData) {
 
-    this.body = {
+    ctx.body = {
       success: true,
       res: AllProjectData,
       msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
   }
 }
 
-const getGroundList = async function () {
-  let req = this.request.body
+const getGroundList = async function (ctx) {
+  let req = ctx.request.body
   let ground_num = req[2]
   let res1 = await AllGroundDataModel.getAllGroundData(ground_num)
   let res2 = await AllGroundDataModel.getElementData()  //不用筛选一下吗？
@@ -84,13 +84,13 @@ const getGroundList = async function () {
   }
   if (AllGroundData) {
 
-    this.body = {
+    ctx.body = {
       success: true,
       res: AllGroundData,
       msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
@@ -98,8 +98,8 @@ const getGroundList = async function () {
 };
 
 /* 获取项目体所有点位的元素信息 */
-const getSpecifiedElementList = async function () {
-  let req = this.request.body
+const getSpecifiedElementList = async function (ctx) {
+  let req = ctx.request.body
   let ground_num = req[2]
   console.log("我是ground_num in ground_info", ground_num)
   let res1 = await AllGroundDataModel.getAllGroundData(ground_num)
@@ -229,23 +229,23 @@ const getSpecifiedElementList = async function () {
 
   if (SpecifiedElementList) {
 
-    this.body = {
+    ctx.body = {
       success: true,
       res: SpecifiedElementList,
       res1: arr_res,
       msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
   }
 };
 
-const getAllPieData = async function () {
+const getAllPieData = async function (ctx) {
 
-  const point_num = this.params.point_num
+  const point_num = ctx.params.point_num
   //  console.log("point_num in controller", point_num);
 
   let res = await AllEchartDataModel.getAllEchartData(point_num)
@@ -288,22 +288,22 @@ const getAllPieData = async function () {
 
 
   if (res) {
-    this.body = {
+    ctx.body = {
       success: true,
       res: AllEchartData,
       msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
   }
 }
 
-const getPieDataName = async function () {
+const getPieDataName = async function (ctx) {
 
-  const point_num = this.params.point_num
+  const point_num = ctx.params.point_num
   let req = await AllEchartDataModel.getAllEchartData(point_num)
 
   let arr = req.map(item => {
@@ -329,23 +329,23 @@ const getPieDataName = async function () {
   })
 
   if (req) {
-    this.body = {
+    ctx.body = {
       //success: true,
       req: AllEchartData,
       //msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
   }
 }
 
-const getRadarRealTimeValue = async function () {
+const getRadarRealTimeValue = async function (ctx) {
 
   // console.log("我是雷达的point_num")
-  const point_num = this.params.point_num
+  const point_num = ctx.params.point_num
   console.log("我是雷达的point_num", point_num)
   let res = await AllEchartDataModel.getAllEchartData(point_num)
 
@@ -371,23 +371,23 @@ const getRadarRealTimeValue = async function () {
   })
 
   if (res) {
-    this.body = {
+    ctx.body = {
       success: true,
       res: AllEchartData,
       msg: '获取成功'
     }
   } else {
-    this.body = {
+    ctx.body = {
       success: false,
       msg: '获取失败'
     }
   }
 }
 
-const getRadarData = async function () {
+const getRadarData = async function (ctx) {
 
   // const id = this.params.id
-  const id = this.params.id;
+  const id = ctx.params.id;
   console.log("hellohello", id);
   if (id > 1) {
     let resDatar_arr = await AllRadarDataModel.getAllRadarData(id)
@@ -415,13 +415,13 @@ const getRadarData = async function () {
     console.log("我是最大值", resDatar_arr)
 
     if (resDatar_arr) {
-      this.body = {
+      ctx.body = {
         success: true,
         resDatar_arr: AllRadarData,
         msg: '获取成功'
       }
     } else {
-      this.body = {
+      ctx.body = {
         success: false,
         msg: '获取失败'
       }
@@ -452,13 +452,13 @@ const getRadarData = async function () {
     })
 
     if (resDatar_arr) {
-      this.body = {
+      ctx.body = {
         success: true,
         resDatar_arr: AllRadarData,
         msg: '获取成功'
       }
     } else {
-      this.body = {
+      ctx.body = {
         success: false,
         msg: '获取失败'
       }

@@ -1,6 +1,6 @@
-const theDatabase = require('../config/db.js').theDb; //引入数据库
-const userSchema = theDatabase.import('../schema/user.js'); 
-const studentInfo = theDatabase.import('../schema/list2.js'); 
+const theDatabase = require('../../config/db.js').theDb; //引入数据库
+const userSchema = theDatabase.import('../../schema/user.js'); 
+const studentInfo = theDatabase.import('../../schema/list2.js'); 
 
 //把通过Pet.findAll()返回的一个或一组对象称为Model实例
 

@@ -153,10 +153,11 @@ export default {
       }
       console.log("ground_list after filter", ground_list);
 
-      this.location.locationnumber = ground_list.locationnumber;
-      this.location.locationtext = ground_list.locationtext;
-      this.location.pelements = ground_list.pelements;
-      this.location.selected_point_num = ground_list.point_num;
+      // this.location.locationnumber = ground_list.locationnumber;
+      // this.location.locationtext = ground_list.locationtext;
+      // this.location.pelements = ground_list.pelements;
+      // this.location.selected_point_num = ground_list.point_num;
+      this.location = ground_list;
 
       let filterList = arr_res.filter(item => {
         if (

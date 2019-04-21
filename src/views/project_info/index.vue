@@ -278,7 +278,7 @@ export default {
         }
       },
       markers: [],
-      zoom: 11,
+      zoom: 14,
       center: [121.457624, 31.27586],
       events: {
         // init: o => {
@@ -414,6 +414,10 @@ export default {
           visible: true
         });
       });
+      if(markers.length){
+        this.center =markers[0].position
+      }
+      
       this.markers = markers
       console.log("ground_list", res)
       // localStorage.clear()

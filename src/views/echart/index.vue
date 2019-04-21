@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-editor-container">
+  <div class="dashboard-editor-container2">
     <el-row style="background:#99CCCC;padding:16px 16px 16px; margin-bottom: 32px">
       <el-cascader
         ref="cascaderAddr"
@@ -263,7 +263,7 @@ export default {
 </script>
 
 <style  rel="stylesheet/scss" lang="scss">
-.dashboard-editor-container {
+.dashboard-editor-container2 {
   padding: 32px;
   background-color: rgb(240, 242, 245);
 

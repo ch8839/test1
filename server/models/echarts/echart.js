@@ -1,9 +1,9 @@
-const theDatabase = require('../config/db.js').theDb; //引入数据库
+const theDatabase = require('../../config/db.js').theDb; //引入数据库
 // const echartSchema = theDatabase.import('../schema/element_info.js'); 
-const projectInfoSchema = theDatabase.import('../schema/project_info.js'); 
-const groundInfoSchema = theDatabase.import('../schema/ground_info.js'); 
-const echartSchema = theDatabase.import('../schema/real_time_element.js'); 
-const radarSchema = theDatabase.import('../schema/reference_info.js'); 
+const projectInfoSchema = theDatabase.import('../../schema/project_info.js'); 
+const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
+const echartSchema = theDatabase.import('../../schema/real_time_element.js'); 
+const radarSchema = theDatabase.import('../../schema/reference_info.js'); 
 
 const getAllProjectData = async function(){
     const AllProjectData = await projectInfoSchema.findAll()

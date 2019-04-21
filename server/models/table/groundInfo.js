@@ -1,10 +1,10 @@
-const theDatabase = require('../config/db.js').theDb; //引入数据库
-const groundInfoSchema = theDatabase.import('../schema/ground_info.js');
-const realTime_elementInfoSchema = theDatabase.import('../schema/real_time_element.js');
-const elementInfoSchema = theDatabase.import('../schema/element_info.js');
+const theDatabase = require('../../config/db.js').theDb; //引入数据库
+const groundInfoSchema = theDatabase.import('../../schema/ground_info.js');
+const realTime_elementInfoSchema = theDatabase.import('../../schema/real_time_element.js');
+const elementInfoSchema = theDatabase.import('../../schema/element_info.js');
 
-const referenceInfoSchema = theDatabase.import('../schema/reference_info.js');
-const unitInfoSchema = theDatabase.import('../schema/unit_info.js');
+const referenceInfoSchema = theDatabase.import('../../schema/reference_info.js');
+const unitInfoSchema = theDatabase.import('../../schema/unit_info.js');
 
 const getGroundMarkerList = async function (ground_num) {
    

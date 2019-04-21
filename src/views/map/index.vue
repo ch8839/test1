@@ -78,7 +78,7 @@
             </el-table> 
           </div>
           <el-badge  class="item">
-          <el-button size="small" type="info" icon="el-icon-message" round align="center"><a href="/table/index">详细信息</a></el-button>
+          <el-button size="small" type="info" icon="el-icon-message" round align="center" @click="toTablePage">详细信息</el-button>
           </el-badge>
         </div>
       </el-amap-info-window>
@@ -165,7 +165,7 @@ export default {
       this.$nextTick(() => {
         this.window.visible = true;
         this.center = this.window.position
-        this.zoom=15
+        this.zoom=17
       });  
       
       let res2 = await getMapPhByID(ground_number);
@@ -174,7 +174,7 @@ export default {
         item.id=index;
         return item; 
       });
-      console.log("项目体信息",tableData);
+      console.log("地图项目体表格",table_data);
       this.tableData = tableData;
 
       let res3 = await getMarkerList(ground_number)
@@ -191,7 +191,14 @@ export default {
       });
       this.ground_markers = arr_temp
     },
+
+    toTablePage(){
+    this.$router.push({ name:'ProjectInfo', params:"hahah" })
+    
+  }
   },
+
+  
 
   async mounted() {
   let res1= await getMarkerInfo()
