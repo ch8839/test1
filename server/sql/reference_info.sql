@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50641
+Source Server         : localhost_3306
+Source Server Version : 50643
 Source Host           : localhost:3306
-Source Database       : 19t3w4
+Source Database       : test
 
 Target Server Type    : MYSQL
-Target Server Version : 50641
+Target Server Version : 50643
 File Encoding         : 65001
 
-Date: 2019-04-18 10:00:18
+Date: 2019-04-21 20:53:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,3 +47,4 @@ CREATE TABLE `reference_info` (
 -- ----------------------------
 INSERT INTO `reference_info` VALUES ('1', '6.200', '3.650', '0.077', '23.326', '21.230', '21.200', '0.323', '20.132', '0.136', '1.632', '3.210', '32.260', '13.200', '23.230', '3.260', '21.323', '13.200', '0.136');
 INSERT INTO `reference_info` VALUES ('2', '24.800', '14.600', '0.308', '93.304', '92.928', '84.800', '1.292', '80.528', '0.544', '6.528', '12.840', '131.040', '52.800', '92.920', '13.040', '85.292', '52.800', '0.544');
+SET FOREIGN_KEY_CHECKS=1;

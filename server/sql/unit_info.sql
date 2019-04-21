@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50528
+Source Server Version : 50643
 Source Host           : localhost:3306
 Source Database       : test
 
 Target Server Type    : MYSQL
-Target Server Version : 50528
+Target Server Version : 50643
 File Encoding         : 65001
 
-Date: 2019-04-14 22:40:18
+Date: 2019-04-21 20:53:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,8 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `unit_info`;
 CREATE TABLE `unit_info` (
   `id` varchar(255) NOT NULL,
-  `locaton_number` varchar(255) DEFAULT NULL,
-  `PHֵ` varchar(255) DEFAULT NULL,
+  `PH` varchar(255) DEFAULT NULL,
   `arsenic` varchar(255) DEFAULT NULL,
   `cadmium` varchar(255) DEFAULT NULL,
   `chromium` varchar(255) DEFAULT NULL,
@@ -46,5 +45,6 @@ CREATE TABLE `unit_info` (
 -- ----------------------------
 -- Records of unit_info
 -- ----------------------------
-INSERT INTO `unit_info` VALUES ('1', '31010720190001001', '', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg');
+INSERT INTO `unit_info` VALUES ('1', 'ph', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg');
+INSERT INTO `unit_info` VALUES ('2', 'PH值', '砷', '镉', '铬', '铜', '铅', '汞', '镍', '锑', '铍', '钴', '锌', '银', '铊', '锡', '硒', '钼', '矾');
 SET FOREIGN_KEY_CHECKS=1;
