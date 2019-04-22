@@ -42,12 +42,12 @@ require("echarts/lib/component/title");
 
 /* bar图接口 */
 // import { getAll } from "@/api/echarts";
-import { getAll, getGroundList } from "@/api/echarts";
+import { getAll, getGroundList } from "@/api/echarts/echarts";
 import {
   getSpecifiedElementList,
   getRadarRealTimeValue,
   getRadarData
-} from "@/api/echarts";
+} from "@/api/echarts/echarts";
 
 /* 导入组件 */
 import RadarChart from './radarChart'

@@ -1,4 +1,4 @@
-import request2 from '../utils/request2'
+import request2 from '../../utils/request2'
 
 export function getGroundList(TableOptions){
     return request2.post('/ground/getGroundList', TableOptions)   

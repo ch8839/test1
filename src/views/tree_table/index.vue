@@ -206,7 +206,7 @@ import {
   updateTable,
   deleteData,
   addTableData
-} from "@/api/table";
+} from "@/api/test/table";
 export default {
   data() {
     return {

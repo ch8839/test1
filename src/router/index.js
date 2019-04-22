@@ -67,14 +67,26 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/project_info',
+    path: '/table',
     component: Layout,
+    redirect: '/table/detail-table',
+    name: 'Table',
+    meta: {
+      title: '表格数据',
+      icon: 'example'
+    },
     children: [
       {
-        path: 'index',
-        name: 'ProjectInfo',
-        component: () => import('@/views/project_info/index'),
-        meta: { title: '项目信息查询', icon: 'form' }
+        path: 'detail-table',
+        name: 'DetailTable',
+        component: () => import('@/views/detail-table/index'),
+        meta: { title: '详细数据', icon: 'form' }
+      },
+      {
+        path: 'detect-table',
+        name: 'DetectTable',
+        component: () => import('@/views/detect-table/index'),
+        meta: { title: '检测数据', icon: 'form' }
       }
     ]
   },

@@ -217,12 +217,12 @@
 </template>
 
 <script>
-import { getAll } from "@/api/project_info";
+import { getAll } from "@/api/table/project_info";
 import {
   getMarkerList,
   getGroundList,
   getAllHistoryData
-} from "@/api/ground_info";
+} from "@/api/table/ground_info";
 import formatTime from "@/utils/time";
  window.onload = function(){
    localStorage.clear()

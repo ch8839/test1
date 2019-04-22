@@ -87,7 +87,7 @@
 </template>
 <script>
 
-import { getMarkerInfo, getMapPhByID, getMarkerList } from "@/api/marker_data"
+import { getMarkerInfo, getMapPhByID, getMarkerList } from "@/api/map/marker_data"
 import axios from 'axios'
 window.onload = function(){
    localStorage.clear()
