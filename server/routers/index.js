@@ -8,7 +8,7 @@ const testController = require('../controller/test/test.js')
 //table模块
 const projectInfo_Controller = require('../controller/table/projectInfo.js')
 const groundInfo_Controller = require('../controller/table/groundInfo.js')
-
+const waterInfo_Controller = require('../controller/table/waterInfo.js')
 //echarts模块
 const echart_Controller = require('../controller/echarts/echart.js')
 
@@ -28,24 +28,24 @@ router.post('/table/deleteData' , testController.deleteTableData)
 router.post('/table/addTableData' , testController.addTableData)
 
 //table部分
-router.get('/project/getAll' , projectInfo_Controller.getAll)
-router.get('/ground/getMarkerList/:ground_num' , groundInfo_Controller.getGroundMarkerList)
-router.post('/ground/getGroundList' , groundInfo_Controller.getGroundList)
-router.post('/ground/getAllHistoryData' , groundInfo_Controller.getAllHistoryData)
-// router.post('/ground/getSpecifiedElementList' , groundInfo_Controller.getSpecifiedElementList)
+router.get('/project/getProjectInfo' , projectInfo_Controller.getProjectInfo)
+router.get('/project/getPointOptions/:project_num' , projectInfo_Controller.getPointOptions)
+router.get('/project/getMarkerList/:project_num' , projectInfo_Controller.getMarkerList)
+
+router.post('/ground/getLabGroundList' , groundInfo_Controller.getLabGroundList)
+router.post('/ground/getDetGroundList' , groundInfo_Controller.getDetGroundList)
+router.get('/ground/getLabGroundReference/:sample_num' , groundInfo_Controller.getLabGroundReference)
+
+router.post('/water/getLabWaterList' , waterInfo_Controller.getLabWaterList)
+router.post('/water/getDetWaterList' , waterInfo_Controller.getDetWaterList)
+router.get('/water/getLabWaterReference/:sample_num' , waterInfo_Controller.getLabWaterReference)
 
 //echarts部分
-router.get('/echarts/getAll' , echart_Controller.getAll)
-router.post('/echarts/getGroundList' , echart_Controller.getGroundList)
-router.post('/echarts/getSpecifiedElementList' , echart_Controller.getSpecifiedElementList)
-// router.get('/echart/getAllPieData/:point_num' , echart_Controller.getAllPieData) //新加入的echart的数据路由
-// router.get('/echart/getPieDataName/:point_num' , echart_Controller.getPieDataName)//只有数据名称的路由
-router.get('/echarts/getRadarRealTimeValue/:point_num' , echart_Controller.getRadarRealTimeValue)
-router.get('/echarts/getRadarData/:id' , echart_Controller.getRadarData)
+router.get('/project/getRawCascader' , echart_Controller.getRawCascader) 
+router.get('/project/getTableItemsByPN/:project_num' , echart_Controller.getTableItemsByPN) 
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo)
-router.get('/project/getMapPhByID/:ground_number' , mapController.getMapPhByID)
-router.get('/data/getMarkerList/:ground_number',mapController.getMarkerList)
+router.get('/data/getMapPhByID/:project_num' , mapController.getMapPhByID)
 
 module.exports= router;

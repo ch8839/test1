@@ -1,59 +1,58 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('project_info', {
+  return sequelize.define('ground_info', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    project_area: {
+    point_num: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    project_name: {
+    point_intro: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    project_num: {
+    point_depth: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    project_type: {
-      type: DataTypes.INTEGER(11),
+    ground_num: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
-    project_lng: {
+    sampling_time: {
+      type: "DOUBLE(30,3)",
+      allowNull: true
+    },
+    point_address: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    point_lng: {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    project_lat: {
+    point_lat: {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    simple_count: {
-      type: DataTypes.INTEGER(255),
-      allowNull: true
-    },
-    detail_count: {
-      type: DataTypes.INTEGER(255),
-      allowNull: true
-    },
-    fixed_count: {
-      type: DataTypes.INTEGER(255),
-      allowNull: true
-    },
-    all_count: {
-      type: DataTypes.INTEGER(255),
+    point_monitor_time: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     remarks: {
       type: DataTypes.STRING(255),
-      allowNull: false,
-      defaultValue: ''
+      allowNull: true
+    },
+    count: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
     }
   }, {
-    tableName: 'project_info'
+    tableName: 'ground_info'
   });
 };

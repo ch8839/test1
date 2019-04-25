@@ -1,17 +1,14 @@
 import request2 from '../../utils/request2'
 
-export function getGroundList(TableOptions){
-    return request2.post('/ground/getGroundList', TableOptions)   
+export function getLabGroundList(TableOptions){
+    return request2.post('/ground/getLabGroundList', TableOptions)   
 }
 
-export function getMarkerList(ground_num){
-    return request2.get('/ground/getMarkerList/' + ground_num)   
+export function getDetGroundList(TableOptions){
+    return request2.post('/ground/getDetGroundList', TableOptions)   
 }
 
-export function getAllHistoryData(HistoryTableOptions){
-    return request2.post('/ground/getAllHistoryData', HistoryTableOptions)   
+export function getLabGroundReference(sample_num){
+    return request2.get('/ground/getLabGroundReference/' + sample_num)   
 }
 
-export function getSpecifiedElementList(selectedOptions){
-    return request2.post('/ground/getSpecifiedElementList', selectedOptions)   
-}

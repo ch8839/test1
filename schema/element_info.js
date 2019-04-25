@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('real_time_element', {
+  return sequelize.define('element_info', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -92,16 +92,11 @@ module.exports = function(sequelize, DataTypes) {
       type: "DOUBLE(30,3)",
       allowNull: true
     },
-    count: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
-    },
-    time: {
+    date: {
       type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: true
     }
   }, {
-    tableName: 'real_time_element'
+    tableName: 'element_info'
   });
 };

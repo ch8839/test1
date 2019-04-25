@@ -4,10 +4,21 @@ const projectInfoSchema = theDatabase.import('../../schema/project_info.js');
 const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
 const echartSchema = theDatabase.import('../../schema/real_time_element.js'); 
 const radarSchema = theDatabase.import('../../schema/reference_info.js'); 
+const tableSchema = theDatabase.import('../../schema/sample_lab_ground_info.js'); 
 
 const getAllProjectData = async function(){
     const AllProjectData = await projectInfoSchema.findAll()
     return AllProjectData
+}
+
+/* 获取指定项目体的所有样本 */
+const getAllTableItemData = async function(project_num){
+    const AllTableItemsData = await tableSchema.findAll({
+        where:{
+            project_num: project_num
+        }
+    })
+    return AllTableItemsData
 }
 
 const getElementData = async function(){
@@ -45,9 +56,12 @@ const getAllRadarData = async function(id){
 }
 
 module.exports = {
-    getAllProjectData,
+    
     getAllGroundData,
     getAllEchartData,
     getAllRadarData,
-    getElementData
+    getElementData,
+    /* 引用的函数 */
+    getAllProjectData,
+    getAllTableItemData
 }

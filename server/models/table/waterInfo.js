@@ -1,11 +1,11 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
-const sample_lab_ground_InfoSchema = theDatabase.import('../../schema/sample_lab_ground_info.js');
-const sample_det_ground_InfoSchema = theDatabase.import('../../schema/sample_detector_ground_info.js');
+const sample_lab_water_InfoSchema = theDatabase.import('../../schema/sample_lab_water_info.js');
+const sample_det_water_InfoSchema = theDatabase.import('../../schema/sample_detector_water_info.js');
 
 const referenceInfoSchema = theDatabase.import('../../schema/reference_info.js');
 const unitInfoSchema = theDatabase.import('../../schema/unit_info.js');
 
-class AllGroundDataModel {
+class AllWaterDataModel {
 
     static async getReferenceInfo() {
    
@@ -25,11 +25,11 @@ static async getUnitInfo() {
     return unitInfo
 }
 
-static async getLabGroundData(project_num, point_num, assess_type, currentPage, page_size) {
-    let labGroundData
+static async getLabWaterData(project_num, point_num, assess_type, currentPage, page_size) {
+    let labWaterData
     if (point_num !== '0') {
         if (assess_type) {
-            labGroundData = await sample_lab_ground_InfoSchema.findAndCountAll({
+            labWaterData = await sample_lab_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -39,7 +39,7 @@ static async getLabGroundData(project_num, point_num, assess_type, currentPage, 
                 }
             })
         } else {
-            labGroundData = await sample_lab_ground_InfoSchema.findAndCountAll({
+            labWaterData = await sample_lab_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -50,7 +50,7 @@ static async getLabGroundData(project_num, point_num, assess_type, currentPage, 
         }
     } else {
         if (assess_type) {
-            labGroundData = await sample_lab_ground_InfoSchema.findAndCountAll({
+            labWaterData = await sample_lab_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -59,7 +59,7 @@ static async getLabGroundData(project_num, point_num, assess_type, currentPage, 
                 }
             })
         } else {
-            labGroundData = await sample_lab_ground_InfoSchema.findAndCountAll({
+            labWaterData = await sample_lab_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -69,14 +69,14 @@ static async getLabGroundData(project_num, point_num, assess_type, currentPage, 
         }
     }
 
-    return labGroundData
+    return labWaterData
 }
 
-static async getDetGroundData(project_num, point_num, assess_type, currentPage, page_size) {
-    let detGroundData
+static async getDetWaterData(project_num, point_num, assess_type, currentPage, page_size) {
+    let detWaterData
     if (point_num !== '0') {
         if (assess_type) {
-            detGroundData = await sample_det_ground_InfoSchema.findAndCountAll({
+            detWaterData = await sample_det_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -86,7 +86,7 @@ static async getDetGroundData(project_num, point_num, assess_type, currentPage, 
                 }
             })
         } else {
-            detGroundData = await sample_det_ground_InfoSchema.findAndCountAll({
+            detWaterData = await sample_det_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -97,7 +97,7 @@ static async getDetGroundData(project_num, point_num, assess_type, currentPage, 
         }
     } else {
         if (assess_type) {
-            detGroundData = await sample_det_ground_InfoSchema.findAndCountAll({
+            detWaterData = await sample_det_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -106,7 +106,7 @@ static async getDetGroundData(project_num, point_num, assess_type, currentPage, 
                 }
             })
         } else {
-            detGroundData = await sample_det_ground_InfoSchema.findAndCountAll({
+            detWaterData = await sample_det_water_InfoSchema.findAndCountAll({
                 limit: page_size,
                 offset: (currentPage - 1) * page_size,
                 where: {
@@ -116,23 +116,23 @@ static async getDetGroundData(project_num, point_num, assess_type, currentPage, 
         }
     }
 
-    return detGroundData
+    return detWaterData
 }
 
-static async getLabGroundRefData(sample_num){
-    const labGroundRef_Data = await sample_lab_ground_InfoSchema.findOne({
+static async getLabWaterRefData(sample_num){
+    const labWaterRef_Data = await sample_lab_water_InfoSchema.findOne({
         where: {
             sample_num
         }
     })
 
-    const detGroundData = await sample_det_ground_InfoSchema.findOne({
+    const detWaterData = await sample_det_water_InfoSchema.findOne({
         where: {
             sample_num
         }
     })
 
-    return [labGroundRef_Data , detGroundData]
+    return [labWaterRef_Data , detWaterData]
 }
 }
-module.exports = AllGroundDataModel
+module.exports = AllWaterDataModel

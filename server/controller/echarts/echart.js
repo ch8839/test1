@@ -1,7 +1,4 @@
-const AllProjectDataModel = require('../../models/echarts/echart.js')
 const AllEchartDataModel = require('../../models/echarts/echart.js')
-const AllRadarDataModel = require('../../models/echarts/echart.js')
-const AllGroundDataModel = require('../../models/echarts/echart.js')
 
 const reference = new Map([['PH', 7.0], ['arsenic', 6.68], ['cadmium', 0.07], ['chromium', 38], ['copper', 28], ['lead', 25.3]
   , ['mercury', 0.312], ['nickel', 39], ['antimony', 0.19], ['beryllium', 2.94], ['cobalt', 12.6], ['zinc', 94.9], ['silver', 0.1], ['thallium', 8.05],
@@ -11,8 +8,81 @@ const element_Map = new Map([['PH', 'PH值'], ['arsenic', '砷'], ['cadmium', '�
   , ['mercury', '汞'], ['nickel', '镍'], ['antimony', '锑'], ['beryllium', '铍'], ['cobalt', '钴'], ['zinc', '锌'], ['silver', '银'], ['thallium', '铊'],
 ['tin', '锡'], ['selenium', '硒'], ['molybdenum', '钼'], ['Alum', '矾']])
 
+/* 获取级联选择器 */
+const getRawCascader = async function (ctx) {
+  let AllProjectData = await AllEchartDataModel.getAllProjectData()
+
+  if (AllProjectData) {
+
+    ctx.body = {
+      success: true,
+      res: AllProjectData,
+      msg: '获取成功'
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      msg: '获取失败'
+    }
+  }
+}
+
+/* getTableItemsByPN */
+const getTableItemsByPN = async function (ctx) {
+  const project_num = ctx.params.project_num
+  let AllItemsData = await AllEchartDataModel.getAllTableItemData(project_num)
+  let res_AllItemsData = AllItemsData.map(item => {
+    return item = {
+      point_num: item.point_num,
+      assess_type: item.assess_type,
+      date: item.date,
+    }
+  })
+
+  let temp_arr = [];
+  for (var i = 0; i < res_AllItemsData.length; i++) {
+    var flag = true;
+    for (var j = 0; j < temp_arr.length; j++) {
+      if (res_AllItemsData[i].point_num == temp_arr[j].point_num) {
+        flag = false;
+      };
+    };
+    if (flag) {
+      temp_arr.push(res_AllItemsData[i]);
+    };
+  };
+  console.log("我是筛选出的表格Item", temp_arr);
+  temp_arr.map(element => {
+    switch (element.assess_type) {
+      case 1:
+        element.assess_type = "初次调查";
+        break;
+      case 2:
+        element.assess_type = "详细调查";
+        break;
+      case 3:
+        element.assess_type = "修复调查";
+        break;
+      default:
+    };
+  })
+
+  if (temp_arr) {
+    ctx.body = {
+      success: true,
+      res: temp_arr,
+      msg: '获取成功'
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      msg: '获取失败'
+    }
+  }
+}
+
 const getAll = async function (ctx) {
-  let AllProjectData = await AllProjectDataModel.getAllProjectData()
+  let AllProjectData = await AllEchartDataModel.getAllProjectData()
 
   if (AllProjectData) {
 
@@ -32,8 +102,8 @@ const getAll = async function (ctx) {
 const getGroundList = async function (ctx) {
   let req = ctx.request.body
   let ground_num = req[2]
-  let res1 = await AllGroundDataModel.getAllGroundData(ground_num)
-  let res2 = await AllGroundDataModel.getElementData()  //不用筛选一下吗？
+  let res1 = await AllEchartDataModel.getAllGroundData(ground_num)
+  let res2 = await AllEchartDataModel.getElementData()  //不用筛选一下吗？
   //对数据库取出的数据做处理得到需要的数组，即dataValues属性的值
   let AllGroundData = res1.map(item => {
     // console.log("item.dataValues in groundinfo.js", item.dataValues);
@@ -102,9 +172,9 @@ const getSpecifiedElementList = async function (ctx) {
   let req = ctx.request.body
   let ground_num = req[2]
   console.log("我是ground_num in ground_info", ground_num)
-  let res1 = await AllGroundDataModel.getAllGroundData(ground_num)
+  let res1 = await AllEchartDataModel.getAllGroundData(ground_num)
   // console.log("res1", res1)
-  let res2 = await AllGroundDataModel.getElementData()  //不用筛选一下吗？
+  let res2 = await AllEchartDataModel.getElementData()  //不用筛选一下吗？
   //对数据库取出的数据做处理得到需要的数组，即dataValues属性的值
 
   let SpecifiedElementList = {}
@@ -390,7 +460,7 @@ const getRadarData = async function (ctx) {
   const id = ctx.params.id;
   console.log("hellohello", id);
   if (id > 1) {
-    let resDatar_arr = await AllRadarDataModel.getAllRadarData(id)
+    let resDatar_arr = await AllEchartDataModel.getAllRadarData(id)
 
     let Datar_arr = resDatar_arr.map(item => {
       return item = item.dataValues
@@ -428,7 +498,7 @@ const getRadarData = async function (ctx) {
     }
 
   } else {
-    let resDatar_arr = await AllRadarDataModel.getAllRadarData(id)
+    let resDatar_arr = await AllEchartDataModel.getAllRadarData(id)
 
     let Datar_arr = resDatar_arr.map(item => {
       return item = item.dataValues
@@ -467,6 +537,9 @@ const getRadarData = async function (ctx) {
 }
 
 module.exports = {
+  getRawCascader,
+  getTableItemsByPN,
+  //以下为原生
   getAll,
   getGroundList,
   getSpecifiedElementList,
