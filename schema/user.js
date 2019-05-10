@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('list2', {
+  return sequelize.define('user', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -12,15 +12,20 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    number: {
-      type: DataTypes.INTEGER(255),
+    password: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
-    sex: {
+    roles: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      defaultValue: '1'
+    },
+    avatar: {
       type: DataTypes.STRING(255),
       allowNull: true
     }
   }, {
-    tableName: 'list2'
+    tableName: 'user'
   });
 };

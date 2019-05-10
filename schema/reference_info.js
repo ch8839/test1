@@ -8,6 +8,18 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
+    point_num: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    reference_intro: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    type: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
     PH: {
       type: "DOUBLE(30,3)",
       allowNull: true

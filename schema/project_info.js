@@ -44,6 +44,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(255),
       allowNull: true
     },
+    all_count: {
+      type: DataTypes.INTEGER(255),
+      allowNull: true
+    },
     remarks: {
       type: DataTypes.STRING(255),
       allowNull: false,

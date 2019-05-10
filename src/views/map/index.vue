@@ -3,7 +3,6 @@
     <el-amap
       ref="map"
       vid="amapDemo"
-      
       :center="center"
       :zoom="zoom"
       :events="events"
@@ -14,14 +13,14 @@
         v-for="(marker, index) in markers"
         :position="marker.position"
         :events="marker.events"
-        :visible="currentWindow.visible"
+        :visible="projectWindow.visible"
         animation="AMAP_ANIMATION_DROP"
         :vid="index"
         :key="index"
       >
         <div class="marker_contain">
-          <div class="marker_content" @click="Marker_Click(marker.id,marker.ground_num)" scope 
-          :class="[{ marker_style1: marker.count>20 },{ marker_style2: marker.count< 19 },{ marker_style3: marker.count==0 },
+          <div class="marker_content" @click="Marker_Click(marker.id,marker.ground_num)"  
+          :class="[{ marker_style1: marker.count>=20 },{ marker_style2: marker.count< 19 },{ marker_style3: marker.count==0 },
           { marker_style4: marker.ground_type==1 },{ marker_style5: marker.ground_type==2 },{ marker_style6: marker.ground_type==3 },]">
             <div >{{marker.ground_name}}</div>
             <div >{{marker.count}}</div>
@@ -30,22 +29,28 @@
             src="../../../static/img/ground_marker.png"
             class="marker_icon"
             @click="show_point(marker.id,marker.ground_num)" 
-            scope
           >
         </div>
       </el-amap-marker>
+
+      <el-amap-polygon 
+      v-for="item in polygons" :vid="item.id" :key="item.id" 
+      :path="item.path"  strokeColor="#FF0000"  strokeWeight=3  
+       fillOpacity=0  :zIndex=50 :visible="polygons_window">
+      </el-amap-polygon>
+
       <el-amap-marker
       v-for="item in point_markers" 
       :key="item.id" 
       :position="item.position" 
       :events="item.events" 
-      :visible="currentWindow1.visible"
+      :visible="pointWindow.visible"
       animation="AMAP_ANIMATION_DROP"  
       :vid="item.id"
       >
         <div class="marker_contain" >
-          <div class="marker_content" @click="Point_Click((item.id/10)-1)" scope   
-          :class="[{ marker_style1: item.count>20 },{ marker_style2: item.count< 19 },{ marker_style3: item.count==0 },
+          <div class="marker_content" @click="Point_Click((item.id/10)-1,item.point_num)" scope   
+          :class="[{ marker_style1: item.count>=20 },{ marker_style2: item.count< 19 },{ marker_style3: item.count==0 },
           { marker_style4: item.ground_type==1 },{ marker_style5: item.ground_type==2 },{ marker_style6: item.ground_type==3 }]">
             <div >{{item.point_name}}</div>
             <div >{{item.count}}</div>
@@ -53,7 +58,7 @@
           <img
             src="../../../static/img/point_marker.png"
             class="marker_icon"
-            @click="Marker_Click(2,31010720190001)" scope >
+            @click="Marker_Click(item.ground_id-1,item.ground_number)" scope >
         </div>         
       </el-amap-marker>
 
@@ -69,28 +74,33 @@
                >
               <el-table-column prop= "point_num" label="点位编号" align="center" width=165px sortable>
                 <template slot-scope="scope">
-                  <span style="margin-left: 5px">{{ scope.row.point_num  }}</span>
+                  <span style="margin-left: 2px">{{ scope.row.point_num }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="point_intro" label="点位描述" width=160px align="center">
+              <el-table-column prop="introduction" label="点位描述" width=160px align="center">
                 <template slot-scope="scope">
-                  <span style="margin-left: 5px">{{ scope.row.point_intro }}</span>
+                  <span style="margin-left: 1px">{{ scope.row.introduction }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="attention" label="主要污染物" width=95px align="center">
+              <!-- <el-table-column prop="attention" label="主要污染物" width=95px align="center">
                 <template slot-scope="scope">
                   <span style="margin-left: 5px">{{ scope.row.attention }}</span>
                 </template>                
-              </el-table-column>
-              <!-- <el-table-column prop="value" label="污染值" align="center">
-                <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.value }}</span>
-                </template>
               </el-table-column> -->
+              <el-table-column prop="attention" label="主要污染物" width=125px align="center">
+              <template slot-scope="scope">
+                <template v-if="scope.row.attention.length">
+                  <el-tag type="danger" v-for="(item,index) in scope.row.attention" :key="index">{{item}}</el-tag>
+                </template>
+                <template v-else>
+                  <el-tag type="success">无污染元素</el-tag>
+                </template>
+              </template>
+            </el-table-column>
             </el-table> 
           </div>
           <el-badge  class="badge_style">
-          <el-button size="small" type="info" icon="el-icon-message" round align="center"><a href="/table/index">详细信息</a></el-button>
+          <el-button size="small" type="info" icon="el-icon-message" round @click="toDetail()">详细信息</el-button>
           </el-badge>
         </div>
       </el-amap-info-window>
@@ -107,24 +117,24 @@
               >
               <el-table-column prop="element" label="超标物" width=100px align="center">
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.element}}</span>
+                  <el-tag type="danger" style="margin-left: 10px">{{ scope.row.element }}</el-tag>
                 </template>                
               </el-table-column>
-              <el-table-column prop="ex_number" label="超标次数" width=100px align="center">
+              <el-table-column prop="count" label="超标次数" width=100px align="center" sortable>
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.ex_number}}</span>
+                  <span style="margin-left: 5px">{{ scope.row.count}}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="max_value" label="超标最高值" width=150px align="center">
+              <el-table-column prop="max_value" label="超标最高值" width=150px align="center" sortable>
                 <template slot-scope="scope">
-                  <span style="margin-left: 10px">{{ scope.row.max_value}}</span>
+                  <span style="margin-left: 5px">{{ scope.row.max_value}}</span>
                 </template>
               </el-table-column>
             </el-table> 
           </div>
-          <el-badge  class="item">
+          <!-- <el-badge  class="item">
           <el-button size="small" type="info" icon="el-icon-message" round align="center"><a href="/table/index">详细信息</a></el-button>
-          </el-badge>
+          </el-badge> -->
         </div>
       </el-amap-info-window>
 
@@ -137,7 +147,7 @@
 //import { AMapManager } from 'vue-amap';
     // CDN 方式
 //let amapManager = new VueAMap.AMapManager();
-import { getMarkerInfo, getMapPhByID, getMarkerList } from "@/api/map/marker_data"
+import { getMarkerInfo, getGroundList, getpointMarkerInfo, getMoreDataByPointnum } from "@/api/map/marker_data"
 import axios from 'axios'
 window.onload = function(){
    localStorage.clear()
@@ -155,26 +165,28 @@ export default {
       markers: [],
       ground_markers:[],
       point_markers:[],
-      zoom: 11,
+      zoom: 12,
       center: [121.457624, 31.27586],
       events: {
         init: o => {
-          console.log(1, o.getCenter()); //获取地图中心
-          console.log(2, this.$refs.map.$$getInstance()); //获取地图实例
+          //console.log(1, o.getCenter()); //获取地图中心
+          //console.log(2, this.$refs.map.$$getInstance()); //获取地图实例
           o.getCity(result => {
             console.log(3, result);
           })        
         }, 
         moveend: () => {},
         zoomchange: () => {
-          if(this.$refs.map.$$getInstance().getZoom()>14){
-            this.currentWindow.visible = false
+          if(this.$refs.map.$$getInstance().getZoom()>15){
+            this.projectWindow.visible = false
             this.window.visible=false
-            this.currentWindow1.visible = true
+            this.pointWindow.visible = true
+            this.polygons_window = true
           }else{
-            this.currentWindow1.visible = false
+            this.pointWindow.visible = false
             this.window1.visible=false
-            this.currentWindow.visible = true
+            this.projectWindow.visible = true
+            this.polygons_window = false
           }
         },
         click: e => {
@@ -183,7 +195,7 @@ export default {
           this.lat = lat;
           this.window.visible=false
           this.window1.visible=false
-          //console.log("点击坐标点：" + [lng, lat]);
+          console.log("点击坐标点：" + [lng, lat]);
           // 这里通过高德 SDK 完成。         
           var geocoder = new AMap.Geocoder({
           radius: 1000,
@@ -208,13 +220,20 @@ export default {
           //showRoad:true,
           events: {
             init(o) {
-              console.log(4, o);
+              //console.log(4, o);
             }
           }
         } //卫星路况插件
       ], //引入插件
+      polygons: [],
       windows: [],
       point_window:[],
+      polygons_window:{
+        position:[121.457624, 31.27586],
+        content:'',
+        event:{},
+        visible:true
+      },      
       window: {
         position:[121.457624, 31.27586],
         content:'',
@@ -227,13 +246,13 @@ export default {
         event:{},
         visible:false
       },  
-      currentWindow:{
+      projectWindow:{
         position:[121.457624, 31.27586],
         content:'',
         event:{},
         visible:true
       },
-      currentWindow1:{
+      pointWindow:{
         position:[121.457624, 31.27586],
         content:'',
         event:{},
@@ -243,18 +262,41 @@ export default {
   },
 
   methods: {
+
+    toDetail(){
+      let transmit_project_num = this.transmit_project_num
+      console.log('transmit_project_num', transmit_project_num)
+      this.$router.push({path:'/table/detail-table',query: {transmit_project_num}})
+    },
+
     async show_point(index,ground_number){
       this.windows.forEach(item => {
         item.visible = true;
       });
       this.window = this.windows[index]; 
-
-      this.currentWindow.visible = true;
-      this.currentWindow1.visible=true;
+      this.center = this.windows[index].position
+      this.zoom=16;
+      this.projectWindow.visible = true;
+      this.pointWindow.visible=true;
       this.$nextTick(() => {
         this.window.visible = false
-        this.currentWindow.visible = false;  
+        this.projectWindow.visible = false;  
+        this.center = this.window.positions;
+        console.log("项目体坐标点1",this.center)
+        this.zoom=17
       })
+      let res5 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/polygons');
+      console.log("res5",res5)
+      let paths = res5.data.data;
+      console.log("path",paths)
+      let polygons= []
+      paths.forEach((item,index) => {
+        polygons.push({
+          id:(index+3)*123,
+          path:item.path,
+        });
+      });
+      this.polygons = polygons;
 
       // let res5 = await getMarkerList(ground_number)
       // let oneGround_Markers = res5.data.res
@@ -273,27 +315,28 @@ export default {
 
     async Marker_Click(index,ground_number) {
       console.log(`id为${index}`);
+      this.transmit_project_num = ground_number
       this.windows.forEach(item => {
         item.visible = false;
       });
-console.log("ground_number",ground_number)
-      this.currentWindow.visible = true;
-      this.currentWindow1.visible = true;
+      this.projectWindow.visible = true;
+      this.pointWindow.visible = true;
       // this.$nextTick(() => {
       //   this.currentWindow1.visible = false;  
       // })
-      console.log(this.$refs.map.$$getInstance().getZoom());
+      this.window.visible=false;
       this.window = this.windows[index];
-      this.center = this.windows[index].position
+      this.center = this.windows[index].position;
       this.zoom=13;
       this.$nextTick(() => {
         this.window.visible = true;
-        this.currentWindow1.visible = false;
-        this.center = this.window.position;
+        this.pointWindow.visible = false;
+        this.center = this.window.positions;
         console.log("项目体坐标点",this.center)
         this.zoom=14
+        console.log("zoom", this.$refs.map.$$getInstance().getZoom());
       });  
-      let res3 = await getMapPhByID(ground_number);
+      let res3 = await getGroundList(ground_number);
       console.log(res3)
       let ground_data = res3.data.res;
       let groundData=ground_data.map((item,index) =>{
@@ -302,24 +345,25 @@ console.log("ground_number",ground_number)
       });
       this.groundData = groundData;
     },
-    async Point_Click(index){
+    async Point_Click(index,point_num){
       console.log(`id为${index}`);
       this.point_window.forEach(item => {
         item.visible = false;
       });
       console.log(this.$refs.map.$$getInstance().getZoom());
       this.window1 = this.point_window[index];
-      this.center = this.window1.position;
-      this.zoom=15;
+      //this.center = this.window1.position;
+      //this.zoom=16;
       this.$nextTick(() => {
         this.window1.visible = true;
-        this.center = this.window1.position;
+        //this.center = this.window1.position;
         console.log("监测点坐标点",this.center)
-        this.zoom=16
+        //this.zoom=17
       });
-      let res4 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/tab');
-      console.log("res5",res4)
-      let point_data = res4.data.pointData;
+      //let res4 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/tab');
+      let res4 = await getMoreDataByPointnum(point_num)
+      console.log("监测点res4",res4)
+      let point_data = res4.data.res;
       console.log("point_data",point_data)
       let pointData=point_data.map((item,index) =>{
         item.id=index;
@@ -356,7 +400,7 @@ console.log("ground_number",ground_number)
 
        ground_windows.push({
           visible: false,
-          position: [item.project_lng + 0.0015, item.project_lat + 0.0015],
+          position: [item.project_lng + 0.0010, item.project_lat + 0.0010],
           ground_name:item.project_name, 
           positions:[item.project_lng,item.project_lat]  
       })
@@ -366,31 +410,36 @@ console.log("ground_number",ground_number)
     this.markers = ground_markers;
     this.windows = ground_windows;
 
-    let res2 = await axios.get('https://www.easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map')
-    let res2_markers = res2.data.data
+    //let res2 = await axios.get('https://www.easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map')
+    let res2= await getpointMarkerInfo()
+    let res2_markers = res2.data.res
+    console.log("测试1111",res2_markers)
     let point_markers = []    
     let point_window = []
     res2_markers.forEach((item,index) => {
       let events ={}
       point_markers.push({
         id: (index+1)*10,
-        position: [item.lng, item.lat],
+        position: [item.point_lng, item.point_lat],
     // events:{
     //   click:()=> {
     //     return this.Point_Click(index);
     //   }},
-        point_name:item.content,
+        point_name:item.point_intro,
         //ground_num:item.ground_num,
         count:item.count,
-        ground_type:item.ground_type,
+        ground_type:item.project_type,
+        ground_id:item.project_id,
+        ground_number:item.project_num,
+        point_num:item.point_num,
         visible: true,
         isPointMarker:true
       })
        point_window.push({
           visible: false,
-          position: [item.lng + 0.00035, item.lat + 0.00035],
-          point_name:item.content, 
-          positions:[item.lng,item.lat]  
+          position: [item.point_lng + 0.00035, item.point_lat + 0.00015],
+          point_name:item.point_intro, 
+          positions:[item.point_lng,item.point_lat]  
       })
     });
     this.point_markers = point_markers;

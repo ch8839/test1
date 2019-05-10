@@ -259,6 +259,7 @@
           }
         },
         markers: [],
+        allMarkers: [],
         zoom: 15,
         center: [121.457624, 31.27586],
         events: {
@@ -274,9 +275,10 @@
           // "ToolBar", //手动调焦插件
           {
             pName: "MapType",
-            defaultType: 0
+            defaultType: 1,
+            // showRoad:true
           } //卫星路况插件
-        ] //引入插件
+        ] 
       };
     },
     methods: {
@@ -298,7 +300,8 @@
           let markers = []
           res_markers.forEach(item => {
             markers.push({
-              id: item.index,
+              id: item.id,
+              point_num: item.point_num,
               position: [item.point_lng, item.point_lat],
               visible: true
             });
@@ -308,6 +311,7 @@
           }
 
           this.markers = markers
+          this.allMarkers = markers
           console.log("markers", markers)
         }
       },
@@ -315,7 +319,14 @@
       pointChange() {
         this.currentPage = 1; //选择类型后重置页码为1
         const page_size = this.page_size;
-        console.log("selectedPoint", this.selectedPoint);
+        console.log("selectedPoint", this.selectedPoint)
+        if(this.selectedPoint !=='0'){
+          this.markers = this.allMarkers.filter(item=>{         
+            return item.point_num == this.selectedPoint
+          })
+        }else{
+          this.markers = this.allMarkers
+        }      
         this.getList(this.currentPage, page_size);
       },
 
@@ -461,6 +472,27 @@
 
     mounted() {
       this.getData();
+    },
+
+    watch:{
+      // '$route': function(value){
+      //   console.log('value', value)
+      //   if(value.query){
+        
+      //   let transmit_project_num = value.query.transmit_project_num
+      //   let ProjectOptions = this.ProjectOptions
+      //   for(let i =0;i<=ProjectOptions.length;i++){
+      //     let item = ProjectOptions[i]
+      //     let res = item.children.find(item=>{
+      //       return item.value == transmit_project_num
+      //     })
+      //     if(res){
+      //       this.selectedProject = [res.value, transmit_project_num]
+      //       break
+      //     }
+      //   }
+      // }
+      // }
     },
 
     computed: {

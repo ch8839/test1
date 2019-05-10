@@ -1,31 +1,22 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user', {
+  return sequelize.define('area_map', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    username: {
+    area_num: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    password: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    roles: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true,
-      defaultValue: '1'
-    },
-    avatar: {
+    area_name: {
       type: DataTypes.STRING(255),
       allowNull: true
     }
   }, {
-    tableName: 'user'
+    tableName: 'area_map'
   });
 };

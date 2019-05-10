@@ -1,6 +1,14 @@
 const AllProjectDataModel = require('../../models/table/projectInfo.js')
+const AllMap = require('../../models/common/Map.js')
 
-const areaMap = new Map([['0001', '静安区'], ['0002', '长宁区'], ['0003','宝山区']])
+var areaMap
+
+AllMap.then(data=>{
+  areaMap = data.area_Map
+})
+
+// const areaMap = new Map([['0001', '静安区'], ['0002', '长宁区'], ['0003','宝山区']])
+
 class ProjectInfo_Controller {
 
   static async getProjectInfo(ctx) {
@@ -25,6 +33,7 @@ class ProjectInfo_Controller {
       }
     })
     console.log('project_obj', project_obj)
+    console.log('areaMap', areaMap)
     for(let key in project_obj){
       project_arr.push({
         value: key,
@@ -57,7 +66,7 @@ class ProjectInfo_Controller {
       return { value: item}
     })
     
-    console.log('PointOptions', PointOptions)
+    // console.log('PointOptions', PointOptions)
     PointOptions.unshift({ value: '0', label:'全部'})
     
     if (res) {
