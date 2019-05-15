@@ -24,6 +24,7 @@ export default {
     }
   },
   created() {
+    console.log("加载")
     this.getBreadcrumb()
   },
   methods: {

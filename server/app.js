@@ -55,9 +55,10 @@ app.use(router.routes()) // 将路由规则挂载到Koa上。
 app.use(static(
   path.join(__dirname, '../dist')
 ))
-
-app.listen(9098, () => {
-  console.log('Koa is listening on port 9098');
+// console.log(77,process.env)
+let port = process.env.PORT || 9097
+app.listen(port, () => {
+  console.log(`Koa is listening on port ${port}`);
 });
 
 module.exports = app
