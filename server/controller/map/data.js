@@ -5,6 +5,10 @@ const ElementDataModel = require('../../models/map/elementInfo.js')
 const PointInfoModel = require('../../models/map/pointInfo.js')
 const sample_detector_ground_info_model=require('../../models/map/sample_detector_ground_info.js')
 const common_model=require('../../models/common/Map.js')
+const UserModel = require('../../models/map/login.js')
+const jwt = require('jsonwebtoken')
+const secret = 'shu-project'
+
 
 var reference,element_Map
 
@@ -101,11 +105,9 @@ const getMapPhByID = async function (ctx) {
 // 在地图页面上获得所有不同区域和地块评估类型的项目体信息以及该项目体的异常污染值
 const getMarkerInfo = async function (ctx) {
   let res = await AllProjectDataModel.getAllProjectData()//得到所有的数据
- 
   let groundnumtopoint = []
   let project_numberList = []
   let data = []
-
 // in -key  of -value
   for (let item of res) {//遍历数据
     let ground_name_point = await AllGroundDataModel.getPointnumByGroundnum(item.project_num)
@@ -128,19 +130,15 @@ const getMarkerInfo = async function (ctx) {
       var fixed_count=0
       if (list) {
         for (let item of list) {//item存放着监测点位的编号
-          
           var count = 0
           let resph = await AllProjectDataModel.getPhData(item)
           let PHdata = resph.map(item => {
             return item = item.dataValues
           })
 
-          // console.log(11,PHdata)
-
           for (let item of PHdata) {//遍历检测点位不同深度的数据为item
-
             for (let x in item) {
-              if (item[x] && reference[x] && (item[x] > reference[x])) {
+              if (item[x] && reference.get(i) && (item[x] > reference.get(i))) {
                 count++;
                 countall++;
                 switch (item.assess_type){
@@ -160,24 +158,31 @@ const getMarkerInfo = async function (ctx) {
             count=0
             //将违规数目更新至ground_info和real_time_info中
           }
-          
         }
         //从这里开始结束循环，计算出一个地块所有检测点位的count
-        console.log(1234,simple_count,detail_count,fixed_count,countall)
         const res2 = await AllProjectDataModel.UpdatedifferentCount(item1,simple_count, detail_count,fixed_count,countall)
         //将各种不同类型的数目更新至project_info中
       }
-      // console.log(s)
     }
 
   }//此处循环结束
+  const token = ctx.header['shu-token']
+  if (token) {
+      var playload = await jwt.verify(token, secret)
+      console.log('playload', playload)
+      var project_num = await UserModel.getProjectnumByUser(playload.username)
 
-  let Alldata = await AllProjectDataModel.getAllProjectData()//得到所有的数据
+  }
+  var project_num_List=project_num.split('、')
+  const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
+ 
+
   ctx.body = {
     success: true,
-    res: Alldata,
+    res: res11,
     msg: '获取成功'
   }
+
 }
     
 
