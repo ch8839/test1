@@ -1,16 +1,19 @@
 <template>
   <div class="project-info-container-echart">
     <div>
-      <div>
+      <div class="filter-container">
+        <p class="p-item">请选择项目：</p>
         <el-cascader
           expand-trigger="hover"
           :options="options"
           ref="cascaderAddr"
           clearable
           v-model="selectedOptions"
+          class="filter-item"
           @change="handleCascaderChange"
         ></el-cascader>
 
+        <P class="p-item">请选择调查类型：</P>
         <el-select
           v-model="assessListQuery"
           placeholder="请选择类型"
@@ -29,7 +32,7 @@
         <el-tab-pane label="土壤" name="earth">
           <el-table
             :data="temp_tableItems"
-            @expand-change="handleFlag"
+            @expand-change="handleLineElementData"
             border
             stripe
             style="width:100%"
@@ -49,19 +52,19 @@
 
                   <el-col :xs="24" :sm="24" :lg="12">
                     <!-- 折线图div -->
-                    <!-- <el-select
+                    <el-select
                       v-model="lineElementListQuery"
                       placeholder="请选择元素"
                       class="filter-item"
-                      @change="handleLineElementSelect"
+                      @change="handleLineElementSelect(scope.row.attention, scope.row.point_num)"
                     >
                       <el-option
-                        v-for="(item,index) in lineElementOptions"
+                        v-for="(item,index) in props.row.lineseries.lineElementOptions"
                         :key="index"
                         :label="item.label"
                         :value="item.label"
                       />
-                    </el-select>-->
+                    </el-select>
                     <div
                       :id="'myLineChart'+props.row.point_num"
                       :data="drawLine('myLineChart'+props.row.point_num, props.row.lineseries)"
@@ -75,20 +78,13 @@
             <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
             <el-table-column prop="attention" label="主要超标元素" align="center">
-              <!-- <template v-else-if="handlePollutionList(scope.row.point_element).length">
+              <template slot-scope="scope">
                 <el-tag
                   type="danger"
-                  v-for="(item,index) in handlePollutionList(scope.row.point_element)"
-                  :key="index"
-                >{{element_Map.get(item.element)}}</el-tag>
-              </template> -->
-              <template slot-scope="scope">
-                <el-tag 
-                  type="danger"
                   v-for="(item, index) in scope.row.attention"
-                  :key="index">{{scope.row.attention[index]}}</el-tag>
+                  :key="index"
+                >{{scope.row.attention[index]}}</el-tag>
               </template>
-              
             </el-table-column>
             <el-table-column prop="status" label="点位情况" align="center"></el-table-column>
             <el-table-column label="详细信息" align="center">
@@ -96,13 +92,81 @@
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="getDetailInfo(scope.row.point_num)"
+                  @click="getDetailInfo(scope.row.attention, scope.row.point_num)"
                 >详情信息</el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="水" name="water"></el-tab-pane>
+        <el-tab-pane label="水" name="water">
+          <el-table
+            :data="temp_water_tableItems"
+            @expand-change="handleLineElementData"
+            border
+            stripe
+            style="width:100%"
+          >
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <el-row :gutter="32">
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <!-- 雷达图div -->
+                    <div
+                      :id="'myRadarChart'+props.row.point_num"
+                      :class="className"
+                      :data="drawRadar('myRadarChart'+props.row.point_num, props.row.radarseries)"
+                      :style="{height:height,width:width}"
+                    ></div>
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <!-- 折线图div -->
+                    <el-select
+                      v-model="lineElementListQuery"
+                      placeholder="请选择元素"
+                      class="filter-item"
+                      @change="handleLineElementSelect(scope.row.attention, scope.row.point_num)"
+                    >
+                      <el-option
+                        v-for="(item,index) in props.row.lineseries.lineElementOptions"
+                        :key="index"
+                        :label="item.label"
+                        :value="item.label"
+                      />
+                    </el-select>
+                    <div
+                      :id="'myLineChart'+props.row.point_num"
+                      :data="drawLine('myLineChart'+props.row.point_num, props.row.lineseries)"
+                      :class="className"
+                      :style="{height:height,width:width}"
+                    ></div>
+                  </el-col>
+                </el-row>
+              </template>
+            </el-table-column>
+            <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
+            <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
+            <el-table-column prop="attention" label="主要超标元素" align="center">
+              <template slot-scope="scope">
+                <el-tag
+                  type="danger"
+                  v-for="(item, index) in scope.row.attention"
+                  :key="index"
+                >{{scope.row.attention[index]}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" label="点位情况" align="center"></el-table-column>
+            <el-table-column label="详细信息" align="center">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="getDetailInfo(scope.row.attention, scope.row.point_num)"
+                >详情信息</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
       </el-tabs>
     </div>
     <el-dialog :visible.sync="dialogFormVisible">
@@ -114,7 +178,7 @@
         @change="handleBarElementSelect"
       >
         <el-option
-          v-for="(item,index) in barElementOptions"
+          v-for="(item,index) in temp_barElementOptions"
           :key="index"
           :label="item.label"
           :value="item.value"
@@ -131,10 +195,6 @@
 <script >
 let echarts3_0 = require("echarts/lib/echarts"); // 引入基本模板
 require("echarts/lib/chart/bar"); // 引入柱状图组件
-// require("echarts/lib/chart/radar"); // 引入柱状图组件
-
-// //s 引入提示框和title组件
-// require("echarts/lib/component/legend");
 require("echarts/lib/component/toolbox");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
@@ -143,11 +203,15 @@ import {
   getCascader,
   getTableItemsByPN,
   getAssessData,
-  getRadarRealTimeValue,
-  getRadarData,
-  getValidElementOfBar
+  // 水数据
+  getWaterTableItemsByPN
 } from "@/api/echarts/echarts";
-import { getHistogramData } from "@/api/echarts/echarts";
+import {
+  getHistogramData,
+  getRadarEachDepthValue,
+  GroundRadarThresholdData,
+  getWaterHistogramData
+} from "@/api/echarts/echarts";
 
 /* 引入函数 */
 import { debounce } from "@/utils";
@@ -184,12 +248,12 @@ export default {
       activeName: "earth",
       selectedOptions: [],
       assessOptions: [],
-      // assessListQuery: { label: "初次调查", value: 1 },
       assessListQuery: null,
       charts: [],
       myDialogChart: null,
       dialogFormVisible: false,
       barElementListQuery: null,
+      lineElementListQuery: null,
       barElementOptions: [
         { label: "PH值", value: "PH" },
         { label: "砷", value: "arsenic" },
@@ -210,122 +274,18 @@ export default {
         { label: "矾", value: "molybdenum" },
         { label: "钼", value: "Alum" }
       ],
+      temp_barElementOptions: [],
       barSeries: [],
       temp_barPointnum: [], //用来服务于bar图的选择器
-      /* tableData: [
-        {
-          point_num: 1,
-          tips: "我是1",
-          pieseries: [
-            { value: 4, name: "初次调查" },
-            { value: 6, name: "详细调查" },
-            { value: 9, name: "修复调查" }
-          ],
-          lineseries: {
-            data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
-            markLine: [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }],
-            xAxis: [
-              "样本一",
-              "样本2",
-              "样本3",
-              "样本4",
-              "样本5",
-              "样本6",
-              "样本7",
-              "样本8",
-              "样本9",
-              "样本10"
-            ]
-          }
-          // radarseries:{
-          //   max: [],
-          //   threshhold: [],
-          //   rt_data: [],
-          // },
-        },
-        {
-          point_num: 2,
-          tips: "我是2",
-          pieseries: [
-            { value: 1, name: "初次调查" },
-            { value: 2, name: "详细调查" },
-            { value: 3, name: "修复调查" }
-          ],
-          lineseries: {
-            data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
-            markLine: [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }],
-            xAxis: [
-              "样本一",
-              "样本2",
-              "样本3",
-              "样本4",
-              "样本5",
-              "样本6",
-              "样本7",
-              "样本8",
-              "样本9",
-              "样本10"
-            ]
-          }
-        },
-        {
-          point_num: 3,
-          tips: "我是3",
-          pieseries: [
-            { value: 4, name: "初次调查" },
-            { value: 5, name: "详细调查" },
-            { value: 6, name: "修复调查" }
-          ],
-          lineseries: {
-            data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
-            markLine: [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }],
-            xAxis: [
-              "样本一",
-              "样本2",
-              "样本3",
-              "样本4",
-              "样本5",
-              "样本6",
-              "样本7",
-              "样本8",
-              "样本9",
-              "样本10"
-            ]
-          }
-        },
-        {
-          point_num: 4,
-          tips: "我是4",
-          pieseries: [
-            { value: 7, name: "初次调查" },
-            { value: 8, name: "详细调查" },
-            { value: 9, name: "修复调查" }
-          ],
-          lineseries: {
-            data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
-            markLine: [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }],
-            xAxis: [
-              "样本一",
-              "样本2",
-              "样本3",
-              "样本4",
-              "样本5",
-              "样本6",
-              "样本7",
-              "样本8",
-              "样本9",
-              "样本10"
-            ]
-          }
-        }
-      ], */
       tableData: [],
+      water_tableData: [],
       temp_tableItems: [],
+      temp_water_tableItems: [],
       temp_lineseries: {
         data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
         markLine: [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }],
         xAxis: [
-          "样本一",
+          "样本1",
           "样本2",
           "样本3",
           "样本4",
@@ -337,13 +297,8 @@ export default {
           "样本10"
         ]
       },
-      temp_radarseries: {},
-      temp_barseries: [
-        { value: 4, name: "初次调查" },
-        { value: 6, name: "详细调查" },
-        { value: 9, name: "修复调查" }
-      ],
-      barflag: false,
+      temp_radarseries: [],
+      temp_barseries: [],
       element_Map: []
     };
   },
@@ -449,7 +404,9 @@ export default {
         //
       }); */
       this.tableData = [];
+      this.water_tableData = [];
       this.temp_tableItems = [];
+      this.temp_water_tableItems = [];
       await this.selectTableItemsByPN(options[1]);
       await this.getATData();
       this.handleAssessFilter();
@@ -458,12 +415,13 @@ export default {
     async handleAssessFilter() {
       this.selectTableItemsByAT(this.assessListQuery);
       console.log("this.temp_tableItems", this.temp_tableItems);
+      console.log("this.temp_water_tableItems", this.temp_water_tableItems);
     },
 
     /* 通过项目体筛选表格数据 */
     async selectTableItemsByPN(project_num) {
-      let temp_tableData = await getTableItemsByPN(project_num);
-      let res_tableData = temp_tableData.data.res;
+      let api_tableData = await getTableItemsByPN(project_num);
+      let res_tableData = api_tableData.data.res;
       res_tableData.map(element => {
         this.tableData.push({
           point_name: element.point_name,
@@ -480,39 +438,59 @@ export default {
       });
       this.temp_tableData = this.tableData;
       console.log("我是暂时的tableData", this.temp_tableData);
+
+      let api_water_tableData = await getWaterTableItemsByPN(project_num);
+      let res_water_tableData = api_water_tableData.data.res;
+      res_water_tableData.map(element => {
+        this.water_tableData.push({
+          point_name: element.point_name,
+          point_num: element.point_num,
+          assess_type: element.assess_type,
+          status: element.status,
+          attention: element.attention,
+          // point_name: element.point_intro,
+          // remarks: element.remarks,
+          lineseries: this.temp_lineseries,
+          barseries: this.temp_barseries,
+          radarseries: this.temp_radarseries
+        });
+      });
+      this.temp_water_tableData = this.water_tableData;
+      console.log("我是暂时的water_tableData", this.temp_water_tableData);
     },
 
     /* 通过类型筛选表格数据 */
     async selectTableItemsByAT(assess_type) {
-      // if (assess_type == "所有类型") {
-      // this.temp_tableItems = this.tableData;
-      // return;
-      // } else {
-      // console.log("我是bar图选择器的传参", this.assessListQuery);
       this.temp_tableItems = this.tableData.filter(element => {
         if (element.assess_type == assess_type) {
           return true;
         }
       });
+      this.temp_water_tableItems = this.water_tableData.filter(element => {
+        if (element.assess_type == assess_type) {
+          return true;
+        }
+      });
+
       // }
     },
 
     /* 处理 */
     async handleBarElementSelect() {
-      console.log("选中的barselect", this.barElementListQuery);
+      // console.log("选中的barselect", this.barElementListQuery);
       this.getBarOptions(this.temp_barPointnum);
     },
 
-    /* 获取监测点位_柱状图的详细数据 */
-    async getDetailInfo(pointnum) {
-      this.barElementListQuery = this.barElementOptions[0].value;
+    /* 获取监测点位_ground_柱状图的详细数据 */
+    async getDetailInfo(attention, pointnum) {
+      this.handleElementSelector("bar", attention, pointnum);
+      this.barElementListQuery = this.temp_barElementOptions[0].value;
       // 获取柱状图的选择器数据
       // this.barElementOptions
       this.dialogFormVisible = true;
       this.temp_barPointnum = pointnum; //存储点位编号以便选择器传参使用
       this.handleBarElementSelect();
       this.getBarOptions(pointnum);
-      // this.drawBar(barseries);
     },
 
     /* 画柱状图 */
@@ -533,10 +511,11 @@ export default {
         title: {
           show: true,
           text:
-            this.$refs["cascaderAddr"].currentLabels[1] +
-            "各阶段" +
-            seriesvalue[5].elementname +
-            "平均值变化",
+            // this.$refs["cascaderAddr"].currentLabels[1] +
+            // "各阶段" +
+
+            "阶段治理情况：" + seriesvalue[5].elementname,
+          // "平均值变化",
           // subtext: this.selectedOptionsLabel,
           x: "center",
           y: "10"
@@ -592,7 +571,7 @@ export default {
             name: "单位:" + seriesvalue[4].unit,
             min: 0,
             // max: 15,
-            interval: 5,
+            // interval: '5%',
             axisLabel: {
               formatter: "{value}"
             }
@@ -606,13 +585,14 @@ export default {
           // },
           {
             name: seriesvalue[2].mean_value,
-            type: "line",
+            type: "bar",
+            // barWidth: 80,
             data: seriesvalue[2].value
           },
           {
             name: seriesvalue[3].max,
             type: "bar",
-            barWidth: 80,
+            // barWidth: 80,
             data: seriesvalue[3].value
           }
         ]
@@ -625,11 +605,16 @@ export default {
         point_num: pointnum,
         element: elementname
       };
-      // console.log("传入后端的bar图参数",combined_pn_en)
-      let res = await getHistogramData(combined_pn_en);
-      let temp_barseries = res.data.res;
-      console.log("bar图数据", temp_barseries);
-      this.barSeries = temp_barseries;
+      let res = null;
+      if (this.activeName == "earth") {
+        res = await getHistogramData(combined_pn_en);
+        console.log("bar图ground数据", res);
+      } else {
+        res = await getWaterHistogramData(combined_pn_en);
+        console.log("bar图water数据", res);
+      }
+      let res_barseries = res.data.res;
+      this.barSeries = res_barseries;
       //把选中的元素的单位push到barSeries[3]
       if (this.barElementListQuery == "PH") {
         this.barSeries.push({ unit: "PH" });
@@ -637,11 +622,11 @@ export default {
         this.barSeries.push({ unit: "mg" });
       }
       //把选中的元素的中文名称push到barSeries[4]
-      this.barElementOptions.find((item)=>{
-        if(item.value === this.barElementListQuery){
-          this.barSeries.push({elementname: item.label})
+      this.barElementOptions.find(item => {
+        if (item.value === this.barElementListQuery) {
+          this.barSeries.push({ elementname: item.label });
         }
-      })
+      });
       this.drawBar(this.barSeries);
     },
 
@@ -658,8 +643,7 @@ export default {
       this.myLineChart.setOption({
         title: {
           show: true,
-          text:
-            this.$refs["cascaderAddr"].currentLabels[1] + "各监测点X元素变化",
+          text: "各采样处" + this.lineElementListQuery + "变化",
           // subtext: this.selectedOptionsLabel,
           x: "center",
           y: "0"
@@ -674,10 +658,10 @@ export default {
             type: "line" // 默认为直线，可选为：'line' | 'shadow'
           }
         },
-        color: ["#CCCC99", "#333300", "#006633"],
+        color: ["#CCCC99", "#9999CC"],
         // color: ["#9999cc"],
         legend: {
-          data: ["深度一", "深度二", "深度三"],
+          data: ["最大值", "平均值"],
           x: "center",
           y: "55"
         },
@@ -721,7 +705,7 @@ export default {
         ],
         series: [
           {
-            name: "深度一",
+            name: "最大值",
             type: "line",
             // data: [11, 11, 15, 13, 12, 13, 10, 12, 13, 10],
             data: lineseriesvalue.data,
@@ -746,14 +730,14 @@ export default {
             }
           },
           {
-            name: "深度二",
+            name: "平均值",
             type: "line",
             data: [4, 5, 6, 16, 3, 1, 20, 12, 12, 11],
             // data: lineseriesvalue.data,
             itemStyle: {
               normal: {
                 lineStyle: {
-                  color: "#333300"
+                  color: "#9999CC"
                 }
               }
             },
@@ -769,8 +753,8 @@ export default {
               //   lineseriesvalue.markLine
               // ]
             }
-          },
-          {
+          }
+          /* {
             name: "深度三",
             type: "line",
             data: [1, 20, 12, 12, 1, 14, 5, 6, 16, 3],
@@ -794,11 +778,11 @@ export default {
               //   lineseriesvalue.markLine
               // ]
             }
-          }
+          } */
         ]
       });
     },
-
+    handleLineElementSelect() {},
     /* 画雷达图 */
     drawRadar(radarid, radardatalist) {
       this.$nextTick(async () => {
@@ -808,13 +792,40 @@ export default {
         this.charts.push(this.myRadarChart);
       });
     },
+    async getRadarOptions(pointnum) {
+      let combined_pn_at = {
+        point_num: pointnum,
+        assess_type: this.assessListQuery,
+        reference_num: "max",
+        type: "ground"
+      };
+      let combined_rn_type = {
+        reference_num: "17国标",
+        type: "ground"
+      };
+      let res1 = await getRadarEachDepthValue(combined_pn_at);
+      let res2 = await GroundRadarThresholdData(combined_rn_type);
+      let res1_radarseries = res1.data.res[0];
+      let p = this.temp_tableItems.findIndex(
+        item => item.point_num == pointnum
+      );
+      this.temp_tableItems[p].radarseries = [];
+      this.temp_tableItems[p].radarseries.push(res2.data.resDatar_arr);
+      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth1);
+      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth2);
+      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth3);
+      this.temp_tableItems[p].radarseries.push(res1_radarseries.max);
+      console.log("res_radarseries", p, this.temp_tableItems[p].radarseries);
+    },
     setRadarOptions(radarserisevalue) {
+      let thresholds = radarserisevalue[1].map((element) => {return element*1.4})
       this.myRadarChart.setOption({
         title: {
-          text: this.$refs["cascaderAddr"].currentLabels[1] + "最新情况",
-          // subtext: this.selectedOptionsLabel,s
+          // text: this.$refs["cascaderAddr"].currentLabels[1] + "最新情况",
+          text: "lab数据",
+          // subtext: this.selectedOptionsLabel,
           x: "center",
-          y: "1"
+          y: "50"
         },
         tooltip: {
           show: true,
@@ -824,8 +835,9 @@ export default {
         legend: {
           // orient: "vertical",
           x: "center",
-          y: 55,
-          data: ["阈值", "深度一", "深度二", "深度三"]
+          y: 100,
+          data: ["17国标", "深度一", "深度二", "深度三"]
+          // data: ["深度一", "深度二", "深度三"]
         },
         toolbox: {
           // show: true,
@@ -842,81 +854,81 @@ export default {
         },
         polar: [
           {
-            // indicator: radarserisevalue.max,
-            indicator: [
+            indicator: radarserisevalue[4],
+            /* indicator: [
               {
-                text: "PH值",
-                max: 20
+                text: "PH值"
+                // max: 20
               },
               {
-                text: "砷",
-                max: 20
+                text: "砷"
+                // max: 20
               },
               {
-                text: "镉",
-                max: 20
+                text: "镉"
+                // max: 20
               },
               {
-                text: "铬",
-                max: 40
+                text: "铬"
+                // max: 40
               },
               {
-                text: "铜",
-                max: 40
+                text: "铜"
+                // max: 40
               },
               {
-                text: "铅",
-                max: 40
+                text: "铅"
+                // max: 40
               },
               {
-                text: "汞",
-                max: 20
+                text: "汞"
+                // max: 20
               },
               {
-                text: "镍",
-                max: 40
+                text: "镍"
+                // max: 40
               },
               {
-                text: "锑",
-                max: 20
+                text: "锑"
+                // max: 20
               },
               {
-                text: "铍",
-                max: 20
+                text: "铍"
+                // max: 20
               },
               {
-                text: "钴",
-                max: 20
+                text: "钴"
+                // max: 20
               },
               {
-                text: "锌",
-                max: 50
+                text: "锌"
+                // max: 50
               },
               {
-                text: "银",
-                max: 40
+                text: "银"
+                // max: 40
               },
               {
-                text: "铊",
-                max: 40
+                text: "铊"
+                // max: 40
               },
               {
-                text: "锡",
-                max: 20
+                text: "锡"
+                // max: 20
               },
               {
-                text: "硒",
-                max: 40
+                text: "硒"
+                // max: 40
               },
               {
-                text: "钼",
-                max: 40
+                text: "钼"
+                // max: 40
               },
               {
-                text: "矾",
-                max: 20
+                text: "矾"
+                // max: 20
               }
-            ],
+            ], */
             axisLine: {
               show: true
             },
@@ -929,7 +941,7 @@ export default {
               }
             },
             radius: 130,
-            center: ["50%", "55%"],
+            center: ["50%", "65%"],
             scale: true,
             splitLine: {
               show: true,
@@ -941,12 +953,13 @@ export default {
           }
         ],
         calculable: true,
-        color: ["#000000", "#CCCC66", "#663300", "#006633"],
+        color: ["#FE7979", "#CCCC66", "#9999CC", "#99CCCC"],
+        // color: ["#CCCC66", "#9999CC", "#99CCCC"],
         series: [
           {
-            name: "阈值 vs 实际值",
+            name: "17国标 vs 实际值",
             type: "radar",
-            symbol: "rect", // 拐点的样式，还可以取值'rect','angle'等
+            symbol: "circle", // 拐点的样式，还可以取值'rect','angle'等
             symbolSize: 2, // 拐点的大小
             areaStyle: {
               normal: {
@@ -954,20 +967,29 @@ export default {
                 opacity: 0.9
               }
             },
-
-            // color: ['#9999CC','#99CC99'],
-            // itemStyle: {
-            //   normal: {
-            //     lineStyle: {
-            //       type: "default",
-            //       opacity: 0.1
-            //     }
-            //   }
-            // },
+            /* itemStyle: {
+              normal: {
+                borderWidth: 2,
+                color: function() {
+                  let params = [11, 11, 15, 13, 12, 13, 10, 12, 13, 10];
+                  let colorList = ["#2CBAFF", "#FE7979"];
+                  for (let i = 0; i < params.length; i++) {
+                    // alert(params[i]);
+                    if (params[i] < 1) {
+                      console.log(colorList[0]);
+                      return colorList[0]
+                    } else if (params[i] >= 1) {
+                      console.log(colorList[1]);
+                      return colorList[1]
+                    }
+                  }
+                }
+              }
+            }, */
             data: [
               {
-                // value: radarserisevalue.threshhold,
-                value: [
+                value: thresholds,
+                /* value: [
                   5,
                   5,
                   5,
@@ -986,22 +1008,55 @@ export default {
                   10,
                   10,
                   5
-                ],
-                name: "阈值",
+                ], */
+                name: "17国标",
                 itemStyle: {
                   normal: {
-                    color: "#000000",
+                    color: "#FE7979",
+                    /* color: function() {
+                      let params = [
+                        5,
+                        5,
+                        5,
+                        8,
+                        8,
+                        8,
+                        5,
+                        8,
+                        5,
+                        5,
+                        5,
+                        12,
+                        10,
+                        10,
+                        5,
+                        10,
+                        10,
+                        5
+                      ];
+                      let colorList = ["#2CBAFF", "#FE7979"];
+                      for (let i = 0; i < params.length; i++) {
+                        // alert(params[i]);
+                        if (params[i] < 6) {
+                          console.log(colorList[0]);
+                          return colorList[0];
+                        } else if (params[i] >= 6) {
+                          console.log(colorList[1]);
+                          return colorList[1];
+                        }
+                      }
+                    }, */
                     lineStyle: {
+                      type: 'dashed'
                       // type: "line"
                       // opacity: 0.5,
                     }
                   }
                 }
               },
-
               {
-                // value: radarserisevalue.rt_data 1,
-                value: [
+                value: radarserisevalue[1],
+                /* value: [
                   5.01,
                   6.81,
                   0.09,
@@ -1038,9 +1093,9 @@ export default {
                   "null",
                   "null",
                   "null"
-                ],
-                name: "深度一",
-                itemStyle: {
+                ], */
+                name: "深度一"
+                /* itemStyle: {
                   normal: {
                     color: "#CCCC66",
                     lineStyle: {
@@ -1048,11 +1103,11 @@ export default {
                       // opacity: 0.5,
                     }
                   }
-                }
+                } */
               },
               {
-                // value: radarserisevalue.rt_data 2,
-                value: [
+                value: radarserisevalue[2],
+                /* value: [
                   6.2,
                   3.65,
                   0.077,
@@ -1071,22 +1126,22 @@ export default {
                   21.323,
                   13.2,
                   0.136
-                ],
-                name: "深度二",
-                itemStyle: {
+                ], */
+                name: "深度二"
+                /* itemStyle: {
                   normal: {
-                    color: "#663300",
+                    color: "#9999CC",
                     lineStyle: {
                       // type: 'default',
                       // type: "line",
                       opacity: 0.5
                     }
                   }
-                }
+                } */
               },
               {
-                // value: radarserisevalue.rt_data 2,
-                value: [
+                value: radarserisevalue[3],
+                /* value: [
                   8,
                   9,
                   4,
@@ -1105,18 +1160,18 @@ export default {
                   13,
                   12,
                   13
-                ],
-                name: "深度三",
-                itemStyle: {
+                ], */
+                name: "深度三"
+                /* itemStyle: {
                   normal: {
-                    color: "#006633",
+                    color: "#99CCCC",
                     lineStyle: {
                       // type: 'default',
                       // type: "line",
                       opacity: 0.5
                     }
                   }
-                }
+                } */
               }
             ]
           }
@@ -1124,9 +1179,44 @@ export default {
       });
     },
 
-    handleFlag() {
-      this.barflag = true;
+    handleLineElementData(row) {
+      this.handleElementSelector("expand", row.attention, row.point_num);
+      this.getRadarOptions(row.point_num);
       // return
+    },
+
+    handleElementSelector(expand, attention, pointnum) {
+      this.temp_barElementOptions = [];
+      if (attention.length == 0) {
+        this.temp_barElementOptions = [
+          {
+            label: "无超标元素",
+            value: null
+          }
+        ];
+      } else {
+        for (let i of attention) {
+          this.barElementOptions.map(item => {
+            if (item.label == i) {
+              this.temp_barElementOptions.push(item);
+              return;
+            }
+          });
+        }
+      }
+      if (expand == "expand") {
+        let p = this.temp_tableItems.findIndex(
+          value => value.point_num == pointnum
+        );
+        this.temp_tableItems[p].lineseries[
+          "lineElementOptions"
+        ] = this.temp_barElementOptions;
+        this.lineElementListQuery = this.temp_tableItems[
+          p
+        ].lineseries.lineElementOptions[0].value;
+      } else {
+        this.barElementListQuery = this.temp_barElementOptions[0].value;
+      }
     }
   },
   mounted() {
@@ -1183,6 +1273,24 @@ export default {
   padding: 30px;
   .chart_contain {
     margin-left: 30px;
+  }
+  .filter-container {
+    display: flex;
+    justify-content: flex-start;
+    // margin-bottom: 30px;
+    margin: 8px 0px 30px 0px;
+    border-radius: 8px;
+    background-color: #339999;
+    .filter-item {
+      margin: 5px 0px 0px 8px;
+      // margin-left: 20px;
+      width: 130px;
+    }
+    .p-item {
+      padding-left: 10px;
+      padding-right: 5px;
+      color: #cccc99;
+    }
   }
 }
 </style>

@@ -13,6 +13,8 @@ const waterInfo_Controller = require('../controller/table/waterInfo.js')
 //echarts模块
 const echart_Controller_0 = require('../controller/echarts/echart_0.js')
 const echart_Controller = require('../controller/echarts/echart.js')
+const echart_ground_Controller = require('../controller/echarts/echart_ground.js')
+const echart_water_Controller = require('../controller/echarts/echart_water.js')
 
 //map模块
 const mapController = require('../controller/map/data.js')
@@ -44,12 +46,18 @@ router.post('/water/getLabWaterList' , waterInfo_Controller.getLabWaterList)
 router.post('/water/getDetWaterList' , waterInfo_Controller.getDetWaterList)
 router.get('/water/getLabWaterReference/:sample_num' , waterInfo_Controller.getLabWaterReference)
 
-//echarts部分
+//echart_0部分
+router.get('/database/ComputeLabAttention',echart_Controller_0.ComputeLabAttention)
+router.get('/database/ComputeLabWaterAttention',echart_Controller_0.ComputeLabWaterAttention)
 router.get('/project/getRawCascader' , echart_Controller_0.getRawCascader) 
 router.get('/project/getRawAssessData/:project_num' , echart_Controller_0.getRawAssessData) 
 router.get('/project/getTableItemsByPN/:project_num' , echart_Controller_0.getTableItemsByPN) 
-router.post('/bar/getValidElementOfBar', echart_Controller_0.getValidElementOfBar) 
-router.post('/echarts/getHistogramData', echart_Controller.getHistogramData)
+router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.getWaterTableItemsByPN) 
+//其它echarts部分
+router.post('/groundecharts/getHistogramData', echart_ground_Controller.getHistogramData)
+router.post('/groundecharts/getRadarEachDepthValue', echart_ground_Controller.getRadarEachDepthValue)
+router.post('/groundecharts/GroundRadarThresholdData', echart_ground_Controller.GroundRadarThresholdData)
+router.post('/groundecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo) //1

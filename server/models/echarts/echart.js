@@ -1,6 +1,5 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
-
-const echartSchema = theDatabase.import('../../schema/sample_detector_ground_info.js'); 
+const echartSchema = theDatabase.import('../../schema/sample_lab_ground_info.js'); 
 const radarSchema = theDatabase.import('../../schema/reference_info.js'); 
 const referenceInfoSchema = theDatabase.import('../../schema/reference_info.js'); 
 const unitInfoSchema = theDatabase.import('../../schema/unit_info.js'); 
@@ -105,7 +104,6 @@ const getHistogramElement = async function (point_num, element) {
                 attributes: [element,'sample_depth','assess_type'],
                 where: {
                     point_num,
-          
                 }
             })
         

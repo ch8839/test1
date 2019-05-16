@@ -1,40 +1,24 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('sample_lab_ground_info', {
+  return sequelize.define('sample_water_histogram_statistic_value', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    sample_num: {
+    statistic_value: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    assess_type: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: false
     },
     point_num: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
-    project_num: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    sample_depth: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    count: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
+    assess_type: {
+      type: DataTypes.INTEGER(255),
+      allowNull: false
     },
     PH: {
       type: DataTypes.STRING(255),
@@ -126,23 +110,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: '-1'
     },
-    attention: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     remarks: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    lng: {
-      type: "DOUBLE(30,10)",
-      allowNull: true
-    },
-    lat: {
-      type: "DOUBLE(30,10)",
-      allowNull: true
     }
   }, {
-    tableName: 'sample_lab_ground_info'
+    tableName: 'sample_water_histogram_statistic_value'
   });
 };

@@ -98,8 +98,8 @@ const ComputeCount = async function (ctx) {
         var attention=-1
         for (let item in i ){
            
-            if (i[item]>reference[item]&&(i[item]-reference[item])>chazhi&&element_Map.has(item)){
-                chazhi=i[item]-reference[item]
+            if (i[item]>reference.get(item)&&(i[item]-reference.get(item))>chazhi&&element_Map.has(item)){
+                chazhi=i[item]-reference.get(item)
                 attention=item
             }
             let data = await sample_detector_ground_info_model.UpdateAttention(i.sample_num,attention)

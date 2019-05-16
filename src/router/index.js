@@ -67,7 +67,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Echart',
         component: () => import('@/views/echart/index'),
-        meta: { title: '图表信息', icon: 'form' }
+        meta: { title: '统计信息', icon: 'form' }
       }
     ]
   },

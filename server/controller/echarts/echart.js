@@ -18,10 +18,10 @@ class echart_Controller{
     
     let SingleElementOptions = ctx.request.body //从前端传入的数据
     let { point_num,element } = SingleElementOptions //将传入的数据将进行定义
-   
+    console.log('我是_ point_num_element',point_num, element)    
     let res1 = await AllEchartDataModel.getAllEchartData(point_num)
     let res = await AllEchartDataModel.getHistogramElement(point_num,element)//通过point_num,assess_type,element将数据库中的数据取出
-    
+    // console.log('我是_ res',res)
     let  DifferentDepthData= res.map(item => {
       return item = item.dataValues
     })
@@ -133,7 +133,6 @@ class echart_Controller{
     sample_depth = sample_depth.filter((item, index, self) => {
         return index == self.indexOf(item)
       })//将得到的深度进行去重
-    console.log("我是深度2",sample_depth)
 
    if(assess_type == 1){
 

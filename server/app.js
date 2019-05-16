@@ -16,7 +16,7 @@ app.use(cors()) //use cors一定要挂载到路由之前
 app.use(bodyparser()) //use bodyparser要挂载到路由之前
 app.use(json())
 
-app.use(async function (ctx, next) {
+/* app.use(async function (ctx, next) {
   try {
     let url = ctx.request.url
     // 登录 不用检查
@@ -43,7 +43,7 @@ app.use(async function (ctx, next) {
     }
     throw err
   }
-})
+}) */
 
 
 
