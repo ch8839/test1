@@ -5,7 +5,6 @@ const index = require('./routers/index.js')
 const bodyparser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 const json = require('koa-json')
-const static = require('koa-static')
 
 const app = new Koa()
 const router = new Router()
@@ -30,9 +29,7 @@ app.use(async function (ctx, next) {
 // })
 router.use(index.routes())
 app.use(router.routes()) // 将路由规则挂载到Koa上。
-app.use(static(
-  path.join( __dirname,  '../dist')
-))
+
 
 app.listen(9098, () => {
     console.log('Koa is listening on port 9098');

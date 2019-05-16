@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50643
+Source Server Version : 50528
 Source Host           : localhost:3306
-Source Database       : tank
+Source Database       : ceshi
 
 Target Server Type    : MYSQL
-Target Server Version : 50643
+Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2019-04-24 17:11:06
+Date: 2019-04-23 20:09:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
