@@ -72,6 +72,39 @@
                 <span style="margin-left: 10px">{{ assess_type_options[scope.row.assess_type].label }}</span>
               </template>
             </el-table-column>
+            <el-table-column
+              label="位置"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                  v-if="scope.row.lng"
+                >
+                  <div class="map_container2">
+                    <el-amap
+                      ref="map2"
+                      :vid="scope.row.sample_num"
+                      :center="[scope.row.lng, scope.row.lat]"
+                      :zoom="zoom"
+                      class="amap-demo"
+                    >
+                      <el-amap-marker
+                        :position="[scope.row.lng, scope.row.lat]"
+                        animation="AMAP_ANIMATION_DROP"
+                        :vid="scope.row.id"
+                      ></el-amap-marker>
+                    </el-amap>
+                  </div>
+                  <el-button size="mini" slot="reference">查看</el-button>
+                </el-popover>
+                <div v-else>
+                  <el-tag type="info">暂无位置信息</el-tag>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="深度" width="120" align="center">
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.sample_depth || '\\' }}</span>
@@ -157,6 +190,39 @@
             <el-table-column prop="point_num" label="调查类型" align="center" sortable>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ assess_type_options[scope.row.assess_type].label }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="位置"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                  v-if="scope.row.lng"
+                >
+                  <div class="map_container2">
+                    <el-amap
+                      ref="map2"
+                      :vid="scope.row.sample_num"
+                      :center="[scope.row.lng, scope.row.lat]"
+                      :zoom="zoom"
+                      class="amap-demo"
+                    >
+                      <el-amap-marker
+                        :position="[scope.row.lng, scope.row.lat]"
+                        animation="AMAP_ANIMATION_DROP"
+                        :vid="scope.row.id"
+                      ></el-amap-marker>
+                    </el-amap>
+                  </div>
+                  <el-button size="mini" slot="reference">查看</el-button>
+                </el-popover>
+                <div v-else>
+                  <el-tag type="info">暂无位置信息</el-tag>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="深度" width="120" align="center">
@@ -587,8 +653,8 @@
     }
 
     .map_container {
-      height: 500px;
-      height: 500px;
+      height: 450px;
+      
     }
   }
 

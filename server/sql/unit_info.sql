@@ -2,12 +2,12 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50643
+Source Server Version : 50528
 Source Host           : localhost:3306
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50643
+Target Server Version : 50528
 File Encoding         : 65001
 
 Date: 2019-05-09 10:26:40
@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `unit_info`;
 CREATE TABLE `unit_info` (
   `id` varchar(255) NOT NULL,
-  `PH` varchar(255) DEFAULT NULL,
+  `PHֵ` varchar(255) DEFAULT NULL,
   `arsenic` varchar(255) DEFAULT NULL,
   `cadmium` varchar(255) DEFAULT NULL,
   `chromium` varchar(255) DEFAULT NULL,
@@ -45,6 +45,6 @@ CREATE TABLE `unit_info` (
 -- ----------------------------
 -- Records of unit_info
 -- ----------------------------
-INSERT INTO `unit_info` VALUES ('1', 'ph', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg');
-INSERT INTO `unit_info` VALUES ('2', 'PH值', '砷', '镉', '铬', '铜', '铅', '汞', '镍', '锑', '铍', '钴', '锌', '银', '铊', '锡', '硒', '钼', '矾');
+INSERT INTO `unit_info` VALUES ('1', '', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg');
+INSERT INTO `unit_info` VALUES ('2', 'PH值', '砷', '镉', '铬', '铜', '铅', '汞', '镍', '锑', '铍', '钴', '锌', '银', '铊', '锡', '硒', '矾', '钼');
 SET FOREIGN_KEY_CHECKS=1;

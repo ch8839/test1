@@ -25,7 +25,7 @@ const ComputeCount = async function (ctx) {
       for (let x of res2) {
           var count=0
           for (let i in x){
-        if (x[i] && reference[i] && (x[i] > reference[i])) {
+        if (x[i] && reference.get(i) && (x[i] > reference.get(i))) {
          count+=1
         }
       }
@@ -88,7 +88,7 @@ const ComputeCount = async function (ctx) {
 //   element_Map = new Map(element_Map_arr)//拿到中英文映射
 //   unit_Map = new Map(unit_Map_arr)//拿到单位映射
   const ComputeAttention = async function (ctx) {
-  
+    
     let Alldata = await sample_detector_ground_info_model.getAlldata()
     let res = Alldata.map(item=>{
         return item = item.dataValues
@@ -98,7 +98,7 @@ const ComputeCount = async function (ctx) {
         var attention=-1
         for (let item in i ){
            
-            if (i[item]>reference.get(item)&&(i[item]-reference.get(item))>chazhi&&element_Map.has(item)){
+            if ((i[item]>reference.get(item))&&(i[item]-reference.get(item)>chazhi)&&element_Map.get(item)){
                 chazhi=i[item]-reference.get(item)
                 attention=item
             }
@@ -107,6 +107,7 @@ const ComputeCount = async function (ctx) {
         }
     
 }
+console.log(11,reference)
   }
 
   module.exports = {

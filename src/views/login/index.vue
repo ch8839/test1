@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import { isvalidUsername } from "@/utils/validate";
 
+import { isvalidUsername } from "@/utils/validate";
 export default {
   name: "Login",
   data() {
@@ -135,7 +135,7 @@ $light_gray: #eee;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: $bg;
       height: 47px;
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -157,10 +157,11 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 .login-container {
-  position: fixed;
-  height: 100%;
   width: 100%;
-  background-color: $bg;
+  height: 100%;
+  background:url("../../../static/img/background1.jpg");
+  background-repeat:no-repeat;
+  background-size:100% 100%;
   .login-form {
     position: absolute;
     left: 0;
@@ -190,7 +191,7 @@ $light_gray: #eee;
   .title {
     font-size: 26px;
     font-weight: 400;
-    color: $light_gray;
+    color: #2d3a4b;
     margin: 0px auto 40px auto;
     text-align: center;
     font-weight: bold;

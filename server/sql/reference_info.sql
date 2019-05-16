@@ -2,12 +2,13 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50643
+Source Server Version : 50528
 Source Host           : localhost:3306
+
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50643
+Target Server Version : 50528
 File Encoding         : 65001
 
 Date: 2019-05-09 10:26:03
@@ -25,23 +26,23 @@ CREATE TABLE `reference_info` (
   `reference_num` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `PH` double(30,3) DEFAULT NULL,
-  `arsenic` double(30,3) DEFAULT NULL COMMENT '砷',
-  `cadmium` double(30,3) DEFAULT NULL COMMENT '镉',
-  `chromium` double(30,3) DEFAULT NULL COMMENT '铬',
-  `copper` double(30,3) DEFAULT NULL COMMENT '铜',
-  `lead` double(30,3) DEFAULT NULL COMMENT '铅',
-  `mercury` double(30,3) DEFAULT NULL COMMENT '汞',
-  `nickel` double(30,3) DEFAULT NULL COMMENT '镍',
-  `antimony` double(30,3) DEFAULT NULL COMMENT '锑',
-  `beryllium` double(30,3) DEFAULT NULL COMMENT '铍',
-  `cobalt` double(30,3) DEFAULT NULL COMMENT '钴',
-  `zinc` double(30,3) DEFAULT NULL COMMENT '锌',
-  `silver` double(30,3) DEFAULT NULL COMMENT '银',
-  `thallium` double(30,3) DEFAULT NULL COMMENT '铊',
-  `tin` double(30,3) DEFAULT NULL COMMENT '锡',
-  `selenium` double(30,3) DEFAULT NULL COMMENT '硒',
-  `molybdenum` double(30,3) DEFAULT NULL COMMENT '钼',
-  `Alum` double(30,3) DEFAULT NULL COMMENT '矾',
+  `arsenic` double(30,3) DEFAULT NULL,
+  `cadmium` double(30,3) DEFAULT NULL,
+  `chromium` double(30,3) DEFAULT NULL,
+  `copper` double(30,3) DEFAULT NULL,
+  `lead` double(30,3) DEFAULT NULL,
+  `mercury` double(30,3) DEFAULT NULL,
+  `nickel` double(30,3) DEFAULT NULL,
+  `antimony` double(30,3) DEFAULT NULL,
+  `beryllium` double(30,3) DEFAULT NULL,
+  `cobalt` double(30,3) DEFAULT NULL,
+  `zinc` double(30,3) DEFAULT NULL,
+  `silver` double(30,3) DEFAULT NULL,
+  `thallium` double(30,3) DEFAULT NULL,
+  `tin` double(30,3) DEFAULT NULL,
+  `selenium` double(30,3) DEFAULT NULL,
+  `molybdenum` double(30,3) DEFAULT NULL,
+  `Alum` double(30,3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 

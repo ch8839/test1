@@ -1,0 +1,18 @@
+{
+    "apps" : [{
+        "name" : "shu",
+        "script"    : "./server/app.js",
+        "instances" : 4,
+        "watch": false,
+        "ignore_watch": ["node_modules"],
+        "env": {
+              "PORT": 9097,
+              "NODE_ENV": "development"
+        },
+        "env_production": {
+              "PORT": 9098,
+              "NODE_ENV": "production"
+        }
+    }]
+   }
+   

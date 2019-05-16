@@ -14,15 +14,23 @@ const getPhData = async function(ground_number){
     return AllProjectData
 }
 
-// const getDepthData = async function(ground_number){
-//     const AllProjectData = await groundInfoSchema.findAll({
-//         where:{
-//             ground_num: ground_number
-//         }
-//     })
-//     // console.log(AllProjectData)
-//     return AllProjectData
-// }
+const getDataByProjectnum = async function(project_num){
+    var Alldata=[]
+    for(let i of project_num){
+    const AllProjectData = await projectInfoSchema.findAll({
+        where:{
+            project_num: i
+        }
+    })
+
+    let res2 = AllProjectData.map(item=>{
+        return item = item.dataValues
+      })
+    Alldata.push(res2[0])
+}
+return Alldata
+
+}
 
 const getAllProjectData = async function(){
     const AllProjectData = await projectInfoSchema.findAll()
@@ -85,5 +93,6 @@ module.exports = {
     getProjecttypeByProjectnum,
     UpdatedifferentCount,
     getCountByProjectnum,
+    getDataByProjectnum,
 
 }

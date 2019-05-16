@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true
     },
     point_num: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER(11),
       allowNull: true
     },
     reference_num: {

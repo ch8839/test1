@@ -6,8 +6,9 @@
   "author": "Pan <panfree23@gmail.com>",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "server": "nodemon server/app.js",
-    "start": "npm run dev",
+    "server": "node server/app.js",
+    "prod": "pm2 start pm2.json --env production",
+    "start": "npm run dev", 
     "build": "node build/build.js",
     "build:report": "npm_config_report=true npm run build",
     "lint": "eslint --ext .js,.vue src",
