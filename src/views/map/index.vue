@@ -29,7 +29,6 @@
             src="../../../static/img/ground_marker.png"
             class="marker_icon"
             @click="show_point(marker.id,marker.ground_num)" 
-            scope
           >
         </div>
       </el-amap-marker>
@@ -497,6 +496,7 @@ export default {
 
     async Marker_Click(index,ground_number) {
       console.log(`id为${index}`);
+      this.transmit_project_num = ground_number
       this.windows.forEach(item => {
         item.visible = false;
       });
@@ -507,7 +507,7 @@ export default {
       // })
       this.window.visible=false;
       this.window = this.windows[index];
-      this.center = this.windows[index].positions;
+      this.center = this.windows[index].position;
       this.zoom=13;
       this.$nextTick(() => {
         this.window.visible = true;
@@ -516,8 +516,6 @@ export default {
         console.log("项目体坐标点",this.center)
         this.zoom=14
         console.log("zoom", this.$refs.map.$$getInstance().getZoom());
-        //console.log("center", this.$refs.map.$$getInstance().target.getPosition());
-        
       });  
       let res3 = await getGroundList(ground_number);
       console.log(res3)

@@ -1,42 +1,13 @@
 const AllGroundDataModel = require('../../models/table/groundInfo.js')
+const AllMap = require('../../models/common/Map.js')
 
-var reference_Map
-var element_Map
-var unit_Map
+var reference_17_ground_Map, element_Map, unit_Map
 
-const getReference = (async function () {
-  let referenceInfo = await AllGroundDataModel.getReferenceInfo()
-  let unitInfo = await AllGroundDataModel.getUnitInfo()
-
-  let referenceList = referenceInfo.map(item => {
-    return item = item.dataValues
-  })
-  let unitList = unitInfo.map(item => {
-    return item = item.dataValues
-  })
-
-  let referenceObj = referenceList[0]
-  let unitObj = unitList[0]
-  let elementNameObj = unitList[1]
-
-  let reference_Map_arr = []
-  let element_Map_arr = []
-  let unit_Map_arr = []
-
-  for (let key in referenceObj) {
-    reference_Map_arr.push([key, referenceObj[key]])
-  }
-  for (let key in elementNameObj) {
-    element_Map_arr.push([key, elementNameObj[key]])
-  }
-  for (let key in unitObj) {
-    unit_Map_arr.push([key, unitObj[key]])
-  }
-
-  reference_Map = new Map(reference_Map_arr)
-  element_Map = new Map(element_Map_arr)
-  unit_Map = new Map(unit_Map_arr)
-})()
+AllMap.then(data=>{
+  reference_17_ground_Map = data.reference_17_ground_Map
+  element_Map = data.element_Map
+  unit_Map = data.unit_Map
+})
 
 
 // const reference_Map = new Map([['PH', 7.0], ['arsenic', 6.68], ['cadmium', 0.07], ['chromium', 38], ['copper', 28], ['lead', 25.3]
@@ -61,12 +32,12 @@ class GroundInfo_Controller {
       let temp_obj = {}
       let LabGroundData_arr = []
       for(let key in labGround_obj){
-        if(reference_Map.has(key)){
-          if(labGround_obj[key] < reference_Map.get(key)){
+        if(reference_17_ground_Map.has(key)){
+          if(labGround_obj[key] < reference_17_ground_Map.get(key)){
             LabGroundData_arr.push({
               element: key, 
               value: labGround_obj[key], 
-              reference: reference_Map.get(key), 
+              reference: reference_17_ground_Map.get(key), 
               ispollution: 0, 
               unit: unit_Map.get(key), 
               time: labGround_obj.date
@@ -75,7 +46,7 @@ class GroundInfo_Controller {
             LabGroundData_arr.push({
               element: key, 
               value: labGround_obj[key], 
-              reference: reference_Map.get(key), 
+              reference: reference_17_ground_Map.get(key), 
               ispollution: 1, 
               unit: unit_Map.get(key), 
               time: labGround_obj.date
@@ -90,7 +61,7 @@ class GroundInfo_Controller {
       
     })
 
-    console.log('SelectLabGroundData', SelectLabGroundData)
+    // console.log('SelectLabGroundData', SelectLabGroundData)
     
     if (SelectLabGroundData) {
 
@@ -125,12 +96,12 @@ class GroundInfo_Controller {
       let temp_obj = {}
       let DetGroundData_arr = []
       for(let key in detGround_obj){
-        if(reference_Map.has(key)){
-          if(detGround_obj[key] < reference_Map.get(key)){
+        if(reference_17_ground_Map.has(key)){
+          if(detGround_obj[key] < reference_17_ground_Map.get(key)){
             DetGroundData_arr.push({
               element: key, 
               value: detGround_obj[key], 
-              reference: reference_Map.get(key), 
+              reference: reference_17_ground_Map.get(key), 
               ispollution: 0, 
               unit: unit_Map.get(key), 
               time: detGround_obj.date
@@ -139,7 +110,7 @@ class GroundInfo_Controller {
             DetGroundData_arr.push({
               element: key, 
               value: detGround_obj[key], 
-              reference: reference_Map.get(key), 
+              reference: reference_17_ground_Map.get(key), 
               ispollution: 1, 
               unit: unit_Map.get(key), 
               time: detGround_obj.date
@@ -154,7 +125,7 @@ class GroundInfo_Controller {
       
     })
 
-    console.log('SelectDetGroundData', SelectDetGroundData)
+    // console.log('SelectDetGroundData', SelectDetGroundData)
     
     if (SelectDetGroundData) {
       ctx.body = {
@@ -179,20 +150,35 @@ class GroundInfo_Controller {
     let res = await AllGroundDataModel.getLabGroundRefData(sample_num)
 
     let ref_arr = []
-    let lab_obj = res[0].dataValues
+    
     let det_obj = res[1].dataValues
-    for(let key in det_obj){
-      if(reference_Map.has(key)){
-        ref_arr.push({
-          element: key,
-          value: det_obj[key],
-          lab_reference: lab_obj[key], 
-          difference: Math.pow(lab_obj[key] - det_obj[key] , 2).toFixed(3),
-          unit: unit_Map.get(key)
-        })
+    if(res[0]){
+      let lab_obj = res[0].dataValues
+      for(let key in det_obj){
+        if(reference_17_ground_Map.has(key)){
+          ref_arr.push({
+            element: key,
+            value: det_obj[key],
+            lab_reference: lab_obj[key], 
+            difference: Math.pow(lab_obj[key] - det_obj[key] , 2).toFixed(3),
+            unit: unit_Map.get(key)
+          })
+        }
+      }
+    }else{
+      for(let key in det_obj){
+        if(reference_17_ground_Map.has(key)){
+          ref_arr.push({
+            element: key,
+            value: det_obj[key],
+            lab_reference: '-1', 
+            difference: '-/',
+            unit: unit_Map.get(key)
+          })
+        }
       }
     }
-    console.log('ref_arr', ref_arr)
+    // console.log('ref_arr', ref_arr)
     if (res) {
       ctx.body = {
         success: true,
