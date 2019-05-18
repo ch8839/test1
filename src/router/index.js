@@ -48,7 +48,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Map',
         component: () => import('@/views/map/index'),
-        meta: { title: '地图', icon: 'form' }
+        meta: { title: '地图', icon: 'map' }
       }
     ]
   },

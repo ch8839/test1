@@ -1,23 +1,30 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
-const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
+const groundInfoSchema = theDatabase.import('../../schema/sample_detector_ground_info.js'); 
+
+const referenceInfoSchema = theDatabase.import('../../schema/reference_info.js');
+const unitInfoSchema = theDatabase.import('../../schema/unit_info.js');
+
 
 //通过地块编号得到多个监测点编号信息
-const getPointnumByGroundnum = async function(ground_num){
-    let i=[]
+const getPointnumByGroundnum = async function(project_num){
+    const i=new Set()
     var u={}
     const AllElementData = await groundInfoSchema.findAll(
     {
         where:{
-            ground_num: ground_num
+            project_num: project_num
         }
     }
     )
     for(let item of AllElementData){
         //   console.log(item.point_num)
-          i.push(item.point_num)
-    }
+        
+        
+          i.add(item.point_num)
+    
+}
     // console.log(AllElementData.dataValues)
-    u[ground_num]=i;
+    u[project_num]=i;
     return u
 }
 
@@ -29,16 +36,16 @@ const UpdateCount = async function(id,depth,count){
     },{
         where:{
             point_num:id,
-            point_depth:depth,
+            sample_depth:depth,
         }
     })
     return true
 }
 
-const getPoingLocationByGroundnum = async function(ground_num){
+const getPoingLocationByGroundnum = async function(project_num){
     const AllSelectData = await groundInfoSchema.findAll({
         where:{
-            ground_num:ground_num
+            project_num:project_num
         }
     })
    
@@ -55,10 +62,52 @@ const getPoingLocationByGroundnum = async function(ground_num){
     return locALL
 }
 
+const getReferenceInfo =  async function () {
+   
+    const referenceInfo = await referenceInfoSchema.findAll({
+        attributes: {exclude: ['id']},
+    })
+
+    return referenceInfo
+}
+
+const getUnitInfo =  async function () {
+   
+    const unitInfo = await unitInfoSchema.findAll({
+        attributes: {exclude: ['id']},
+    })
+
+    return unitInfo
+}
+
+const getAllGroundData = async function (project_num, currentPage, page_size) {
+    const AllGroundtData = await groundInfoSchema.findAndCountAll({
+        limit: page_size,
+        offset: (currentPage - 1) * page_size,
+        where: {
+            project_num: project_num
+        }
+    })
+
+    return AllGroundtData
+}
+
+const getRealTimeElementData = async function (project_num) {
+    const TodayElementData = await groundInfoSchema.findAll({
+        where: {
+            project_num: project_num
+        }
+    })
+    return TodayElementData
+}
 
 module.exports = {
     getPointnumByGroundnum,
     UpdateCount,
-    getPoingLocationByGroundnum
+    getPoingLocationByGroundnum,
+    getReferenceInfo,
+    getUnitInfo,
+    getAllGroundData,
+    getRealTimeElementData,
 
 }
