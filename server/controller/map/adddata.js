@@ -4,7 +4,6 @@ const ReferenceDataMOdel = require('../../models/map/reference.js')
 const ElementDataModel = require('../../models/map/elementInfo.js')
 const PointInfoModel = require('../../models/map/pointInfo.js')
 const sample_detector_ground_info_model=require('../../models/map/sample_detector_ground_info.js')
-
 const addTableData = async function (ctx) {
    
     

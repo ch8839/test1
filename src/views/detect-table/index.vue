@@ -72,6 +72,39 @@
                 <span style="margin-left: 10px">{{ assess_type_options[scope.row.assess_type].label }}</span>
               </template>
             </el-table-column>
+            <el-table-column
+              label="位置"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                  v-if="scope.row.lng"
+                >
+                  <div class="map_container2">
+                    <el-amap
+                      ref="map2"
+                      :vid="scope.row.sample_num"
+                      :center="[scope.row.lng, scope.row.lat]"
+                      :zoom="zoom"
+                      class="amap-demo"
+                    >
+                      <el-amap-marker
+                        :position="[scope.row.lng, scope.row.lat]"
+                        animation="AMAP_ANIMATION_DROP"
+                        :vid="scope.row.id"
+                      ></el-amap-marker>
+                    </el-amap>
+                  </div>
+                  <el-button size="mini" slot="reference">查看</el-button>
+                </el-popover>
+                <div v-else>
+                  <el-tag type="info">暂无位置信息</el-tag>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="深度" width="120" align="center">
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.sample_depth || '\\' }}</span>
@@ -157,6 +190,39 @@
             <el-table-column prop="point_num" label="调查类型" align="center" sortable>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ assess_type_options[scope.row.assess_type].label }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="位置"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                  v-if="scope.row.lng"
+                >
+                  <div class="map_container2">
+                    <el-amap
+                      ref="map2"
+                      :vid="scope.row.sample_num"
+                      :center="[scope.row.lng, scope.row.lat]"
+                      :zoom="zoom"
+                      class="amap-demo"
+                    >
+                      <el-amap-marker
+                        :position="[scope.row.lng, scope.row.lat]"
+                        animation="AMAP_ANIMATION_DROP"
+                        :vid="scope.row.id"
+                      ></el-amap-marker>
+                    </el-amap>
+                  </div>
+                  <el-button size="mini" slot="reference">查看</el-button>
+                </el-popover>
+                <div v-else>
+                  <el-tag type="info">暂无位置信息</el-tag>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="深度" width="120" align="center">
@@ -259,18 +325,18 @@
           }
         },
         markers: [],
+        allMarkers: [],
         zoom: 14,
         center: [121.457624, 31.27586],
         events: {
 
         },
         plugin: [
-          // "ToolBar", //手动调焦插件
           {
             pName: "MapType",
-            defaultType: 0
+            defaultType: 1
           } //卫星路况插件
-        ] //引入插件
+        ] 
       };
     },
     methods: {
@@ -292,7 +358,8 @@
           let markers = []
           res_markers.forEach(item => {
             markers.push({
-              id: item.index,
+              id: item.id,
+              point_num: item.point_num,
               position: [item.point_lng, item.point_lat],
               visible: true
             });
@@ -302,6 +369,7 @@
           }
 
           this.markers = markers
+          this.allMarkers = markers
           console.log("markers", markers)
         }
       },
@@ -309,7 +377,14 @@
       pointChange() {
         this.currentPage = 1; //选择类型后重置页码为1
         const page_size = this.page_size;
-        console.log("selectedPoint", this.selectedPoint);
+        console.log("selectedPoint", this.selectedPoint)
+        if(this.selectedPoint !=='0'){
+          this.markers = this.allMarkers.filter(item=>{         
+            return item.point_num == this.selectedPoint
+          })
+        }else{
+          this.markers = this.allMarkers
+        }      
         this.getList(this.currentPage, page_size);
       },
 
@@ -578,8 +653,8 @@
     }
 
     .map_container {
-      height: 500px;
-      height: 500px;
+      height: 450px;
+      
     }
   }
 

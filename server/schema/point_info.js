@@ -43,6 +43,10 @@ module.exports = function(sequelize, DataTypes) {
     count: {
       type: DataTypes.INTEGER(11),
       allowNull: true
+    },
+    assess_type: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
     }
   }, {
     tableName: 'point_info'

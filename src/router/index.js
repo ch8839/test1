@@ -27,15 +27,21 @@ export const constantRouterMap = [
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    path: '/dashboard',
+    component: Layout, 
     hidden: true,
     children: [{
-      path: 'dashboard',
+      name: 'Dashboard',
+      path: '',
       component: () => import('@/views/dashboard/index')
     }]
+  },
+
+  {
+    path: '/',
+    hidden: true,
+    component: Layout,
+    redirect: '/map/index'
   }
 ]
 
@@ -61,7 +67,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Echart',
         component: () => import('@/views/echart/index'),
-        meta: { title: '图表信息', icon: 'form' }
+        meta: { title: '统计信息', icon: 'form' }
       }
     ]
   },
@@ -73,7 +79,8 @@ export const asyncRouterMap = [
     name: 'Table',
     meta: {
       title: '表格数据',
-      icon: 'example'
+      icon: 'example',
+      roles: ['admin']
     },
     children: [
       {

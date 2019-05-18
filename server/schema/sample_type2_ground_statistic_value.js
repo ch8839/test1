@@ -1,14 +1,14 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('sample_lab_water_info', {
+  return sequelize.define('sample_type2_ground_statistic_value', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    sample_num: {
+    statistic_value: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
@@ -18,22 +18,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     point_num: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    project_num: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
+      allowNull: false
     },
     sample_depth: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    count: {
-      type: DataTypes.INTEGER(11),
       allowNull: true
     },
     PH: {
@@ -126,15 +114,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       defaultValue: '-1'
     },
-    attention: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     remarks: {
       type: DataTypes.STRING(255),
       allowNull: true
     }
   }, {
-    tableName: 'sample_lab_water_info'
+    tableName: 'sample_type2_ground_statistic_value'
   });
 };

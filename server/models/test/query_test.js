@@ -1,9 +1,8 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
-const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
-const elementInfoSchema = theDatabase.import('../../schema/element_info.js'); 
+const sample_lab_water_InfoSchema = theDatabase.import('../../schema/sample_lab_water_info.js');
 
 let getAllHistory = async function(point_num){
-    const AllHistoryData = await elementInfoSchema.findAll({
+    const AllHistoryData = await sample_lab_water_InfoSchema.findAll({
         attributes: ['PH', 'arsenic','date'],   
         where:{
             point_num:point_num,

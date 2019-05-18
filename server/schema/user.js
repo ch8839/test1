@@ -9,10 +9,19 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true
     },
     username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     password: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    roles: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      defaultValue: '1'
+    },
+    avatar: {
       type: DataTypes.STRING(255),
       allowNull: true
     }

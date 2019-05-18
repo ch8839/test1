@@ -1,32 +1,42 @@
 import request2 from '../../utils/request2'
 
-
 export function getAll(){
     return request2.get('/echarts/getAll')
 }
 
-export function getGroundList(selectedOptions){
-    return request2.post('/echarts/getGroundList', selectedOptions)   
+/* echarts */
+export function getHistogramData(params){
+    // 获取barseries of ground
+    return request2.post('/groundecharts/getHistogramData', params)
+}
+export function getRadarEachDepthValue(params){
+    // 获取radarseries of ground
+    return request2.post('/groundecharts/getRadarEachDepthValue', params)
+}
+export function GroundRadarThresholdData(params){
+    // 获取radarseries ground
+    return request2.post('/groundecharts/GroundRadarThresholdData', params)
+}
+export function getWaterHistogramData(params){
+    // 获取barseries of water
+    return request2.post('/groundecharts/getWaterHistogramData', params)
 }
 
-export function getSpecifiedElementList(selectedOptions){
-    return request2.post('/echarts/getSpecifiedElementList', selectedOptions)   
-}
-
-export function getRadarRealTimeValue(point_num){
-    console.log("Point_num 数据 in api", point_num)
-    return request2.get('/echarts/getRadarRealTimeValue/' + point_num)   
-}
-
-export function getRadarData(id){
-    return request2.get('/echarts/getRadarData/' + id)
-}
-
-/* 获取级联选择器 */
+/* echarts_0  */
 export function getCascader(){
+    // 获取级联选择器 
     return request2.get('/project/getRawCascader')
 }
-
+export function getAssessData(project_num){
+    // 获取类型选择器数据
+    return request2.get('/project/getRawAssessData/'+project_num)
+}
 export function getTableItemsByPN(project_num){
+    // 获取筛选后earth表格 
     return request2.get('/project/getTableItemsByPN/'+project_num)
+}
+
+export function getWaterTableItemsByPN(project_num){
+    // 获取筛选后water表格 
+    return request2.get('/project/getWaterTableItemsByPN/'+project_num)
 }
