@@ -58,7 +58,7 @@
           <img
             src="../../../static/img/point_marker.png"
             class="marker_icon"
-            @click="Marker_Click(item.ground_id-1,item.ground_number)" scope >
+            @click="Marker_Click(item.ground_id-1,item.project_number)" scope >
         </div>         
       </el-amap-marker>
 
@@ -125,18 +125,18 @@
         <div>
           <!-- <div class="windows_title" align="center" >{{window1.point_name}}</div>              -->
           <div>
-            <div v-for="item in point_table" :key="item.id" :vid="item.id">  
+            <!-- <div v-for="item in point_table" :key="item.id" :vid="item.id">  
             <div
                 :id="'myLineChart'+item.point_num"
                 :data="drawLine('myLineChart'+item.point_num,item.linedatalist)"
                 :class="className"
                 :style="{height:height,width:width}"
               ></div>
-            </div>
+            </div> -->
             
-          <!-- <el-table 
+          <el-table 
               :data="pointData"
-              height="150px"
+              height="260px"
               size:mimi
               style="width: 100% height: 100%" 
               >
@@ -155,7 +155,7 @@
                   <span style="margin-left: 5px">{{ scope.row.max_value}}</span>
                 </template>
               </el-table-column>
-            </el-table>  -->
+            </el-table> 
  
           </div>
           <!-- <el-badge  class="item">
@@ -182,7 +182,7 @@ require("echarts/lib/chart/bar"); // 引入柱状图组件
 require("echarts/lib/component/toolbox");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
-import { getMarkerInfo, getGroundList, getpointMarkerInfo, getMoreDataByPointnum } from "@/api/map/marker_data"
+import { getMarkerInfo, getGroundList, getpointMarkerInfo, getMoreDataByPointnum, getCircleByProjectnum } from "@/api/map/marker_data"
 import axios from 'axios'
 window.onload = function(){
    localStorage.clear()
@@ -446,11 +446,12 @@ export default {
         ]
       });
     },
-
+   // 转移到陈刚表格详细信息
     transfer_table(project_num,point_num){
       console.log("转移测试",project_num,point_num)
     },
-    async show_point(index,ground_number){
+
+    async show_point(index,project_number){
       this.windows.forEach(item => {
         item.visible = true;
       });
@@ -467,7 +468,8 @@ export default {
         this.zoom=17
       })
       let res5 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/polygons');
-      console.log("res5",res5)
+      // console.log("res5",res5)
+      // let res5 = await getCircleByProjectnum(project_number);
       let paths = res5.data.data;
       console.log("path",paths)
       let polygons= []
@@ -494,9 +496,9 @@ export default {
       // this.ground_markers = arr_temp
     },
 
-    async Marker_Click(index,ground_number) {
+    async Marker_Click(index,project_number) {
       console.log(`id为${index}`);
-      this.transmit_project_num = ground_number
+      this.transmit_project_num = project_number
       this.windows.forEach(item => {
         item.visible = false;
       });
@@ -507,7 +509,7 @@ export default {
       // })
       this.window.visible=false;
       this.window = this.windows[index];
-      this.center = this.windows[index].position;
+      this.center = this.windows[index].positions;
       this.zoom=13;
       this.$nextTick(() => {
         this.window.visible = true;
@@ -516,8 +518,10 @@ export default {
         console.log("项目体坐标点",this.center)
         this.zoom=14
         console.log("zoom", this.$refs.map.$$getInstance().getZoom());
+        //console.log("center", this.$refs.map.$$getInstance().target.getPosition());
+        
       });  
-      let res3 = await getGroundList(ground_number);
+      let res3 = await getGroundList(project_number);
       console.log(res3)
       let ground_data = res3.data.res;
       let groundData=[];
@@ -652,7 +656,7 @@ export default {
         count:item.count,
         ground_type:item.project_type,
         ground_id:item.project_id,
-        ground_number:item.project_num,
+        project_number:item.project_num,
         point_num:item.point_num,
         visible: true,
         isPointMarker:true

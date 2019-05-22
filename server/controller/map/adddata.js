@@ -4,14 +4,6 @@ const ReferenceDataMOdel = require('../../models/map/reference.js')
 const ElementDataModel = require('../../models/map/elementInfo.js')
 const PointInfoModel = require('../../models/map/pointInfo.js')
 const sample_detector_ground_info_model=require('../../models/map/sample_detector_ground_info.js')
-const common_model=require('../../models/common/Map.js')
-
-var reference,element_Map
-
-common_model.then(data=>{
-  reference = data.reference_17_ground_Map
-  element_Map=data.element_Map
-})
 const addTableData = async function (ctx) {
    
     
@@ -25,10 +17,10 @@ const addTableData = async function (ctx) {
             var chazhi=0
             var attention=0
             for (let i in data){
-          if (data[i] && reference.get(i) && (data[i] > reference.get(i))) {
+          if (data[i] && reference[i] && (data[i] > reference[i])) {
            count+=1
-           if((data[i] - reference.get(i))>chazhi){
-             chazhi=data[i] - reference.get(i)
+           if((data[i] - reference[i])>chazhi){
+             chazhi=data[i] - reference[i]
              attention=i
 
            }

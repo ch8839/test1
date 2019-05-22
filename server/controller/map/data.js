@@ -5,7 +5,14 @@ const ElementDataModel = require('../../models/map/elementInfo.js')
 const PointInfoModel = require('../../models/map/pointInfo.js')
 const sample_detector_ground_info_model=require('../../models/map/sample_detector_ground_info.js')
 const common_model=require('../../models/common/Map.js')
+const CircleModel = require('../../models/map/circle.js')
 
+var reference,element_Map
+
+common_model.then(data=>{
+reference = data.reference_17_ground_Map
+element_Map=data.element_Map
+})
 
 const getMapPhByID = async function (ctx) {
   const project_num = ctx.params.project_num
@@ -94,9 +101,7 @@ const getMapPhByID = async function (ctx) {
 // 在地图页面上获得所有不同区域和地块评估类型的项目体信息以及该项目体的异常污染值
 const getMarkerInfo = async function (ctx) {
   let res = await AllProjectDataModel.getAllProjectData()//得到所有的数据
-  let reference1 = await common_model.getAllMap()//得到所有的参考值数据
-  reference=reference1['reference_17_ground_Map']
-  console.log(1,reference)
+
   let groundnumtopoint = []
   let project_numberList = []
   let data = []
@@ -182,10 +187,7 @@ const getMarkerInfo = async function (ctx) {
 
 
 const getGroundList =async function(ctx) {
-  let reference1 = await common_model.getAllMap()//得到所有的参考值数据
-  reference=reference1['reference_17_ground_Map']
-  console.log(1,reference)
-  element_Map=reference1['element_Map']
+
   // const element_Map = await getUnit() //通过这种方式每回请求都要执行生成Map映射，所以直接定义全局变量，并立即执行生成Map映射函数，之后取映射时不用再执行
   const project_num = ctx.params.project_num
   // console.log(4,project_num)
@@ -226,6 +228,17 @@ const getGroundList =async function(ctx) {
   }
 };
 
+const getCircleByProjectnum = async function (ctx) {
+  const project_num = ctx.params.project_num
+  let res4 = await CircleModel.getCircleByProjectnum(project_num)
+  
+  ctx.body = {
+  success: true,
+  res: res4,
+  msg: '获取成功'
+  }
+  ;
+  }
 
 const getMoreDataByPointnum = async function (ctx) {
 const point_num = ctx.params.point_num
@@ -235,8 +248,7 @@ var id=1
 // 拿到Projectnum和Intro
 let Projectnum = await PointInfoModel.getProjectnumByPointnum(point_num)
 let Intro = await PointInfoModel.getIntroByPointnum(point_num)
-let reference1 = await common_model.getAllMap()//得到所有的参考值数据
-element_Map=reference1['element_Map']
+
 
 let res = await sample_detector_ground_info_model.getDataByPointnum(point_num)
 let res2 = res.map(item=>{
@@ -287,4 +299,5 @@ module.exports = {
   getpointMarkerInfo,
   getGroundList,
   getMoreDataByPointnum,
+  getCircleByProjectnum
 }
