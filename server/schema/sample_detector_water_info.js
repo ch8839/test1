@@ -133,6 +133,14 @@ module.exports = function(sequelize, DataTypes) {
     remarks: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    lng: {
+      type: "DOUBLE(30,10)",
+      allowNull: true
+    },
+    log: {
+      type: "DOUBLE(30,10)",
+      allowNull: true
     }
   }, {
     tableName: 'sample_detector_water_info'
