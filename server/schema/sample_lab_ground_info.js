@@ -141,11 +141,7 @@ module.exports = function(sequelize, DataTypes) {
     lat: {
       type: "DOUBLE(30,10)",
       allowNull: true
-<<<<<<< HEAD
-    }
-=======
     },
->>>>>>> c81d9187dae69e770003f83289071b4600aec40e
   }, {
     tableName: 'sample_lab_ground_info'
   });

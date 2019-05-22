@@ -49,7 +49,7 @@ router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.
 //其它echarts部分
 router.post('/groundecharts/getHistogramData', echart_ground_Controller.getHistogramData)
 router.post('/groundecharts/getRadarEachDepthValue', echart_ground_Controller.getRadarEachDepthValue)
-router.post('/groundecharts/GroundRadarThresholdData', echart_ground_Controller.GroundRadarThresholdData)
+router.post('/groundecharts/getRadarWaterEachDepthValue', echart_water_Controller.getRadarWaterEachDepthValue)
 router.post('/groundecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
 
 //map部分

@@ -65,12 +65,12 @@ const RadarType2EachDepthValue = async function (point_num) {
     return SelectOptions
 }
 
-const getWaterRadarThresholdData = async function(reference_num,type){
+const getWaterRadarThresholdData = async function(type){
     const AllDatarData = await radar_threshold_Schema.findAll(
         {
-            attributes: {exclude: ['type','id','reference_num','point_num']},
+            attributes: {exclude: ['type','id','point_num']},
             where: {
-                reference_num,
+               
                 type,
             }
         }
