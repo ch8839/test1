@@ -54,7 +54,6 @@ router.post('/groundecharts/getWaterHistogramData', echart_water_Controller.getW
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo) //1
-router.get('/project/getMapPhByID/:project_num' , mapController.getMapPhByID)
 router.get('/data/getpointMarkerInfo',mapController.getpointMarkerInfo) //3
 router.get('/data/getGroundList/:project_num',mapController.getGroundList) //2
 router.get('/data/ComputeCount',ComputeController.ComputeCount)

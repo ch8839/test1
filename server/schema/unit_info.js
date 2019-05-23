@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    PHֵ: {
+    PH: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
