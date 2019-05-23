@@ -17,14 +17,7 @@ export function getRadarWaterEachDepthValue(params){
     // 获取radarseries of water
     return request2.post('/groundecharts/getRadarWaterEachDepthValue', params)
 }
-// export function GroundRadarThresholdData(params){
-//     // 获取radarseries ground
-//     return request2.post('/groundecharts/GroundRadarThresholdData', params)
-// }
-// export function WaterRadarThresholdData(params){
-//     // 获取radarseries water
-//     return request2.post('/groundecharts/WaterRadarThresholdData', params)
-// }
+
 export function getWaterHistogramData(params){
     // 获取barseries of water
     return request2.post('/groundecharts/getWaterHistogramData', params)

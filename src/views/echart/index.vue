@@ -76,7 +76,7 @@
             </el-table-column>
             <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
-            <el-table-column prop="attention" label="主要超标元素" align="center">
+            <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
                 <el-tag
                   type="danger"
@@ -144,7 +144,7 @@
             </el-table-column>
             <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
-            <el-table-column prop="attention" label="主要超标元素" align="center">
+            <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
                 <el-tag
                   type="danger"
@@ -790,15 +790,11 @@ export default {
       let combined_pn_at = {
         point_num: pointnum,
         assess_type: this.assessListQuery,
-        reference_num: "max",
+        // reference_num: "max",
         type: "ground"
       };
-      let combined_rn_type = {
-        reference_num: "17国标",
-        type: "ground"
-      };
+
       let res1 = await getRadarEachDepthValue(combined_pn_at);
-      // let res2 = await GroundRadarThresholdData(combined_rn_type);
       if (typeof res1.data.res == "undefined") {
         //如果数据库不含雷达图的数据——很有可能
         let p = this.temp_water_tableItems.findIndex(
@@ -819,7 +815,7 @@ export default {
           res1_radarseries.hasOwnProperty("depth3") == true &&
           res1_radarseries.hasOwnProperty("depth4") == false
         ) {
-          legend = ["17国标", "深度一", "深度二", "深度三"];
+          legend = ["17国标", "18国标", "深度一", "深度二", "深度三"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -827,6 +823,18 @@ export default {
               itemStyle: {
                 normal: {
                   color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
                   lineStyle: {
                     type: "dashed"
                   }
@@ -847,7 +855,7 @@ export default {
             }
           ];
         } else if (res1_radarseries.hasOwnProperty("depth4") == true) {
-          legend = ["17国标", "深度一", "深度二", "深度三", "深度四"];
+          legend = ["17国标", "18国标", "深度一", "深度二", "深度三", "深度四"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -855,6 +863,18 @@ export default {
               itemStyle: {
                 normal: {
                   color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
                   lineStyle: {
                     type: "dashed"
                   }
@@ -879,7 +899,7 @@ export default {
             }
           ];
         } else {
-          legend = ["17国标", "深度一"];
+          legend = ["17国标", "18国标", "深度一"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -887,6 +907,18 @@ export default {
               itemStyle: {
                 normal: {
                   color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
                   lineStyle: {
                     type: "dashed"
                   }
@@ -909,15 +941,11 @@ export default {
       let combined_pn_at = {
         point_num: pointnum,
         assess_type: this.assessListQuery,
-        reference_num: "max",
-        type: "water"
-      };
-      let combined_rn_type = {
-        reference_num: "17国标",
+        // reference_num: "max",
         type: "water"
       };
       let res1 = await getRadarWaterEachDepthValue(combined_pn_at);
-      // let res2 = await WaterRadarThresholdData(combined_rn_type);
+      console.log("数据库原始数据", res1.data.resDatar_arr)
       if (typeof res1.data.resDatar_arr == "undefined") {
         //如果数据库不含雷达图的数据——很有可能
         let p = this.temp_water_tableItems.findIndex(
@@ -927,6 +955,8 @@ export default {
         this.temp_water_tableItems[p].radarseries["legend"] = [];
         this.temp_water_tableItems[p].radarseries["max"] = [];
         this.temp_water_tableItems[p].radarseries["data"] = [];
+        console.log(this.temp_water_tableItems[p].radarseries)
+
       } else {
         let res1_radarseries = res1.data.resDatar_arr["0"];
         let p = this.temp_water_tableItems.findIndex(
@@ -938,7 +968,7 @@ export default {
           res1_radarseries.hasOwnProperty("depth2") &&
           res1_radarseries.hasOwnProperty("depth1")
         ) {
-          legend = ["17国标", "深度一", "深度二"];
+          legend = ["17国标", "18国标", "深度一", "深度二"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -946,6 +976,18 @@ export default {
               itemStyle: {
                 normal: {
                   color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
                   lineStyle: {
                     type: "dashed"
                   }
@@ -962,7 +1004,7 @@ export default {
             }
           ];
         } else {
-          legend = ["17国标", "深度一"];
+          legend = ["17国标", "18国标", "深度一"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -970,6 +1012,18 @@ export default {
               itemStyle: {
                 normal: {
                   color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
                   lineStyle: {
                     type: "dashed"
                   }
@@ -986,6 +1040,8 @@ export default {
         this.temp_water_tableItems[p].radarseries["legend"] = legend; //0——作为雷达图的legend
         this.temp_water_tableItems[p].radarseries["max"] = res1_radarseries.max;
         this.temp_water_tableItems[p].radarseries["data"] = combined_data;
+        console.log(this.temp_water_tableItems[p].radarseries)
+
       }
     },
     setRadarOptions(radarserisevalue) {
@@ -1120,7 +1176,7 @@ export default {
           }
         ],
         calculable: true,
-        color: ["#FE7979", "#CCCC66", "#9999CC", "#99CCCC"],
+        color: ["#FE7979", "#000000", "#CCCC66", "#9999CC", "#99CCCC"],
         series: [
           {
             name: "17国标 vs 实际值",

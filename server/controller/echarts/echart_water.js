@@ -148,8 +148,9 @@ class echart_Controller{
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
           AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+          
         } else {
           // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
           AllRadarData.push({ text: element_Map.get(key)})
@@ -161,10 +162,10 @@ class echart_Controller{
     }//将最大值的元素换成中文显示
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})//将所有数据进行push到一个数组中去
-
+    console.log("数据库原始数据", all, all[0].max)
     ctx.body = {
       success: true,
-      res:all,
+      resDatar_arr:all,
       msg: '获取成功'
     }
   }else if(assess_type == 2){
@@ -215,7 +216,7 @@ class echart_Controller{
     
     AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0])
     console.log(95689,AllData)
- 
+    console.log("数据库原始数据", all, all[0].max)
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
