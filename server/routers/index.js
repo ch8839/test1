@@ -56,12 +56,11 @@ router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.
 //其它echarts部分
 router.post('/groundecharts/getHistogramData', echart_ground_Controller.getHistogramData)
 router.post('/groundecharts/getRadarEachDepthValue', echart_ground_Controller.getRadarEachDepthValue)
-router.post('/groundecharts/GroundRadarThresholdData', echart_ground_Controller.GroundRadarThresholdData)
+router.post('/groundecharts/getRadarWaterEachDepthValue', echart_water_Controller.getRadarWaterEachDepthValue)
 router.post('/groundecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo) //1
-router.get('/project/getMapPhByID/:project_num' , mapController.getMapPhByID)
 router.get('/data/getpointMarkerInfo',mapController.getpointMarkerInfo) //3
 router.get('/data/getGroundList/:project_num',mapController.getGroundList) //2
 router.get('/data/ComputeCount',ComputeController.ComputeCount)

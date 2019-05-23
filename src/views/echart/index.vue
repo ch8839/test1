@@ -32,7 +32,7 @@
         <el-tab-pane label="土壤" name="earth">
           <el-table
             :data="temp_tableItems"
-            @expand-change="handleLineElementData"
+            @expand-change="handleEarthLineElementData"
             border
             stripe
             style="width:100%"
@@ -43,9 +43,8 @@
                   <el-col :xs="24" :sm="24" :lg="12">
                     <!-- 雷达图div -->
                     <div
-                      :id="'myRadarChart'+props.row.point_num"
+                      :id="'myEarthRadarChart'+props.row.point_num"
                       :class="className"
-                      :data="drawRadar('myRadarChart'+props.row.point_num, props.row.radarseries)"
                       :style="{height:height,width:width}"
                     ></div>
                   </el-col>
@@ -101,7 +100,7 @@
         <el-tab-pane label="水" name="water">
           <el-table
             :data="temp_water_tableItems"
-            @expand-change="handleLineElementData"
+            @expand-change="handleWaterLineElementData"
             border
             stripe
             style="width:100%"
@@ -112,9 +111,8 @@
                   <el-col :xs="24" :sm="24" :lg="12">
                     <!-- 雷达图div -->
                     <div
-                      :id="'myRadarChart'+props.row.point_num"
+                      :id="'myWaterRadarChart'+props.row.point_num"
                       :class="className"
-                     
                       :style="{height:height,width:width}"
                     ></div>
                   </el-col>
@@ -209,7 +207,9 @@ import {
 import {
   getHistogramData,
   getRadarEachDepthValue,
+  getRadarWaterEachDepthValue,
   GroundRadarThresholdData,
+  WaterRadarThresholdData,
   getWaterHistogramData
 } from "@/api/echarts/echarts";
 
@@ -400,9 +400,6 @@ export default {
     /* 级联选择器的触发函数 */
     async handleCascaderChange(options) {
       console.log("this.selectedOptions", this.selectedOptions);
-      /*       this.$nextTick(async () => {
-        //
-      }); */
       this.tableData = [];
       this.water_tableData = [];
       this.temp_tableItems = [];
@@ -414,8 +411,11 @@ export default {
     /* 地块类型选择器的触发函数 */
     async handleAssessFilter() {
       this.selectTableItemsByAT(this.assessListQuery);
-      console.log("this.temp_tableItems", this.temp_tableItems);
-      console.log("this.temp_water_tableItems", this.temp_water_tableItems);
+      console.log("当前页面显示的temp_tableItems", this.temp_tableItems);
+      console.log(
+        "当前页面显示的temp_water_tableItems",
+        this.temp_water_tableItems
+      );
     },
 
     /* 通过项目体筛选表格数据 */
@@ -437,7 +437,7 @@ export default {
         });
       });
       this.temp_tableData = this.tableData;
-      console.log("我是暂时的tableData", this.temp_tableData);
+      // console.log("我是暂时的tableData", this.temp_tableData);
 
       let api_water_tableData = await getWaterTableItemsByPN(project_num);
       let res_water_tableData = api_water_tableData.data.res;
@@ -456,7 +456,7 @@ export default {
         });
       });
       this.temp_water_tableData = this.water_tableData;
-      console.log("我是暂时的water_tableData", this.temp_water_tableData);
+      // console.log("我是暂时的water_tableData", this.temp_water_tableData);
     },
 
     /* 通过类型筛选表格数据 */
@@ -487,10 +487,12 @@ export default {
       this.barElementListQuery = this.temp_barElementOptions[0].value;
       // 获取柱状图的选择器数据
       // this.barElementOptions
-      this.dialogFormVisible = true;
+      if(this.temp_barElementOptions[0].value !== -1){
+        this.dialogFormVisible = true;
+      }
       this.temp_barPointnum = pointnum; //存储点位编号以便选择器传参使用
       this.handleBarElementSelect();
-      this.getBarOptions(pointnum);
+      // this.getBarOptions(pointnum);
     },
 
     /* 画柱状图 */
@@ -600,7 +602,8 @@ export default {
     },
     /* 获取this.table_Data的barseries */
     async getBarOptions(pointnum) {
-      let elementname = this.barElementListQuery;
+      if(this.temp_barElementOptions[0].value !== -1){
+        let elementname = this.barElementListQuery;
       let combined_pn_en = {
         point_num: pointnum,
         element: elementname
@@ -608,10 +611,8 @@ export default {
       let res = null;
       if (this.activeName == "earth") {
         res = await getHistogramData(combined_pn_en);
-        console.log("bar图ground数据", res);
       } else {
         res = await getWaterHistogramData(combined_pn_en);
-        console.log("bar图water数据", res);
       }
       let res_barseries = res.data.res;
       this.barSeries = res_barseries;
@@ -628,6 +629,10 @@ export default {
         }
       });
       this.drawBar(this.barSeries);
+      }else{
+        alert("无超标元素")
+      }
+      
     },
 
     /* 画折线图 */
@@ -754,98 +759,312 @@ export default {
               // ]
             }
           }
-          /* {
-            name: "深度三",
-            type: "line",
-            data: [1, 20, 12, 12, 1, 14, 5, 6, 16, 3],
-            // data: lineseriesvalue.data,
-            itemStyle: {
-              normal: {
-                lineStyle: {
-                  color: "#006633"
-                }
-              }
-            },
-            markPoint: {
-              data: [
-                { type: "max", name: "最大值" },
-                { type: "min", name: "最小值" }
-              ]
-            },
-            markLine: {
-              // data: [
-              //   // [{ coord: ["样本1", 10] }, { coord: ["样本10", 10] }] //如何获取grid上侧最大值，目前是写死的
-              //   lineseriesvalue.markLine
-              // ]
-            }
-          } */
         ]
       });
     },
-    handleLineElementSelect() {},
+    handleLineElementSelect() {
+      if(this.lineElementListQuery !== -1){
+        // drawLine([""])
+      }
+
+    },
     /* 画雷达图 */
-    async drawRadar(radarid, radardatalist) {
-       
-         console.log(55,radardatalist)
+    drawRadar(radarid, radardatalist) {
+      this.$nextTick(async () => {
+        if (document.getElementById(radarid) !== null) {
+          if(this.activeName == "earth"){
+            this.myRadarChart = echarts.init(document.getElementById(radarid));
+            this.charts.push(this.myEarthRadarChart);
+          }else{
+            this.myRadarChart = echarts.init(document.getElementById(radarid));
+            this.charts.push(this.myWaterRadarChart);
+          }
          
-         this.$nextTick(async () => {
-          this.myRadarChart = echarts.init(document.getElementById(radarid));
           this.setRadarOptions(radardatalist);
           /* 将所有charts放入数组，以实现缩放 */
-          this.charts.push(this.myRadarChart);
+          // this.charts.push(this.myRadarChart);
+        }
       });
       
     },
-    async getRadarOptions(pointnum) {
+    async getEarthRadarOptions(pointnum) {
       let combined_pn_at = {
         point_num: pointnum,
         assess_type: this.assessListQuery,
-        reference_num: "max",
+        // reference_num: "max",
         type: "ground"
       };
-      let combined_rn_type = {
-        reference_num: "17国标",
-        type: "ground"
-      };
+
       let res1 = await getRadarEachDepthValue(combined_pn_at);
-      let res2 = await GroundRadarThresholdData(combined_rn_type);
-      let res1_radarseries = res1.data.res[0];
-      let p = this.temp_tableItems.findIndex(
-        item => item.point_num == pointnum
-      );
-      this.temp_tableItems[p].radarseries = [];
-      this.temp_tableItems[p].radarseries.push(res2.data.resDatar_arr);
-      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth1);
-      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth2);
-      this.temp_tableItems[p].radarseries.push(res1_radarseries.depth3);
-      this.temp_tableItems[p].radarseries.push(res1_radarseries.max);
-      console.log("res_radarseries", p, this.temp_tableItems[p].radarseries);
+      if (typeof res1.data.res == "undefined") {
+        //如果数据库不含雷达图的数据——很有可能
+        let p = this.temp_water_tableItems.findIndex(
+          item => item.point_num == pointnum
+        );
+        this.temp_water_tableItems[p].radarseries = {};
+        this.temp_water_tableItems[p].radarseries["legend"] = [];
+        this.temp_water_tableItems[p].radarseries["max"] = [];
+        this.temp_water_tableItems[p].radarseries["data"] = [];
+      } else {
+        let res1_radarseries = res1.data.res[0];
+        let p = this.temp_tableItems.findIndex(
+          item => item.point_num == pointnum
+        );
+        let legend = [];
+        let combined_data = [];
+        if (
+          res1_radarseries.hasOwnProperty("depth3") == true &&
+          res1_radarseries.hasOwnProperty("depth4") == false
+        ) {
+          legend = ["17国标", "18国标", "深度一", "深度二", "深度三"];
+          combined_data = [
+            {
+              value: res1_radarseries.Threshold17,
+              name: "17国标",
+              itemStyle: {
+                normal: {
+                  color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.depth1,
+              name: "深度一"
+            },
+            {
+              value: res1_radarseries.depth2,
+              name: "深度二"
+            },
+            {
+              value: res1_radarseries.depth3,
+              name: "深度三"
+            }
+          ];
+        } else if (res1_radarseries.hasOwnProperty("depth4") == true) {
+          legend = ["17国标", "18国标", "深度一", "深度二", "深度三", "深度四"];
+          combined_data = [
+            {
+              value: res1_radarseries.Threshold17,
+              name: "17国标",
+              itemStyle: {
+                normal: {
+                  color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.depth1,
+              name: "深度一"
+            },
+            {
+              value: res1_radarseries.depth2,
+              name: "深度二"
+            },
+            {
+              value: res1_radarseries.depth3,
+              name: "深度三"
+            },
+            {
+              value: res1_radarseries.depth4,
+              name: "深度四"
+            }
+          ];
+        } else {
+          legend = ["17国标", "18国标", "深度一"];
+          combined_data = [
+            {
+              value: res1_radarseries.Threshold17,
+              name: "17国标",
+              itemStyle: {
+                normal: {
+                  color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.depth1,
+              name: "深度一"
+            }
+          ];
+        }
+        this.temp_tableItems[p].radarseries = {};
+        this.temp_tableItems[p].radarseries["legend"] = legend; //0——作为雷达图的legend
+        this.temp_tableItems[p].radarseries["max"] = res1_radarseries.max;
+        this.temp_tableItems[p].radarseries["data"] = combined_data;
+      }
+    },
+    async getWaterRadarOptions(pointnum) {
+      let combined_pn_at = {
+        point_num: pointnum,
+        assess_type: this.assessListQuery,
+        // reference_num: "max",
+        type: "water"
+      };
+      let res1 = await getRadarWaterEachDepthValue(combined_pn_at);
+      console.log("数据库原始数据", res1.data.resDatar_arr)
+      if (typeof res1.data.resDatar_arr == "undefined") {
+        //如果数据库不含雷达图的数据——很有可能
+        let p = this.temp_water_tableItems.findIndex(
+          item => item.point_num == pointnum
+        );
+        this.temp_water_tableItems[p].radarseries = {};
+        this.temp_water_tableItems[p].radarseries["legend"] = [];
+        this.temp_water_tableItems[p].radarseries["max"] = [];
+        this.temp_water_tableItems[p].radarseries["data"] = [];
+        console.log(this.temp_water_tableItems[p].radarseries)
+
+      } else {
+        let res1_radarseries = res1.data.resDatar_arr["0"];
+        let p = this.temp_water_tableItems.findIndex(
+          item => item.point_num == pointnum
+        );
+        let combined_data = [];
+        let legend = [];
+        if (
+          res1_radarseries.hasOwnProperty("depth2") &&
+          res1_radarseries.hasOwnProperty("depth1")
+        ) {
+          legend = ["17国标", "18国标", "深度一", "深度二"];
+          combined_data = [
+            {
+              value: res1_radarseries.Threshold17,
+              name: "17国标",
+              itemStyle: {
+                normal: {
+                  color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.depth1,
+              name: "深度一"
+            },
+            {
+              value: res1_radarseries.depth2,
+              name: "深度二"
+            }
+          ];
+        } else {
+          legend = ["17国标", "18国标", "深度一"];
+          combined_data = [
+            {
+              value: res1_radarseries.Threshold17,
+              name: "17国标",
+              itemStyle: {
+                normal: {
+                  color: "#FE7979",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.Threshold18,
+              name: "18国标",
+              itemStyle: {
+                normal: {
+                  color: "#000000",
+                  lineStyle: {
+                    type: "dashed"
+                  }
+                }
+              }
+            },
+            {
+              value: res1_radarseries.depth1,
+              name: "深度一"
+            }
+          ];
+        }
+        this.temp_water_tableItems[p].radarseries = {};
+        this.temp_water_tableItems[p].radarseries["legend"] = legend; //0——作为雷达图的legend
+        this.temp_water_tableItems[p].radarseries["max"] = res1_radarseries.max;
+        this.temp_water_tableItems[p].radarseries["data"] = combined_data;
+        console.log(this.temp_water_tableItems[p].radarseries)
+
+      }
     },
     setRadarOptions(radarserisevalue) {
-      console.log('radarserisevalue', radarserisevalue)
-      let thresholds = radarserisevalue[1].map((element) => {return element*1.4})
       this.myRadarChart.setOption({
         title: {
           // text: this.$refs["cascaderAddr"].currentLabels[1] + "最新情况",
           text: "lab数据",
-          // subtext: this.selectedOptionsLabel,
           x: "center",
           y: "50"
         },
         tooltip: {
           show: true,
-          // trigger: "item",
-          trigger: "axis"
+          trigger: "axis",
+          hideDelay: 2000
         },
         legend: {
           // orient: "vertical",
           x: "center",
           y: 100,
-          data: ["17国标", "深度一", "深度二", "深度三"]
-          // data: ["深度一", "深度二", "深度三"]
+          data: radarserisevalue.legend
         },
         toolbox: {
-          // show: true,
           show: true,
           orient: "vertical",
           x2: "1%",
@@ -859,7 +1078,7 @@ export default {
         },
         polar: [
           {
-            indicator: radarserisevalue[4],
+            indicator: radarserisevalue.max,
             /* indicator: [
               {
                 text: "PH值"
@@ -958,251 +1177,56 @@ export default {
           }
         ],
         calculable: true,
-        color: ["#FE7979", "#CCCC66", "#9999CC", "#99CCCC"],
-        // color: ["#CCCC66", "#9999CC", "#99CCCC"],
+        color: ["#FE7979", "#000000", "#CCCC66", "#9999CC", "#99CCCC"],
         series: [
           {
             name: "17国标 vs 实际值",
             type: "radar",
-            symbol: "circle", // 拐点的样式，还可以取值'rect','angle'等
-            symbolSize: 2, // 拐点的大小
+            symbol: "rect", // 拐点的样式，还可以取值'rect','angle'等
+            symbolSize: 4, // 拐点的大小
             areaStyle: {
               normal: {
                 width: 1,
                 opacity: 0.9
               }
             },
-            /* itemStyle: {
-              normal: {
-                borderWidth: 2,
-                color: function() {
-                  let params = [11, 11, 15, 13, 12, 13, 10, 12, 13, 10];
-                  let colorList = ["#2CBAFF", "#FE7979"];
-                  for (let i = 0; i < params.length; i++) {
-                    // alert(params[i]);
-                    if (params[i] < 1) {
-                      console.log(colorList[0]);
-                      return colorList[0]
-                    } else if (params[i] >= 1) {
-                      console.log(colorList[1]);
-                      return colorList[1]
-                    }
-                  }
-                }
-              }
-            }, */
-            data: [
-              {
-                value: thresholds,
-                /* value: [
-                  5,
-                  5,
-                  5,
-                  8,
-                  8,
-                  8,
-                  5,
-                  8,
-                  5,
-                  5,
-                  5,
-                  12,
-                  10,
-                  10,
-                  5,
-                  10,
-                  10,
-                  5
-                ], */
-                name: "17国标",
-                itemStyle: {
-                  normal: {
-                    color: "#FE7979",
-                    /* color: function() {
-                      let params = [
-                        5,
-                        5,
-                        5,
-                        8,
-                        8,
-                        8,
-                        5,
-                        8,
-                        5,
-                        5,
-                        5,
-                        12,
-                        10,
-                        10,
-                        5,
-                        10,
-                        10,
-                        5
-                      ];
-                      let colorList = ["#2CBAFF", "#FE7979"];
-                      for (let i = 0; i < params.length; i++) {
-                        // alert(params[i]);
-                        if (params[i] < 6) {
-                          console.log(colorList[0]);
-                          return colorList[0];
-                        } else if (params[i] >= 6) {
-                          console.log(colorList[1]);
-                          return colorList[1];
-                        }
-                      }
-                    }, */
-                    lineStyle: {
-                      type: 'dashed'
-                      // type: "line"
-                      // opacity: 0.5,
-                    }
-                  }
-                }
-              },
-              {
-                value: radarserisevalue[1],
-                /* value: [
-                  5.01,
-                  6.81,
-                  0.09,
-                  29,
-                  27.32,
-                  22.2,
-                  0.662,
-                  21,
-                  0.336,
-                  1.236,
-                  "null",
-                  95.3,
-                  "null",
-                  0.5,
-                  2,
-                  3.26,
-                  "null",
-                  0.451,
-                  7.26,
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  0.6,
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  "null",
-                  2.53,
-                  "null",
-                  "null",
-                  "null"
-                ], */
-                name: "深度一"
-                /* itemStyle: {
-                  normal: {
-                    color: "#CCCC66",
-                    lineStyle: {
-                      // type: "line"
-                      // opacity: 0.5,
-                    }
-                  }
-                } */
-              },
-              {
-                value: radarserisevalue[2],
-                /* value: [
-                  6.2,
-                  3.65,
-                  0.077,
-                  23.326,
-                  21.23,
-                  21.2,
-                  0.323,
-                  20.132,
-                  0.136,
-                  1.632,
-                  3.21,
-                  32.26,
-                  13.2,
-                  23.23,
-                  3.26,
-                  21.323,
-                  13.2,
-                  0.136
-                ], */
-                name: "深度二"
-                /* itemStyle: {
-                  normal: {
-                    color: "#9999CC",
-                    lineStyle: {
-                      // type: 'default',
-                      // type: "line",
-                      opacity: 0.5
-                    }
-                  }
-                } */
-              },
-              {
-                value: radarserisevalue[3],
-                /* value: [
-                  8,
-                  9,
-                  4,
-                  6,
-                  2,
-                  22,
-                  23,
-                  3,
-                  16,
-                  16,
-                  10,
-                  26,
-                  13,
-                  23,
-                  26,
-                  13,
-                  12,
-                  13
-                ], */
-                name: "深度三"
-                /* itemStyle: {
-                  normal: {
-                    color: "#99CCCC",
-                    lineStyle: {
-                      // type: 'default',
-                      // type: "line",
-                      opacity: 0.5
-                    }
-                  }
-                } */
-              }
-            ]
+            data: radarserisevalue.data
           }
         ]
       });
     },
 
-    async handleLineElementData(row,expandedRows) {
-      console.log('row',row)
-      console.log('expandedRows',expandedRows)
-      let p = this.temp_tableItems.findIndex((element) => element.point_num == row.point_num)
-      console.log('p',p)
+    async handleEarthLineElementData(row) {
       this.handleElementSelector("expand", row.attention, row.point_num);
-      await this.getRadarOptions(row.point_num);
-      console.log(88,this.temp_tableItems)
-      this.drawRadar('myRadarChart'+row.point_num, this.temp_tableItems[p].radarseries)
-      // return
+      await this.getEarthRadarOptions(row.point_num);
+      let p = this.temp_tableItems.findIndex(
+        earthitems => earthitems.point_num == row.point_num
+      );
+      // :data="drawRadar('myRadarChart'+props.row.point_num, props.row.radarseries)"
+      this.drawRadar(
+        "myEarthRadarChart" + row.point_num,
+        this.temp_tableItems[p].radarseries
+      );
+    },
+    async handleWaterLineElementData(row) {
+      this.handleElementSelector("expand", row.attention, row.point_num);
+      await this.getWaterRadarOptions(row.point_num);
+      let p = this.temp_water_tableItems.findIndex(
+        earthitems => earthitems.point_num == row.point_num
+      );
+      this.drawRadar(
+        "myWaterRadarChart" + row.point_num,
+        this.temp_water_tableItems[p].radarseries
+      );
     },
 
     handleElementSelector(expand, attention, pointnum) {
       this.temp_barElementOptions = [];
-      if (attention.length == 0) {
+      if (attention[0] == "无") {
         this.temp_barElementOptions = [
           {
             label: "无超标元素",
-            value: null
+            value: -1
           }
         ];
       } else {
@@ -1222,11 +1246,11 @@ export default {
         this.temp_tableItems[p].lineseries[
           "lineElementOptions"
         ] = this.temp_barElementOptions;
-        this.lineElementListQuery = this.temp_tableItems[
-          p
-        ].lineseries.lineElementOptions[0].value;
+        this.lineElementListQuery = this.temp_tableItems[p].lineseries.lineElementOptions[0].value;
       } else {
+        //如果expand 等于bar
         this.barElementListQuery = this.temp_barElementOptions[0].value;
+
       }
     }
   },

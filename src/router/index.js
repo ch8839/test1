@@ -59,7 +59,6 @@ export const asyncRouterMap = [
     ]
   },
 
-
   {
     path: '/table',
     component: Layout,

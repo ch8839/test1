@@ -17,7 +17,7 @@
         animation="AMAP_ANIMATION_DROP"
         :vid="index"
         :key="index"
-      >
+      >            <!--项目体坐标点位显示 -->
         <div class="marker_contain">
           <div class="marker_content" @click="Marker_Click(marker.id,marker.ground_num)" scope 
           :class="[{ marker_style1: marker.count>=20 },{ marker_style2: marker.count< 19 },{ marker_style3: marker.count==0 },
@@ -37,7 +37,7 @@
       v-for="item in polygons" :vid="item.id" :key="item.id" 
       :path="item.path"  strokeColor="#FF0000"  strokeWeight=3  
        fillOpacity=0  :zIndex=50 :visible="polygons_window">
-      </el-amap-polygon>
+      </el-amap-polygon>   <!--项目体检测轮廓 -->
 
       <el-amap-marker
       v-for="item in point_markers" 
@@ -47,7 +47,7 @@
       :visible="pointWindow.visible"
       animation="AMAP_ANIMATION_DROP"  
       :vid="item.id"
-      >
+      >          <!--监测点坐标点位显示 -->
         <div class="marker_contain" >
           <div class="marker_content" @click="Point_Click((item.id/10)-1,item.point_num)" scope   
           :class="[{ marker_style1: item.count>=20 },{ marker_style2: item.count< 19 },{ marker_style3: item.count==0 },
@@ -58,11 +58,11 @@
           <img
             src="../../../static/img/point_marker.png"
             class="marker_icon"
-            >
+           >
         </div>         
       </el-amap-marker>
 
-      <el-amap-info-window v-if="window" :position="window.position" :visible="window.visible" autoMove="true" scope>
+      <el-amap-info-window v-if="window" :position="window.position" :visible="window.visible" autoMove="true" scope> <!--项目体点击表格显示 -->
         <div>
           <!-- <div class="jBox-container"><div class="jBox-content" style="width: auto; height: auto;"><div class="smog-aqi-box" data-id="_110112"> <div class="title"> 
             <h3>{{window.ground_name+ "项目体"}} <span class="lv-str lv3" >轻度污染</span></h3> </div> 
@@ -121,9 +121,9 @@
         </div>
       </el-amap-info-window>
 
-      <el-amap-info-window v-if="window1" :position="window1.position" :visible="window1.visible">
+      <el-amap-info-window v-if="window1" :position="window1.position" :visible="window1.visible">  <!--检测点位点击表格显示 -->
         <div>
-          <!-- <div class="windows_title" align="center" >{{window1.point_name}}</div>              -->
+          <!-- <div class="windows_title" align="center" >{{window1.point_name}}</div> -->
           <div>
             <!-- <div v-for="item in point_table" :key="item.id" :vid="item.id">  
             <div
@@ -132,7 +132,7 @@
                 :class="className"
                 :style="{height:height,width:width}"
               ></div>
-            </div> -->
+            </div> -->  <!--折线图形式展示 -->
             
           <el-table 
               :data="pointData"
@@ -284,8 +284,8 @@ export default {
         } //卫星路况插件
       ], //引入插件
       point_table:[],
-      linedatalist:[],
-      polygons: [],
+      linedatalist:[], //折线图数据
+      polygons: [],  //项目体轮廓
       windows: [],
       point_window:[],
       polygons_window:{
@@ -294,31 +294,31 @@ export default {
         event:{},
         visible:true
       },      
-      window: {
+      window: { 
         position:[121.457624, 31.27586],
         content:'',
         event:{},
         visible:false,
-        //autoMove:true,
+        //autoMove:true,   //项目体
       },
       window1: {
         position:[121.457624, 31.27586],
         content:'',
         event:{},
         visible:false,
-        //autoMove:true,
+        //autoMove:true,   //监测点
       },  
       projectWindow:{
         position:[121.457624, 31.27586],
         content:'',
         event:{},
-        visible:true
+        visible:true  //项目体窗体
       },
       pointWindow:{
         position:[121.457624, 31.27586],
         content:'',
         event:{},
-        visible:false
+        visible:false   //监测点窗体
       },  
     };
   },
@@ -451,7 +451,7 @@ export default {
       console.log("转移测试",project_num,point_num)
     },
 
-    async show_point(index,project_number){
+    async show_point(index,project_number){     //显示监测点一级信息
       this.windows.forEach(item => {
         item.visible = true;
       });
@@ -467,10 +467,10 @@ export default {
         console.log("项目体坐标点1",this.center)
         this.zoom=17
       })
-      let res5 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/polygons');
+      //let res5 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/polygons');
       // console.log("res5",res5)
-      // let res5 = await getCircleByProjectnum(project_number);
-      let paths = res5.data.data;
+      let res5 = await getCircleByProjectnum(project_number);
+      let paths = res5.data.res;
       console.log("path",paths)
       let polygons= []
       paths.forEach((item,index) => {
@@ -479,7 +479,12 @@ export default {
           path:item.path,
         });
       });
+      // let polygons=paths.map((item,index) =>{
+      //   item.id=index;
+      //   return item; 
+      // });
       this.polygons = polygons;
+      console.log("item.path",polygons)
 
       // let res5 = await getMarkerList(ground_number)
       // let oneGround_Markers = res5.data.res
@@ -496,7 +501,7 @@ export default {
       // this.ground_markers = arr_temp
     },
 
-    async Marker_Click(index,project_number) {
+    async Marker_Click(index,project_number) {   //点击项目体图标，显示该项目体下信息
       console.log(`id为${index}`);
       this.transmit_project_num = project_number
       this.windows.forEach(item => {
@@ -540,7 +545,8 @@ export default {
       this.groundData = groundData;
       this.window.content= groundData.join("");
     },
-    async Point_Click(index,point_num){
+
+    async Point_Click(index,point_num){          //点击监测点图标，显示监测点一级信息
       console.log(`id为${index}`);
       this.point_window.forEach(item => {
         item.visible = false;
@@ -549,7 +555,7 @@ export default {
       this.window1 = this.point_window[index];
       //this.center = this.window1.position;
       //this.zoom=16;
-      let res6 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/etable');
+      let res6 = await axios.get('https://easy-mock.com/mock/5c8f3becc3ee14532e6031b3/map/etable');  //折线图信息
       this.$nextTick(() => {
         this.window1.visible = true;
         //this.center = this.window1.position;
