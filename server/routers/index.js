@@ -9,6 +9,7 @@ const User_Controller = require('../controller/user/login.js')
 //table模块
 const projectInfo_Controller = require('../controller/table/projectInfo.js')
 const groundInfo_Controller = require('../controller/table/groundInfo.js')
+const waterInfo_Controller = require('../controller/table/waterInfo.js')
 
 //echarts模块
 const echart_Controller_0 = require('../controller/echarts/echart_0.js')
@@ -33,11 +34,17 @@ router.post('/user2/login' , User_Controller.login)
 router.get('/user2/info/:token' , User_Controller.getUserInfo)
 
 //table部分
-//router.get('/project/getAll' , projectInfo_Controller.getAll)
-//router.get('/ground/getMarkerList/:ground_num' , groundInfo_Controller.getGroundMarkerList)
-//router.post('/ground/getGroundList' , groundInfo_Controller.getGroundList)
-//router.post('/ground/getAllHistoryData' , groundInfo_Controller.getAllHistoryData)
-// router.post('/ground/getSpecifiedElementList' , groundInfo_Controller.getSpecifiedElementList)
+router.get('/project/getProjectInfo' , projectInfo_Controller.getProjectInfo)
+router.get('/project/getPointOptions/:project_num' , projectInfo_Controller.getPointOptions)
+router.get('/project/getMarkerList/:project_num' , projectInfo_Controller.getMarkerList)
+
+router.post('/ground/getLabGroundList' , groundInfo_Controller.getLabGroundList)
+router.post('/ground/getDetGroundList' , groundInfo_Controller.getDetGroundList)
+router.get('/ground/getLabGroundReference/:sample_num' , groundInfo_Controller.getLabGroundReference)
+
+router.post('/water/getLabWaterList' , waterInfo_Controller.getLabWaterList)
+router.post('/water/getDetWaterList' , waterInfo_Controller.getDetWaterList)
+router.get('/water/getLabWaterReference/:sample_num' , waterInfo_Controller.getLabWaterReference)
 
 //echart_0部分
 router.get('/database/ComputeLabAttention',echart_Controller_0.ComputeLabAttention)

@@ -785,6 +785,7 @@ export default {
           // this.charts.push(this.myRadarChart);
         }
       });
+      
     },
     async getEarthRadarOptions(pointnum) {
       let combined_pn_at = {

@@ -34,12 +34,11 @@ import '../mock' // simulation data
 
 import VueAMap from 'vue-amap'
 
-Vue.use(VueAMap);
+Vue.use(VueAMap)
 VueAMap.initAMapApiLoader({
   key: '41566098d1f6cc04ff44f5c827379950',
-  plugin: ['AMap.MapType','AMap.Geocoder'],
+  plugin: ['AMap.MapType', 'AMap.Geocoder']
 })
-
 
 Vue.use(ElementUI, { locale })
 Vue.component(VeLine.name, VeLine)
@@ -53,5 +52,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App) //const h = this.$createElement(App)
+  render: h => h(App) // const h = this.$createElement(App)
 })

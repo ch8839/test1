@@ -1,9 +1,10 @@
 const AllProjectDataModel = require('../../models/table/projectInfo.js')
 const AllMap = require('../../models/common/Map.js')
-
+const jwt = require('jsonwebtoken')
+const secret = 'shu-project'
 var areaMap
 
-AllMap.then(data=>{
+AllMap.then(data => {
   areaMap = data.area_Map
 })
 
@@ -12,19 +13,36 @@ AllMap.then(data=>{
 class ProjectInfo_Controller {
 
   static async getProjectInfo(ctx) {
-    let res = await AllProjectDataModel.getAllProjectData()
+
+    const token = ctx.header['shu-token']
+    let roles
+    let project_owner
+    if (token) {
+      try {
+        let playload = await jwt.verify(token, secret)
+        console.log('playload', playload)
+        roles = playload.roles
+        project_owner = playload.project_owner.split('、')
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      return
+    }
+
+    let res = await AllProjectDataModel.getAllProjectData(roles, project_owner)
     let AllProjectData = res.map(item => {
       return item = item.dataValues
     })
     let project_obj = {}
     let project_arr = []
-    AllProjectData.forEach((item,index)=>{
-      if(item.project_area in project_obj){
+    AllProjectData.forEach((item, index) => {
+      if (item.project_area in project_obj) {
         project_obj[item.project_area].push({
           value: item.project_num,
           label: item.project_name
         })
-      }else{
+      } else {
         project_obj[item.project_area] = []
         project_obj[item.project_area].push({
           value: item.project_num,
@@ -34,7 +52,7 @@ class ProjectInfo_Controller {
     })
     console.log('project_obj', project_obj)
     console.log('areaMap', areaMap)
-    for(let key in project_obj){
+    for (let key in project_obj) {
       project_arr.push({
         value: key,
         label: areaMap.get(key),
@@ -60,15 +78,15 @@ class ProjectInfo_Controller {
   static async getPointOptions(ctx) {
     let project_num = ctx.params.project_num
     let res = await AllProjectDataModel.getPoint(project_num)
-    let PointOptions = res.map(item=>{
+    let PointOptions = res.map(item => {
       return item = item.dataValues.point_num
-    }).map(item=>{
-      return { value: item}
+    }).map(item => {
+      return { value: item }
     })
-    
+
     // console.log('PointOptions', PointOptions)
-    PointOptions.unshift({ value: '0', label:'全部'})
-    
+    PointOptions.unshift({ value: '0', label: '全部' })
+
     if (res) {
       ctx.body = {
         success: true,
