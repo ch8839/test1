@@ -14,49 +14,9 @@ reference = data.reference_17_ground_Map
 element_Map=data.element_Map
 })
 
-const getMapPhByID = async function (ctx) {
-  const project_num = ctx.params.project_num
-  let res = await PointInfoModel.getAllData(project_num)
-  let res1 = res.map(item=>{
-    return item = item.dataValues
-  })
-  //根据project_num得到了不同point_num的数据
 
-  
-  point_introList=[]
-  point_numList=[]
-  Alldata=[]
-  for(let key of res1){ 
-     point_introList.push(key.point_intro)
-     point_numList.push(key.point_num)
-     
-  }
-
-  for(let i of point_numList){//遍历每个point_num
-    let res2 = await sample_detector_ground_info_model.getDataByPointnum(i)
-    let res = res2.map(item=>{
-      return item = item.dataValues
-    })
-    //清洗数据
-    for(let i of res){
-      //  console.log(i)
-       Alldata.push({id:i.id,point_num:i.point_num,point_intro:point_introList[point_numList.indexOf(i.point_num)],attention:i.attention})
-      // 组合数据，送给前端
-    }
-  }
-  // console.log(Alldata)
-
-     ctx.body = {
-       success: true,
-       res: Alldata,
-       msg: '获取成功'
-     }
-
-   
-  }
  
  
-  
 
   const getpointMarkerInfo = async function (ctx) {
     let res = await PointInfoModel.getpointMarkerInfo()
@@ -183,9 +143,6 @@ const getMarkerInfo = async function (ctx) {
 
 
 
-
-
-
 const getGroundList =async function(ctx) {
 
   // const element_Map = await getUnit() //通过这种方式每回请求都要执行生成Map映射，所以直接定义全局变量，并立即执行生成Map映射函数，之后取映射时不用再执行
@@ -295,7 +252,6 @@ if (list) {
 
 module.exports = {
   getMarkerInfo,
-  getMapPhByID,
   getpointMarkerInfo,
   getGroundList,
   getMoreDataByPointnum,
