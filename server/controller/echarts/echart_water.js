@@ -216,7 +216,6 @@ class echart_Controller{
     
     AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0])
     console.log(95689,AllData)
-    console.log("数据库原始数据", all, all[0].max)
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
@@ -242,9 +241,14 @@ class echart_Controller{
         }  
       }
     }
+    // console.log(44444444,AllData)
     
     for (let key in AllData[0]) {
+      console.log(44444444,AllData[0],element_Map)
+      // console.log(44444444,AllData[0][key],element_Map.has(key))
       if (AllData[0][key] && element_Map.has(key)) {
+       
+
         if (AllData[0][key] && element_Map.get(key)) {
           AllRadarData.push({ text: element_Map.get(key)})
           // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
@@ -263,7 +267,8 @@ class echart_Controller{
        
       }
     }
-    console.log(15266,arr2)
+
+    console.log(15266,AllRadarData)
     if(arr4.length!=0){
       all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4})
     }else {
