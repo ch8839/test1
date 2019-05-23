@@ -33,11 +33,13 @@ const sample_type2_statistic_value_Schema = theDatabase.import('../../schema/sam
 //     return unitInfo
 // }
 
-const RadarEachDepthValue = async function (point_num) {
+const RadarEachDepthValue = async function (assess_type,point_num) {
     const SelectOptions = await sample_type2_statistic_value_Schema.findAll({
         attributes: {exclude: ['assess_type','id','point_num','remarks']},
         where: {
-            point_num
+            assess_type,
+            point_num,
+           
         }
     })
     return SelectOptions
@@ -47,6 +49,18 @@ const RadarEachDepthValue = async function (point_num) {
 
 
 const getElementData = async function(assess_type){
+    const AllElementData = await echartSchema.findAll(
+        {
+            attributes: {exclude: ['id','sample_num','project_num','date','sample_depth','count','lat','lng']},
+            where: {
+                assess_type
+            }
+        }
+    )
+    return AllElementData
+}
+
+const getType3ElementData = async function(assess_type){
     const AllElementData = await echartSchema.findAll(
         {
             attributes: {exclude: ['id','sample_num','project_num','date','sample_depth','count','lat','lng']},
@@ -69,22 +83,34 @@ const getElementData = async function(assess_type){
 //     return AllEchartData
 // }
 
-const getAllRadarData = async function(reference_num,type){
+
+const getAllRadarData = async function(type){
     const AllDatarData = await radarSchema.findAll(
         {
-            attributes: {exclude: ['id','reference_num','type','point_num']},
+            attributes: {exclude: ['id','type','point_num']},
             where: {
-                reference_num,
                 type,
+              
             }
         }
     ) 
     return AllDatarData
 }
 
-const getFoldData = async function (point_num,assess_type) {
+const getFoldData = async function (sample_depth,assess_type) {
     const FoldData = await echartSchema.findAll({
-        attributes: {exclude: ['id','project_num','sample_num','point_num','assess_type','count','remarks','date','attention','lat','lng']},
+        attributes: {exclude: ['id','project_num','sample_num','assess_type','count','remarks','date','attention','lat','lng']},
+        where: {
+            sample_depth,
+            assess_type,
+        }
+    })
+    return FoldData
+}
+
+const getData = async function (point_num,assess_type) {
+    const FoldData = await echartSchema.findAll({
+        attributes: {exclude: ['id','project_num','sample_num','assess_type','count','remarks','date','attention','lat','lng']},
         where: {
             point_num,
             assess_type,
@@ -118,6 +144,8 @@ module.exports = {
     // getReferenceInfo,
     // getUnitInfo,
     RadarEachDepthValue,
-    getHistogramElement
+    getHistogramElement,
+    getType3ElementData,
+    getData
     
 }

@@ -159,17 +159,25 @@ class echartCompute_Controller{
   static async ComputeRadarElementEachDepthValue(ctx){
    
     let UpdateOptions = ctx.request.body //从前端传入的数据
-    let { sample_depth,statistic_value } = UpdateOptions
+    let { sample_depth,statistic_value,assess_type} = UpdateOptions
     // console.log('888', statistic_value)
-    let assess_type = 2
-    console.log('888', statistic_value,sample_depth,assess_type)
-    let res = await AllEchartDataModel.getFoldData(sample_depth,assess_type)//得到所有的数据
+    // let assess_type = 2
+    // console.log('888', statistic_value,sample_depth,assess_type)
+    let res = []
+    if(assess_type == 2){
+      res = await AllEchartDataModel.getFoldData(sample_depth,assess_type)//得到所有的数据
+    }else if(assess_type==3){
+     res = await AllEchartDataModel.getType3ElementData(assess_type)//得到所有的数据
+      
+    }
+    
     assess_type=Number(assess_type)
     
     
     let res1 = res.map(item=>{
         return item = item.dataValues
     })
+  
 
     function deepClone(obj) {
       let result = typeof  obj.splice === "function" ? [] : {};
@@ -186,7 +194,7 @@ class echartCompute_Controller{
       }
       return obj;
   }
-    
+ 
       
      let map = ["PH",
                 "arsenic",
@@ -236,6 +244,7 @@ class echartCompute_Controller{
           }
       
       })
+       console.log(859666, obj)
       
  
    let arr_max = []
@@ -250,7 +259,7 @@ class echartCompute_Controller{
       obj_max['point_num'] = key
       arr_max.push(obj_max)
     }
-    
+    console.log(859666, arr_max)
    
     let obj2 = deepClone(obj);
 

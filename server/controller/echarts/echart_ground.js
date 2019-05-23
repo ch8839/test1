@@ -69,30 +69,53 @@ class echart_Controller{
   
   static async getRadarEachDepthValue(ctx) {
   
+    // console.log("我是雷达的point_num")
     let FrontElement = ctx.request.body //从前端传入的数据
-    let { point_num,assess_type,reference_num,type} = FrontElement //将传入的数据将进行定义
+    // let { point_num,assess_type,reference_num,type} = FrontElement//将传入的数据将进行定义
+    let { point_num,assess_type,type} = FrontElement//将传入的数据将进行定义
     
-    console.log("我是雷达的", point_num,assess_type)
-    let res = await AllEchartDataModel.getFoldData(point_num,assess_type)
-
+    // console.log("我是雷达的", point_num,assess_type)
+    let res = await AllEchartDataModel.getData(point_num,assess_type)
+    let resDatar_arr = await AllEchartDataModel.getAllRadarData(type)
+    let Datar_arr = resDatar_arr.map(item => {
+      return item = item.dataValues
+    })
+    let Threshold17 = []
+    let Threshold18 = []
+    let ThresholdMax = []
+    Datar_arr.forEach((item) =>{
+      
+        if(item.reference_num == '17国标'){
+          delete item.reference_num;
+          Threshold17.push(item)
+        }else if(item.reference_num == 'max'){
+          delete item.reference_num;
+          ThresholdMax.push(item)
+        }else if(item.reference_num == '18国标'){
+          delete item.reference_num;
+          Threshold18.push(item)
+        }
+      
+    })
+    // console.log(4865963, Threshold) 
+    // console.log(7569869696,ThresholdMax) 
     let Echart_arr = res.map(item => {
       return item = item.dataValues
     })
-    //  console.log("我是深度",Echart_arr)
+     console.log(55555555555,Echart_arr)
     let sample_depth = res.map(item => {
       return item = item.dataValues.sample_depth
     })
     sample_depth = sample_depth.filter((item, index, self) => {
         return index == self.indexOf(item)
       })//将得到的深度进行去重
+    // console.log("我是深度2",sample_depth)
 
-   if(assess_type == 1&&reference_num == 'max' && type == 'ground'){
+   if(assess_type == 1  ){
   
     let depth1 = []
     let depth2 = []
-    let depth3 = []
-
-    
+    let depth3 = []   
     Echart_arr.forEach((item) => {
       //let in 遍历数组元素即一个包含id,date,point_num还有各种元素值的对象，然后把这些元素对应的值，参考值，时间，是否受污染push到HistoryLists数组中
       
@@ -121,10 +144,7 @@ class echart_Controller{
           }
     })
 
-    let resDatar_arr = await AllEchartDataModel.getAllRadarData(reference_num,type)
-    let Datar_arr = resDatar_arr.map(item => {
-      return item = item.dataValues
-    })
+   
 
     let AllData =[]
     let AllRadarData = []
@@ -132,16 +152,20 @@ class echart_Controller{
     let arr1 =[]
     let arr2 =[]
     let arr3 =[]
-    AllData.push(Datar_arr[0],depth1[0],depth2[0],depth3[0])
-
+    let arr4 =[]
+    let arr5 =[]
+    AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0])
+    console.log(4444444,AllData)
     for(let i=0;i<AllData.length;i++){
             for(let key in AllData[0] ){
-              if(AllData[1][key]=='0'&& AllData[2][key] =='0'&& AllData[3][key] =='0'){
+              if(AllData[3][key]=='0'&& AllData[4][key] =='0'&& AllData[5][key] =='0'){
               //  arr119.push({text:key,max:AllData[0][key]});
-              delete AllData[0][key];
-              delete AllData[1][key];
-              delete AllData[2][key];
-              delete AllData[3][key];
+                  delete AllData[0][key];
+                  delete AllData[1][key];
+                  delete AllData[2][key];
+                  delete AllData[3][key];
+                  delete AllData[4][key];
+                  delete AllData[5][key];
                }
                
              }
@@ -151,29 +175,31 @@ class echart_Controller{
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
           AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
           AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
         }
       }
       arr1.push(AllData[1][key]);
       arr2.push(AllData[2][key]);
       arr3.push(AllData[3][key]);
+      arr4.push(AllData[4][key]);
+      arr5.push(AllData[5][key]);
     }
 
-    all.push({max:AllRadarData,depth1:arr1,depth2:arr2,depth3:arr3})
+    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5})
 
     ctx.body = {
       success: true,
       res:all,
       msg: '获取成功'
     }
-  }else if(assess_type == 2&& reference_num == 'max' && type == 'ground'){
+  }else if(assess_type == 2){
 
-    let res2 = await AllEchartDataModel.RadarEachDepthValue(point_num)
-    let resDatar_arr = await AllEchartDataModel.getAllRadarData(reference_num,type)
+    let res2 = await AllEchartDataModel.RadarEachDepthValue(assess_type,point_num)
+    console.log(56586556,assess_type,point_num)
     
     let Echart_arr2 = res2.map(item => {
       return item = item.dataValues
@@ -186,9 +212,7 @@ class echart_Controller{
         return index == self.indexOf(item)
       })//将得到的深度进行去重
     
-    let Datar_arr = resDatar_arr.map(item => {
-      return item = item.dataValues
-    })
+  
 
     let depth1 = []
     let depth2 = []
@@ -242,37 +266,45 @@ class echart_Controller{
     let arr2 =[]
     let arr3 =[]
     let arr4 =[]
-    AllData.push(Datar_arr[0],depth1[0],depth2[0],depth3[0],depth4[0])
+    let arr5 =[]
+    let arr6 =[]
+    AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0],depth4[0])
+    
 
     for(let i=0;i<AllData.length;i++){
-            for(let key in AllData[0] ){
-              if(AllData[1][key]=='0'&& AllData[2][key] =='0'&& AllData[3][key] =='0'&& AllData[4][key] =='0'){
-              //  arr119.push({text:key,max:AllData[0][key]});
-              delete AllData[0][key];
-              delete AllData[1][key];
-              delete AllData[2][key];
-              delete AllData[3][key];
-              delete AllData[4][key];
-              }
-               
-             }
+      for(let key in AllData[0] ){
+        if(AllData[3][key]=='0'&& AllData[4][key] =='0'&& AllData[5][key] =='0'&& AllData[6][key] =='0'){
+        //  arr119.push({text:key,max:AllData[0][key]});
+            delete AllData[0][key];
+            delete AllData[1][key];
+            delete AllData[2][key];
+            delete AllData[3][key];
+            delete AllData[4][key];
+            delete AllData[5][key];
+            delete AllData[6][key];
+        } 
+      }
     }
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+          AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
         } else {
-          AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+          AllRadarData.push({ text: element_Map.get(key)})
         }
       }
       arr1.push(AllData[1][key]);
       arr2.push(AllData[2][key]);
       arr3.push(AllData[3][key]);
       arr4.push(AllData[4][key]);
+      arr5.push(AllData[5][key]);
+      arr6.push(AllData[6][key]);
     }
 
-    all.push({max:AllRadarData,depth1:arr1,depth2:arr2,depth3:arr3,depth4:arr4})
+    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5,depth4:arr6})
     
 
       ctx.body = {
@@ -280,50 +312,72 @@ class echart_Controller{
         res:all,
         msg: '获取成功'
       }
+  }else if(assess_type == 3){
+    let res3 = await AllEchartDataModel.RadarEachDepthValue(assess_type,point_num)
+    console.log(56586556,assess_type,point_num)
+    let Echart_arr3 = res3.map(item => {
+      return item = item.dataValues
+    })
+    let type3Data=[]
+    
+    Echart_arr3.forEach((item)=>{
+      if(item.statistic_value=='max_value'){
+          delete item.statistic_value;
+          delete item.sample_depth;
+          type3Data.push(item)
+          
+      }
+    })
+  
+    let all =[]
+    let arr1 =[]
+    let arr2 =[]
+    let arr3 =[]
+    let AllData =[]
+    let AllRadarData = []
+    AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],type3Data[0])
+    
+    for(let i=0;i<AllData.length;i++){
+      for(let key in AllData[0] ){
+        if(AllData[3][key]=='0'){
+        //  arr119.push({text:key,max:AllData[0][key]});
+            delete AllData[0][key];
+            delete AllData[1][key];
+            delete AllData[2][key];
+            delete AllData[3][key];
+            
+        } 
+      }
+    }
+
+    for (let key in AllData[0]) {
+      if (AllData[0][key] && element_Map.has(key)) {
+        if (AllData[0][key] && element_Map.get(key)) {
+          AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+        } else {
+          AllRadarData.push({ text: element_Map.get(key)})
+          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+        }
+      }
+      arr1.push(AllData[1][key]);
+      arr2.push(AllData[2][key]);
+      arr3.push(AllData[3][key]);
+     
+    }
+
+    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})
+    ctx.body = {
+      success: true,
+      res:all,
+      msg: '获取成功'
+    }
+
   }
+
     
  };//对应于雷达图里面的在一个调查类型下的一个监测点位中的不同深度的数据值
-  
-  static async GroundRadarThresholdData(ctx) {
-  
-    // const id = this.params.id
-    let FrontElement = ctx.request.body //从前端传入的数据
-    let { reference_num,type } = FrontElement
-   
-    console.log(99999, reference_num,typeof type);
-    
-      let resDatar_arr = await AllEchartDataModel.getAllRadarData(reference_num,type)
-    if(reference_num == '17国标' && type == 'ground') {
-     
-  
-      let Datar_arr = resDatar_arr.map(item => {
-        return item = item.dataValues
-      })
-  
-      let AllRadarData = []
-      console.log('我是',Datar_arr)
-  
-  
-      Datar_arr.forEach((item) => {
-        //let in 遍历数组元素即一个包含id,date,point_num还有各种元素值的对象，然后把这些元素对应的值，参考值，时间，是否受污染push到HistoryLists数组中
-        for (let key in item) {
-          if (item[key] && element_Map.has(key)) {
-            if (item[key] && element_Map.get(key)) {
-              AllRadarData.push(item[key])
-            } else {
-              AllRadarData.push(item[key])
-            }
-          }
-        }
-      })
- 
-        ctx.body = {
-          success: true,
-          resDatar_arr: AllRadarData,
-          msg: '获取成功'
-        }
-    }
-  };//得到国标值以及阈值
+
   
 }
 
