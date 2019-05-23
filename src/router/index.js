@@ -59,18 +59,6 @@ export const asyncRouterMap = [
     ]
   },
 
-  {
-    path: '/echart',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Echart',
-        component: () => import('@/views/echart/index'),
-        meta: { title: '统计信息', icon: 'form' }
-      }
-    ]
-  },
 
   {
     path: '/table',
@@ -80,7 +68,7 @@ export const asyncRouterMap = [
     meta: {
       title: '表格数据',
       icon: 'example',
-      roles: ['admin']
+      // roles: ['admin']
     },
     children: [
       {
@@ -97,6 +85,20 @@ export const asyncRouterMap = [
       }
     ]
   },
+
+  {
+    path: '/echart',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Echart',
+        component: () => import('@/views/echart/index'),
+        meta: { title: '统计信息', icon: 'form' }
+      }
+    ]
+  },
+  
 
   // {
   //   path: '/tree_table',

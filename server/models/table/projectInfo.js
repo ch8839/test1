@@ -4,8 +4,25 @@ const projectInfoSchema = Sequelize.import('../../schema/project_info.js');
 const pointInfoSchema = Sequelize.import('../../schema/point_info.js');
 
 class AllProjectDataModel {
-    static async getAllProjectData() {
-        const AllProjectData = await projectInfoSchema.findAll()
+    static async getAllProjectData(roles, project_owner) {
+        let project_owner_list = []
+        project_owner.forEach(item=>{
+            project_owner_list.push({
+                project_num: item
+            })
+        })
+        console.log(project_owner_list)
+        let AllProjectData
+        if(roles.indexOf('admin')){
+            AllProjectData = await projectInfoSchema.findAll()
+        }else {
+            AllProjectData = await projectInfoSchema.findAll({
+                where:{
+                    $or:project_owner_list
+                }
+            })
+        }
+        
         return AllProjectData
     }
 

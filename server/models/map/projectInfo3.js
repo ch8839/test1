@@ -1,6 +1,5 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
 const projectInfoSchema = theDatabase.import('../../schema/project_info.js'); 
-const groundInfoSchema = theDatabase.import('../../schema/ground_info.js'); 
 const locationphInfoSchema = theDatabase.import('../../schema/sample_detector_ground_info.js'); 
 
 
@@ -14,15 +13,6 @@ const getPhData = async function(ground_number){
     return AllProjectData
 }
 
-const getDepthData = async function(ground_number){
-    const AllProjectData = await groundInfoSchema.findAll({
-        where:{
-            ground_num: ground_number
-        }
-    })
-    // console.log(AllProjectData)
-    return AllProjectData
-}
 
 const getAllProjectData = async function(){
     const AllProjectData = await projectInfoSchema.findAll()
@@ -82,7 +72,6 @@ const getCountByProjectnum = async function(project_num){
 module.exports = {
     getAllProjectData,
     getPhData,
-    getDepthData, 
     getProjecttypeByProjectnum,
     UpdatedifferentCount,
     getCountByProjectnum,

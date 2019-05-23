@@ -1,6 +1,7 @@
 const AllProjectDataModel = require('../../models/table/projectInfo.js')
 const AllMap = require('../../models/common/Map.js')
-
+const jwt = require('jsonwebtoken')
+const secret = 'shu-project'
 var areaMap
 
 AllMap.then(data=>{
@@ -12,7 +13,25 @@ AllMap.then(data=>{
 class ProjectInfo_Controller {
 
   static async getProjectInfo(ctx) {
-    let res = await AllProjectDataModel.getAllProjectData()
+
+    const token = ctx.header['shu-token']
+    let roles
+    let project_owner
+		if (token) {
+			try {
+				let playload = await jwt.verify(token, secret)
+        console.log('playload', playload)
+        roles = playload.roles
+				project_owner = playload.project_owner.split('、')				 
+      } catch(err){
+        console.log(err)
+      }
+        
+    }else{
+      return
+    }
+
+    let res = await AllProjectDataModel.getAllProjectData(roles, project_owner)
     let AllProjectData = res.map(item => {
       return item = item.dataValues
     })

@@ -13,7 +13,8 @@ class User_Controller {
 				const userToken = {
 					id: userInfo.id,
 					username: userInfo.username,
-					roles: roles_Map.get(userInfo.roles),
+					roles: userInfo.roles,
+					project_owner: userInfo.project_owner,
 					avatar: userInfo.avatar
 				}
 

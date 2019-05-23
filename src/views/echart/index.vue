@@ -77,7 +77,7 @@
             </el-table-column>
             <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
-            <el-table-column prop="attention" label="主要超标元素" align="center">
+            <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
                 <el-tag
                   type="danger"
@@ -114,7 +114,7 @@
                     <div
                       :id="'myRadarChart'+props.row.point_num"
                       :class="className"
-                      :data="drawRadar('myRadarChart'+props.row.point_num, props.row.radarseries)"
+                     
                       :style="{height:height,width:width}"
                     ></div>
                   </el-col>
@@ -146,7 +146,7 @@
             </el-table-column>
             <el-table-column prop="point_name" label="监测点位名称" align="center"></el-table-column>
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
-            <el-table-column prop="attention" label="主要超标元素" align="center">
+            <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
                 <el-tag
                   type="danger"
@@ -784,13 +784,17 @@ export default {
     },
     handleLineElementSelect() {},
     /* 画雷达图 */
-    drawRadar(radarid, radardatalist) {
-      this.$nextTick(async () => {
-        this.myRadarChart = echarts.init(document.getElementById(radarid));
-        this.setRadarOptions(radardatalist);
-        /* 将所有charts放入数组，以实现缩放 */
-        this.charts.push(this.myRadarChart);
+    async drawRadar(radarid, radardatalist) {
+       
+         console.log(55,radardatalist)
+         
+         this.$nextTick(async () => {
+          this.myRadarChart = echarts.init(document.getElementById(radarid));
+          this.setRadarOptions(radardatalist);
+          /* 将所有charts放入数组，以实现缩放 */
+          this.charts.push(this.myRadarChart);
       });
+      
     },
     async getRadarOptions(pointnum) {
       let combined_pn_at = {
@@ -818,6 +822,7 @@ export default {
       console.log("res_radarseries", p, this.temp_tableItems[p].radarseries);
     },
     setRadarOptions(radarserisevalue) {
+      console.log('radarserisevalue', radarserisevalue)
       let thresholds = radarserisevalue[1].map((element) => {return element*1.4})
       this.myRadarChart.setOption({
         title: {
@@ -1179,9 +1184,15 @@ export default {
       });
     },
 
-    handleLineElementData(row) {
+    async handleLineElementData(row,expandedRows) {
+      console.log('row',row)
+      console.log('expandedRows',expandedRows)
+      let p = this.temp_tableItems.findIndex((element) => element.point_num == row.point_num)
+      console.log('p',p)
       this.handleElementSelector("expand", row.attention, row.point_num);
-      this.getRadarOptions(row.point_num);
+      await this.getRadarOptions(row.point_num);
+      console.log(88,this.temp_tableItems)
+      this.drawRadar('myRadarChart'+row.point_num, this.temp_tableItems[p].radarseries)
       // return
     },
 

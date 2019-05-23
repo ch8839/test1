@@ -58,7 +58,7 @@
           <img
             src="../../../static/img/point_marker.png"
             class="marker_icon"
-            @click="Marker_Click(item.ground_id-1,item.project_number)" scope >
+            >
         </div>         
       </el-amap-marker>
 

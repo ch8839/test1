@@ -2,12 +2,11 @@
   <div class="project-info-container">
     <div class="project-selector">
       <el-cascader
-        expand-trigger="hover"
         :options="ProjectOptions"
+        expand-trigger="hover"
         v-model="selectedProject"
         @change="projectChange"
-      >
-      </el-cascader>
+      />
     </div>
 
     <div class="content">
@@ -24,7 +23,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          ></el-option>
+          />
         </el-select>
 
         <span class="lable">请选择调查类型：</span>
@@ -38,8 +37,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          >
-          </el-option>
+          />
         </el-select>
       </div>
 
@@ -65,8 +63,8 @@
                   <div class="table2-container">
                     <el-table
                       :data="props.row.labGround_element"
-                      class="drop_table"
                       :row-class-name="tableRowClassName"
+                      class="drop_table"
                     >
                       <el-table-column label="指标">
                         <template slot-scope="scope">
@@ -95,7 +93,7 @@
                       :data="handleChartData(props.row.labGround_element)"
                       :settings="chartSettings3"
                       width="450px"
-                    ></ve-histogram>
+                    />
                   </div>
                 </div>
               </template>
@@ -127,8 +125,8 @@
                 <el-popover
                   placement="right"
                   width="400"
-                  trigger="click"
                   v-if="scope.row.lng"
+                  trigger="click"
                 >
                   <div class="map_container2">
                     <el-amap
@@ -140,12 +138,15 @@
                     >
                       <el-amap-marker
                         :position="[scope.row.lng, scope.row.lat]"
-                        animation="AMAP_ANIMATION_DROP"
                         :vid="scope.row.id"
-                      ></el-amap-marker>
+                        animation="AMAP_ANIMATION_DROP"
+                      />
                     </el-amap>
                   </div>
-                  <el-button size="mini" slot="reference">查看</el-button>
+                  <el-button
+                    slot="reference"
+                    size="mini"
+                  >查看</el-button>
                 </el-popover>
                 <div v-else>
                   <el-tag type="info">暂无位置信息</el-tag>
@@ -172,10 +173,10 @@
                 </template>-->
                 <template v-if="handlePollutionList(scope.row.labGround_element).length">
                   <el-tag
-                    type="danger"
                     v-for="(item,index) in handlePollutionList(scope.row.labGround_element)"
+                    type="danger"
                     :key="index"
-                  >{{element_Map.get(item.element)}}</el-tag>
+                  >{{ element_Map.get(item.element) }}</el-tag>
                 </template>
                 <template v-else>
                   <el-tag type="success">无污染元素</el-tag>
@@ -187,7 +188,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ handleTime(scope.row.date)}}</span>
+                <span style="margin-left: 10px">{{ handleTime(scope.row.date) }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -195,14 +196,14 @@
           <div class="pagination">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
               :current-page="currentPage"
+              @current-change="handleCurrentChange"
               :page-sizes="[2, 5, 8, 10]"
               :page-size="page_size"
               layout="total, sizes, prev, pager, next, jumper"
               background
               :total="total"
-            ></el-pagination>
+            />
           </div>
         </el-tab-pane>
 
@@ -223,8 +224,8 @@
                   <div class="table2-container">
                     <el-table
                       :data="props.row.labWater_element"
-                      class="drop_table"
                       :row-class-name="tableRowClassName"
+                      class="drop_table"
                     >
                       <el-table-column label="指标">
                         <template slot-scope="scope">
@@ -253,7 +254,7 @@
                       :data="handleChartData(props.row.labWater_element)"
                       :settings="chartSettings3"
                       width="450px"
-                    ></ve-histogram>
+                    />
                   </div>
                 </div>
               </template>
@@ -286,8 +287,8 @@
                 <el-popover
                   placement="right"
                   width="400"
-                  trigger="click"
                   v-if="scope.row.lng"
+                  trigger="click"
                 >
                   <div class="map_container2">
                     <el-amap
@@ -299,12 +300,15 @@
                     >
                       <el-amap-marker
                         :position="[scope.row.lng, scope.row.lat]"
-                        animation="AMAP_ANIMATION_DROP"
                         :vid="scope.row.id"
-                      ></el-amap-marker>
+                        animation="AMAP_ANIMATION_DROP"
+                      />
                     </el-amap>
                   </div>
-                  <el-button size="mini" slot="reference">查看</el-button>
+                  <el-button
+                    slot="reference"
+                    size="mini"
+                  >查看</el-button>
                 </el-popover>
                 <div v-else>
                   <el-tag type="info">暂无位置信息</el-tag>
@@ -331,10 +335,10 @@
                 </template>-->
                 <template v-if="handlePollutionList(scope.row.labWater_element).length">
                   <el-tag
-                    type="danger"
                     v-for="(item,index) in handlePollutionList(scope.row.labWater_element)"
+                    type="danger"
                     :key="index"
-                  >{{element_Map.get(item.element)}}</el-tag>
+                  >{{ element_Map.get(item.element) }}</el-tag>
                 </template>
                 <template v-else>
                   <el-tag type="success">无污染元素</el-tag>
@@ -346,7 +350,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ handleTime(scope.row.date)}}</span>
+                <span style="margin-left: 10px">{{ handleTime(scope.row.date) }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -354,14 +358,14 @@
           <div class="pagination">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
               :current-page="currentPage"
+              @current-change="handleCurrentChange"
               :page-sizes="[2, 5, 8, 10]"
               :page-size="page_size"
               layout="total, sizes, prev, pager, next, jumper"
               background
               :total="total"
-            ></el-pagination>
+            />
           </div>
         </el-tab-pane>
 
@@ -372,8 +376,8 @@
           <div class="map_container">
             <el-amap
               ref="map"
-              vid="amapDemo"
               :center="center"
+              vid="amapDemo"
               :zoom="zoom"
               :plugin="plugin"
               :events="events"
@@ -383,10 +387,10 @@
                 v-for="(marker, index) in markers"
                 :position="marker.position"
                 :visible="marker.visible"
-                animation="AMAP_ANIMATION_DROP"
                 :vid="index"
+                animation="AMAP_ANIMATION_DROP"
                 :key="index"
-              ></el-amap-marker>
+              />
               <!-- <el-amap-info-window v-if="window" :position="window.position" :visible="window.visible">
         <div class="windows_contain">
           <div class="windows_title">{{window.content}}</div>
@@ -410,21 +414,21 @@ import {
   getProjectInfo,
   getPointOptions,
   getMarkerList
-} from "@/api/table/project_info";
-import { getLabGroundList } from "@/api/table/ground_info";
-import { getLabWaterList } from "@/api/table/water_info";
-import { formatTime, formatTime2 } from "@/utils/time";
+} from '@/api/table/project_info';
+import { getLabGroundList } from '@/api/table/ground_info';
+import { getLabWaterList } from '@/api/table/water_info';
+import { formatTime, formatTime2 } from '@/utils/time';
 window.onload = function() {
-  localStorage.clear();
+  localStorage.clear()
 };
 export default {
   data() {
     return {
-      activeName: "first",
+      activeName: 'first',
       ProjectOptions: [],
       selectedProject: [],
       pointOptions: [],
-      selectedPoint: "0",
+      selectedPoint: '0',
       selectedAssessType: 0,
       lab_ground_list: [],
       lab_water_list: [],
@@ -435,13 +439,13 @@ export default {
       page_size: 5,
       total: 20,
 
-      element_Map: "",
+      element_Map: '',
       chartSettings3: {
-        showLine: ["reference"],
+        showLine: ['reference'],
         labelMap: {
-          element: "元素",
-          value: "数值",
-          reference: "参考值"
+          element: '元素',
+          value: '数值',
+          reference: '参考值'
         }
       },
       markers: [],
@@ -460,12 +464,16 @@ export default {
       plugin: [
         // "ToolBar", //手动调焦插件
         {
-          pName: "MapType",
+          pName: 'MapType',
           defaultType: 1
           // showRoad:true
-        } //卫星路况插件
+        } // 卫星路况插件
       ]
-    };
+    }
+  },
+
+  mounted() {
+    this.getData();
   },
   methods: {
     /* 点击第三级目录时触发的事件 */
@@ -650,30 +658,6 @@ export default {
     }
   },
 
-  mounted() {
-    this.getData();
-  },
-
-  watch: {
-    // '$route': function(value){
-    //   console.log('value', value)
-    //   if(value.query){
-    //   let transmit_project_num = value.query.transmit_project_num
-    //   let ProjectOptions = this.ProjectOptions
-    //   for(let i =0;i<=ProjectOptions.length;i++){
-    //     let item = ProjectOptions[i]
-    //     let res = item.children.find(item=>{
-    //       return item.value == transmit_project_num
-    //     })
-    //     if(res){
-    //       this.selectedProject = [res.value, transmit_project_num]
-    //       break
-    //     }
-    //   }
-    // }
-    // }
-  },
-
   computed: {
     assess_type_options() {
       return [
@@ -695,8 +679,28 @@ export default {
         }
       ];
     }
-  }
-};
+  },
+
+  watch: {
+    // '$route': function(value){
+    //   console.log('value', value)
+    //   if(value.query){
+    //   let transmit_project_num = value.query.transmit_project_num
+    //   let ProjectOptions = this.ProjectOptions
+    //   for(let i =0;i<=ProjectOptions.length;i++){
+    //     let item = ProjectOptions[i]
+    //     let res = item.children.find(item=>{
+    //       return item.value == transmit_project_num
+    //     })
+    //     if(res){
+    //       this.selectedProject = [res.value, transmit_project_num]
+    //       break
+    //     }
+    //   }
+    // }
+    // }
+  },
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
