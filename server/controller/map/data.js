@@ -184,10 +184,7 @@ const getMarkerInfo = async function (ctx) {
 
 
 
-
-
 const getGroundList =async function(ctx) {
-
   // const element_Map = await getUnit() //通过这种方式每回请求都要执行生成Map映射，所以直接定义全局变量，并立即执行生成Map映射函数，之后取映射时不用再执行
   const project_num = ctx.params.project_num
   // console.log(4,project_num)
@@ -196,50 +193,54 @@ const getGroundList =async function(ctx) {
   var id=0
   var Alldata=[]
   for (let item of ground_name_point[project_num]) {
-    //  取出监测点位编号，然后开始统计attention元素的值
-    //  console.log(6,item)
-     let attentionlist = await sample_detector_ground_info_model.getAttentionByPointnum(item)
-    //  console.log(7,attentionlist)
-     var attention1=Array.from(attentionlist)
-     var attention=[]
-     let Intro = await PointInfoModel.getIntroByPointnum(item)
-     for (let i of attention1){
-       if (i!=-1){//不要把null当作attentionde
-        
-       attention.push(element_Map.get(i))
-     }
-    }
-     Alldata.push({id:++id,point_num:item,attention:attention,introduction:Intro})
-     
+  // 取出监测点位编号，然后开始统计attention元素的值
+  // console.log(6,item)
+  let attentionlist = await sample_detector_ground_info_model.getAttentionByPointnum(item)
+  // console.log(7,attentionlist)
+  var attention1=Array.from(attentionlist)
+  var attention=[]
+  let Intro = await PointInfoModel.getIntroByPointnum(item)
+  var attention1_List=attention1[0].split(',') 
+  
+  for (let i of attention1_List){
+  if (i!=-1){//不要把null当作attentionde
+  console.log(112,i)
+  
+  attention.push(element_Map.get(i))
+  }
+  }
+  Alldata.push({id:++id,point_num:item,attention:attention,introduction:Intro})
   }
   if (Alldata) {
-
-    ctx.body = {
-      success: true,
-      res: Alldata,
-      msg: '获取成功'
-    }
-  } else {
-    ctx.body = {
-      success: true,
-      res: [],
-      msg: '获取失败'
-    }
-  }
-};
-
-const getCircleByProjectnum = async function (ctx) {
-  const project_num = ctx.params.project_num
-  let res4 = await CircleModel.getCircleByProjectnum(project_num)
   
   ctx.body = {
   success: true,
-  res: res4,
+  res: Alldata,
   msg: '获取成功'
   }
-  ;
+  } else {
+  ctx.body = {
+  success: true,
+  res: [],
+  msg: '获取失败'
   }
+  }
+  };
 
+  const getCircleByProjectnum = async function (ctx) {
+    const project_num = ctx.params.project_num
+    let res4 = await CircleModel.getCircleByProjectnum(project_num)
+    var res={}
+    res['path']=res4
+    var res2=[]
+    res2.push(res)
+    ctx.body = {
+    success: true,
+    res: res2,
+    msg: '获取成功'
+    }
+    ;
+    }
 const getMoreDataByPointnum = async function (ctx) {
 const point_num = ctx.params.point_num
 var list=[]

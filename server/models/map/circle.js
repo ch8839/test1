@@ -1,6 +1,6 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
 
-//const circle_area = theDatabase.import('../../schema/circle_area.js'); 
+const circle_area = theDatabase.import('../../schema/circle_area.js'); 
 
 const getCircleByProjectnum = async function(project_num){
     data=[]
