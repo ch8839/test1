@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50528
+Source Server         : tank
+Source Server Version : 50641
 Source Host           : localhost:3306
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50528
+Target Server Version : 50641
 File Encoding         : 65001
 
-Date: 2019-05-22 21:17:04
+Date: 2019-05-26 13:31:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -87,12 +87,12 @@ INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('35', 'max_value',
 INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('36', 'max_value', '31010720190001007', '2', '9.72', '1.1', '2.3', '37.1', '36.7', '78.8', '44.3', '91.9', '0.37', '8.4', '0.793', '0', '0.5', '0', '0', '0', '0', '0', null);
 INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('37', 'max_value', '31010720190001009', '2', '9.72', '1.1', '2.3', '37.1', '36.7', '82.1', '44.3', '83.9', '0.37', '8.4', '0.793', '0', '0.5', '0', '0', '0', '0', '0', null);
 INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('38', 'max_value', '31010720190001004', '3', '0', '0', '0', '28', '53.2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('39', 'mean_value', '2019-0001-0001-0001', '1', '8.52', '1.41', '0.00', '0.00', '0.00', '0.00', '0.00', '9.36', '0.00', '0.00', '0.00', '12.36', '0.00', '0.00', '0.00', '16.29', '0.00', '0.00', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('40', 'mean_value', '2019-0001-0001-0002', '1', '8.19', '1.16', '0.00', '0.00', '0.00', '0.00', '0.00', '6.36', '0.00', '0.00', '0.00', '15.36', '0.00', '0.00', '0.00', '10.63', '0.00', '0.00', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('41', 'mean_value', '2019-0001-0001-0001', '2', '8.19', '1.49', '0.00', '0.00', '0.00', '0.00', '0.00', '13.02', '0.00', '0.00', '0.00', '22.03', '0.00', '0.00', '0.00', '3.96', '0.00', '0.00', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('42', 'mean_value', '2019-0001-0001-0002', '2', '8.19', '1.16', '0.00', '0.00', '0.00', '0.00', '0.00', '6.36', '0.00', '0.00', '0.00', '22.03', '0.00', '0.00', '0.00', '3.63', '0.00', '0.00', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('43', 'max_value', '2019-0001-0001-0001', '1', '9.190', '3.060', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '12.360', '0', '0', '0', '22.960', '0', '0', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('44', 'max_value', '2019-0001-0001-0002', '1', '9.190', '1.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '17.360', '0', '0', '0', '4.960', '0', '0', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('45', 'max_value', '2019-0001-0001-0001', '2', '9.190', '2.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '4.960', '0', '0', null);
-INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('46', 'max_value', '2019-0001-0001-0002', '2', '9.190', '1.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '3.960', '0', '0', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('39', 'mean_value', '31010720190002001', '1', '8.52', '1.41', '0.00', '0.00', '0.00', '0.00', '0.00', '9.36', '0.00', '0.00', '0.00', '12.36', '0.00', '0.00', '0.00', '16.29', '0.00', '0.00', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('40', 'mean_value', '31010720190002002', '1', '8.19', '1.16', '0.00', '0.00', '0.00', '0.00', '0.00', '6.36', '0.00', '0.00', '0.00', '15.36', '0.00', '0.00', '0.00', '10.63', '0.00', '0.00', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('41', 'mean_value', '31010720190002001', '2', '8.19', '1.49', '0.00', '0.00', '0.00', '0.00', '0.00', '13.02', '0.00', '0.00', '0.00', '22.03', '0.00', '0.00', '0.00', '3.96', '0.00', '0.00', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('42', 'mean_value', '31010720190002002', '2', '8.19', '1.16', '0.00', '0.00', '0.00', '0.00', '0.00', '6.36', '0.00', '0.00', '0.00', '22.03', '0.00', '0.00', '0.00', '3.63', '0.00', '0.00', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('43', 'max_value', '31010720190002001', '1', '9.190', '3.060', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '12.360', '0', '0', '0', '22.960', '0', '0', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('44', 'max_value', '31010720190002002', '1', '9.190', '1.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '17.360', '0', '0', '0', '4.960', '0', '0', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('45', 'max_value', '31010720190002001', '2', '9.190', '2.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '4.960', '0', '0', null);
+INSERT INTO `sample_ground_histogram_statistic_value` VALUES ('46', 'max_value', '31010720190002002', '2', '9.190', '1.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '3.960', '0', '0', null);
 SET FOREIGN_KEY_CHECKS=1;

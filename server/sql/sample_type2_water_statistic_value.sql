@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50528
+Source Server         : tank
+Source Server Version : 50641
 Source Host           : localhost:3306
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50528
+Target Server Version : 50641
 File Encoding         : 65001
 
-Date: 2019-05-22 21:17:32
+Date: 2019-05-26 13:32:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,11 +45,7 @@ CREATE TABLE `sample_type2_water_statistic_value` (
   `Alum` varchar(255) DEFAULT '-1',
   `remarks` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-<<<<<<< HEAD
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
-=======
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
->>>>>>> 776e02086219144cf187c569d1871cf068eb521f
 
 -- ----------------------------
 -- Records of sample_type2_water_statistic_value
@@ -69,21 +65,17 @@ INSERT INTO `sample_type2_water_statistic_value` VALUES ('12', 'mean_value', '2'
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('13', 'mean_value', '2', '31010720190001004', '4', '9.9700', '0.0086', '0.0000', '0.0000', '0.0046', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('15', 'mean_value', '2', '31010720190001009', '4', '9.9700', '0.0095', '0.0000', '0.0000', '0.0046', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('16', 'mean_value', '2', '31010720190001009', '6', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('17', 'max_value', '2', '2019-0001-0001-0001', '4', '9.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '4.6900', '0.0000', '0.0000', '0.0000', '12.3600', '0.0000', '0.0000', '0.0000', '24.9600', '0.0000', '0.0000', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('18', 'max_value', '2', '2019-0001-0001-0001', '6', '7.190', '23.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '3.960', '0', '0', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('19', 'max_value', '2', '2019-0001-0001-0002', '4', '9.190', '1.160', '0', '0', '0', '0', '0', '24.690', '0', '0', '0', '12.360', '0', '0', '0', '4.960', '0', '0', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('20', 'max_value', '2', '2019-0001-0001-0002', '6', '8.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '17.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('21', 'mean_value', '2', '2019-0001-0001-0001', '4', '8.6900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '15.1900', '0.0000', '0.0000', '0.0000', '11.8600', '0.0000', '0.0000', '0.0000', '13.9600', '0.0000', '0.0000', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('22', 'mean_value', '2', '2019-0001-0001-0001', '6', '7.1900', '23.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '27.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('23', 'mean_value', '2', '2019-0001-0001-0002', '4', '9.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '24.6900', '0.0000', '0.0000', '0.0000', '12.3600', '0.0000', '0.0000', '0.0000', '4.9600', '0.0000', '0.0000', null);
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('24', 'mean_value', '2', '2019-0001-0001-0002', '6', '7.6900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '17.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
-<<<<<<< HEAD
-INSERT INTO `sample_type2_water_statistic_value` VALUES ('50', 'mean_value', '2', '31010720190001004', '4', '9.9700', '0.0086', '0.0000', '0.0000', '0.0046', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', null);
-=======
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('17', 'max_value', '2', '31010720190002001', '4', '9.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '4.6900', '0.0000', '0.0000', '0.0000', '12.3600', '0.0000', '0.0000', '0.0000', '24.9600', '0.0000', '0.0000', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('18', 'max_value', '2', '31010720190002001', '6', '7.190', '23.160', '0', '0', '0', '0', '0', '6.690', '0', '0', '0', '27.360', '0', '0', '0', '3.960', '0', '0', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('19', 'max_value', '2', '31010720190002002', '4', '9.190', '1.160', '0', '0', '0', '0', '0', '24.690', '0', '0', '0', '12.360', '0', '0', '0', '4.960', '0', '0', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('20', 'max_value', '2', '31010720190002002', '6', '8.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '17.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('21', 'mean_value', '2', '31010720190002001', '4', '8.6900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '15.1900', '0.0000', '0.0000', '0.0000', '11.8600', '0.0000', '0.0000', '0.0000', '13.9600', '0.0000', '0.0000', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('22', 'mean_value', '2', '31010720190002001', '6', '7.1900', '23.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '27.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('23', 'mean_value', '2', '31010720190002002', '4', '9.1900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '24.6900', '0.0000', '0.0000', '0.0000', '12.3600', '0.0000', '0.0000', '0.0000', '4.9600', '0.0000', '0.0000', null);
+INSERT INTO `sample_type2_water_statistic_value` VALUES ('24', 'mean_value', '2', '31010720190002002', '6', '7.6900', '1.1600', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '6.6900', '0.0000', '0.0000', '0.0000', '17.3600', '0.0000', '0.0000', '0.0000', '3.9600', '0.0000', '0.0000', null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('50', 'mean_value', '2', '31010720190001004', '6', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('51', 'max_value', '2', '31010720190001007', '4', '7.46', '0.0104', '0', '0', '0.00069', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('52', 'max_value', '2', '31010720190001007', '6', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('53', 'mean_value', '2', '31010720190001007', '4', '7.4600', '0.0104', '0.0000', '0.0000', '0.0007', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', null);
 INSERT INTO `sample_type2_water_statistic_value` VALUES ('54', 'mean_value', '2', '31010720190001007', '6', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
->>>>>>> 776e02086219144cf187c569d1871cf068eb521f
 SET FOREIGN_KEY_CHECKS=1;
