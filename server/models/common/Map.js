@@ -6,7 +6,7 @@ const areaMapSchema = theDatabase.import('../../schema/area_map.js');
 const getAllMap = (async function () {
 
     let referenceInfo =  referenceInfoSchema.findAll({
-        attributes: { exclude: ['id','point_num','reference_intro', 'type'] },
+        attributes: { exclude: ['id','point_num','reference_num', 'type'] },
     }) //不同标准的参考值表
     let unitInfo =  unitInfoSchema.findAll({
         attributes: { exclude: ['id'] },
@@ -26,14 +26,12 @@ const getAllMap = (async function () {
     let reference_arr = tasks[0] //不同标准的参考值数组
     let unit_eleName_arr = tasks[1] //单位、元素映射
     let area_arr = tasks[2] //区
-    console.log(area_arr)
+ 
     let reference_17_ground_Obj = reference_arr[0] //参考值标准1
     let reference_17_water_Obj = reference_arr[2] //参考值标准2
 
     let unitObj = unit_eleName_arr[0] //单位映射
     let elementNameObj = unit_eleName_arr[1] //元素名称映射
-
-    // let areaObj = area_arr[0] //区名映射
 
     let reference_17_ground_Map_arr = [],
         reference_17_water_Map_arr = [],
@@ -65,9 +63,7 @@ const getAllMap = (async function () {
         area_Map: new Map(area_Map_arr)
     }
 
-
 })
-
 
 module.exports = getAllMap()
 

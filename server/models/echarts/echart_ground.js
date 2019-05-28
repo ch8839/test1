@@ -2,9 +2,36 @@ const theDatabase = require('../../config/db.js').theDb; //引入数据库
 
 const echartSchema = theDatabase.import('../../schema/sample_lab_ground_info.js'); 
 const radarSchema = theDatabase.import('../../schema/reference_info.js'); 
+// const referenceInfoSchema = theDatabase.import('../../schema/reference_info.js'); 
+// const unitInfoSchema = theDatabase.import('../../schema/unit_info.js'); 
 const sample_histogram_statistic_value_Schema = theDatabase.import('../../schema/sample_ground_histogram_statistic_value.js'); 
 const sample_type2_statistic_value_Schema = theDatabase.import('../../schema/sample_type2_ground_statistic_value.js'); 
 
+
+
+
+// const getReferenceInfo =  async function (element) {
+   
+//     let referenceInfo
+//     if (element) {
+//         referenceInfo = await referenceInfoSchema.findAll({
+//                 attributes: [element], 
+//             })
+//     }
+    
+//     return referenceInfo
+// }
+
+// const getUnitInfo =  async function (element) {
+//     let unitInfo
+//     if (element){
+//         unitInfo = await unitInfoSchema.findAll({
+//             attributes: [element],
+//         })
+//     }
+    
+//     return unitInfo
+// }
 
 const RadarEachDepthValue = async function (assess_type,point_num) {
     const SelectOptions = await sample_type2_statistic_value_Schema.findAll({
@@ -45,25 +72,16 @@ const getType3ElementData = async function(assess_type){
     return AllElementData
 }
 
-const getFoldElement = async function (point_num,assess_type,element) {
-    let AllElementData
-    if (element) {
-    
-            AllElementData = await echartSchema.findAll({
-                attributes: [element,'sample_num'],
-                where: {
-                    point_num,
-                    assess_type,
-          
-                }
-            })
-        
-    }
-    return AllElementData
-}
 
 
-
+// const getAllEchartData = async function(point_num){
+//     const AllEchartData = await sample_histogram_statistic_value_Schema.findAll({
+//         where: {
+//             point_num: point_num
+//         }
+//     })
+//     return AllEchartData
+// }
 
 
 const getAllRadarData = async function(type){
@@ -117,35 +135,17 @@ const getHistogramElement = async function (point_num, element) {
     return AllElementData
 }
 
-const getFoldElementMean = async function (point_num,assess_type,element,statistic_value) {
-    let AllElementData
-    if (element) {
-    
-            AllElementData = await sample_histogram_statistic_value_Schema.findAll({
-                attributes: [element,],
-                where: {
-                    point_num,
-                    assess_type,
-                    statistic_value,
-          
-                }
-            })
-        
-    }
-    return AllElementData
-}
-
 
 module.exports = {
-    
+    // getAllEchartData,
     getAllRadarData,
     getElementData,
     getFoldData,
+    // getReferenceInfo,
+    // getUnitInfo,
     RadarEachDepthValue,
     getHistogramElement,
     getType3ElementData,
-    getData,
-    getFoldElement,
-    getFoldElementMean
+    getData
     
 }

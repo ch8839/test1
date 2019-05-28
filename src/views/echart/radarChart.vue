@@ -28,7 +28,7 @@ require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 
 
-import { getRadarRealTimeValue, getRadarData } from "@/api/echarts";
+import { getRadarRealTimeValue, getRadarData } from "@/api/echarts/echarts";
 
 import { debounce } from "@/utils";
 

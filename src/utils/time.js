@@ -16,4 +16,13 @@ const formatTime = function(time){
     const t2 = [hour, minute, second].map(formatNumber).join(':')
     return `${t1} ${t2}`
 }
-export default formatTime
+const formatTime2 = function(time){
+    let date = new Date(time)
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    let day = date.getDate()    
+    
+    const t1 = [year, month, day].map(formatNumber).join('-')
+    return `${t1}`
+}
+export {formatTime , formatTime2 }

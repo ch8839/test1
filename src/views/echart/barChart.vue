@@ -43,7 +43,7 @@ require("echarts/lib/component/title");
 import {
   getGroundList,
   getSpecifiedElementList,
-} from "@/api/echarts";
+} from "@/api/echarts/echarts";
 
 import { debounce } from "@/utils";
 

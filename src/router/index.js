@@ -27,15 +27,21 @@ export const constantRouterMap = [
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    path: '/dashboard',
+    component: Layout, 
     hidden: true,
     children: [{
-      path: 'dashboard',
+      name: 'Dashboard',
+      path: '',
       component: () => import('@/views/dashboard/index')
     }]
+  },
+
+  {
+    path: '/',
+    hidden: true,
+    component: Layout,
+    redirect: '/map/index'
   }
 ]
 
@@ -48,7 +54,33 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Map',
         component: () => import('@/views/map/index'),
-        meta: { title: '地图', icon: 'form' }
+        meta: { title: '地图', icon: 'map' }
+      }
+    ]
+  },
+
+  {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/detail-table',
+    name: 'Table',
+    meta: {
+      title: '表格数据',
+      icon: 'example',
+      // roles: ['admin']
+    },
+    children: [
+      {
+        path: 'detail-table',
+        name: 'DetailTable',
+        component: () => import('@/views/detail-table/index'),
+        meta: { title: '详细数据', icon: 'form' }
+      },
+      {
+        path: 'detect-table',
+        name: 'DetectTable',
+        component: () => import('@/views/detect-table/index'),
+        meta: { title: '检测数据', icon: 'form' }
       }
     ]
   },
@@ -61,23 +93,11 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Echart',
         component: () => import('@/views/echart/index'),
-        meta: { title: '图表信息', icon: 'form' }
+        meta: { title: '统计信息', icon: 'form' }
       }
     ]
   },
-
-  {
-    path: '/project_info',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'ProjectInfo',
-        component: () => import('@/views/project_info/index'),
-        meta: { title: '项目信息查询', icon: 'form' }
-      }
-    ]
-  },
+  
 
   // {
   //   path: '/tree_table',

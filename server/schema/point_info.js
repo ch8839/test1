@@ -16,14 +16,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    project_id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
-    },
-    point_address: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     point_lng: {
       type: "DOUBLE(30,10)",
       allowNull: true

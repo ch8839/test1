@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, getInfo } from '@/api/user/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -31,9 +31,14 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
+          if(data.code ==200){
+            setToken(data.token)
+            commit('SET_TOKEN', data.token)
+            resolve(data)
+          }else if(data.code == 412 || data.code == 413){
+            resolve(data)
+          }
+         
         }).catch(error => {
           reject(error)
         })
@@ -44,7 +49,8 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response.data
+          const data = response.data.res
+          console.log('getInfo', data)
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {
@@ -62,14 +68,10 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+          resolve()     
       })
     },
 

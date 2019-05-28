@@ -5,7 +5,7 @@
 
 ## 项目准备
 
-- 建立数据库test
+- 建立数据库tank
 - 导入sql文件
 - 修改server/config/db.js文件的账号密码为自己的账号密码
 

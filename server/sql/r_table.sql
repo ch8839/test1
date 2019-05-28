@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : localhost_3306
 Source Server Version : 50528
 Source Host           : localhost:3306
-Source Database       : ceshi
+Source Database       : tank
 
 Target Server Type    : MYSQL
 Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2019-04-23 18:45:53
+Date: 2019-05-14 14:39:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,7 +44,7 @@ CREATE TABLE `r_table` (
   `count` int(11) DEFAULT NULL COMMENT '超标数目',
   `attention` varchar(255) DEFAULT NULL COMMENT '需要注意的元素',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of r_table

@@ -47,6 +47,7 @@ class echartCompute_Controller{
                 "copper",
                 "lead",
                 "mercury", 
+                "nickel", 
                 "nickel",
                 "antimony",
                 "beryllium",
@@ -127,7 +128,7 @@ class echartCompute_Controller{
         // console.log(obj_total)
     for(let ele in obj_total){
         obj_total[ele] /=ele_list.length
-        obj_total[ele] = obj_total[ele].toFixed(4)
+        obj_total[ele] = obj_total[ele].toFixed(2)
     }
     obj_total['point_num'] = key
     
@@ -156,7 +157,7 @@ class echartCompute_Controller{
     
     ctx.body = {
       success: true,
-      res: arr_average,
+      res: arr_max,
       msg: '获取成功'
     }
   };
