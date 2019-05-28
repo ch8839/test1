@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ground_info', {
+  return sequelize.define('point_info', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -12,20 +12,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    point_intro: {
+    project_num: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    point_depth: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    ground_num: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    sampling_time: {
-      type: "DOUBLE(30,3)",
+    project_id: {
+      type: DataTypes.INTEGER(11),
       allowNull: true
     },
     point_address: {
@@ -40,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    point_monitor_time: {
+    point_intro: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
@@ -51,8 +43,12 @@ module.exports = function(sequelize, DataTypes) {
     count: {
       type: DataTypes.INTEGER(11),
       allowNull: true
+    },
+    assess_type: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
     }
   }, {
-    tableName: 'ground_info'
+    tableName: 'point_info'
   });
 };

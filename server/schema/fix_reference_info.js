@@ -1,24 +1,24 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('real_time_element', {
+  return sequelize.define('fix_reference_info', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    ground_num: {
+    reference_num: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
+    },
+    sample_num: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     point_num: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    point_depth: {
-      type: DataTypes.STRING(255),
-      allowNull: false
+      type: DataTypes.INTEGER(11),
+      allowNull: true
     },
     PH: {
       type: "DOUBLE(30,3)",
@@ -91,17 +91,8 @@ module.exports = function(sequelize, DataTypes) {
     Alum: {
       type: "DOUBLE(30,3)",
       allowNull: true
-    },
-    count: {
-      type: DataTypes.STRING(11),
-      allowNull: true
-    },
-    time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
-    tableName: 'real_time_element'
+    tableName: 'fix_reference_info'
   });
 };

@@ -8,46 +8,50 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    area: {
+    project_area: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    ground_name: {
+    project_name: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    ground_num: {
+    project_num: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    ground_type: {
+    project_type: {
       type: DataTypes.INTEGER(11),
       allowNull: true
     },
-    assess_type: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
-    },
-    ground_lng: {
+    project_lng: {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    ground_lat: {
+    project_lat: {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    monitor_time: {
-      type: DataTypes.STRING(255),
+    simple_count: {
+      type: DataTypes.INTEGER(255),
+      allowNull: true
+    },
+    detail_count: {
+      type: DataTypes.INTEGER(255),
+      allowNull: true
+    },
+    fixed_count: {
+      type: DataTypes.INTEGER(255),
+      allowNull: true
+    },
+    all_count: {
+      type: DataTypes.INTEGER(255),
       allowNull: true
     },
     remarks: {
       type: DataTypes.STRING(255),
       allowNull: false,
       defaultValue: ''
-    },
-    count: {
-      type: DataTypes.STRING(11),
-      allowNull: true
     }
   }, {
     tableName: 'project_info'
