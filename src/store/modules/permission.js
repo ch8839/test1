@@ -50,7 +50,8 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.includes('admin')) {
+        //如果角色是super admin则挂载所有路由，否则进入筛选路由函数
+        if (roles.includes('super admin')) {
           accessedRouters = asyncRouterMap
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)

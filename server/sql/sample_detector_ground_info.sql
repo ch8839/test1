@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50528
+Source Server Version : 50643
 Source Host           : localhost:3306
-Source Database       : tank
+Source Database       : tank2
 
 Target Server Type    : MYSQL
-Target Server Version : 50528
+Target Server Version : 50643
 File Encoding         : 65001
 
-Date: 2019-05-22 21:16:49
+Date: 2019-05-28 15:01:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,7 +49,7 @@ CREATE TABLE `sample_detector_ground_info` (
   `attention` varchar(255) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
   `lng` double(30,10) DEFAULT NULL,
-  `log` double(30,10) DEFAULT NULL,
+  `lat` double(30,10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;
 

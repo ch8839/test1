@@ -1,6 +1,9 @@
 const UserModel = require('../../models/user/login.js')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const aesDecrypt = require('../../utils/aes').aesDecrypt
 const secret = 'shu-project'
+const key = 'shu'
 const roles_Map = new Map([[1, 'admin'], [2, 'tourist']])
 
 class User_Controller {
@@ -9,7 +12,8 @@ class User_Controller {
 		const req_userInfo = ctx.request.body
 		let userInfo = await UserModel.login(req_userInfo.username)
 		if (userInfo) {
-			if (userInfo.password == req_userInfo.password) {
+			let password = aesDecrypt(req_userInfo.password, key) //解密
+			if (userInfo.password == password) {
 				const userToken = {
 					id: userInfo.id,
 					username: userInfo.username,

@@ -138,7 +138,7 @@ module.exports = function(sequelize, DataTypes) {
       type: "DOUBLE(30,10)",
       allowNull: true
     },
-    log: {
+    lat: {
       type: "DOUBLE(30,10)",
       allowNull: true
     }

@@ -1,6 +1,8 @@
 import { login, getInfo } from '@/api/user/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { aesEncrypt, aesDecrypt } from '@/utils/aes'
 
+const key = 'shu'
 const user = {
   state: {
     token: getToken(),
@@ -28,8 +30,10 @@ const user = {
     // 登录
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
+      let password = userInfo.password
+      password = aesEncrypt(password, key) //加密
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
+        login(username, password).then(response => {
           const data = response.data
           if(data.code ==200){
             setToken(data.token)

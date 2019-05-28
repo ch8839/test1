@@ -452,15 +452,7 @@ export default {
       allMarkers: [],
       zoom: 17,
       center: [121.457624, 31.27586],
-      events: {
-        // init: o => {
-        //   console.log(1, o.getCenter()); //获取地图中心
-        //   console.log(2, this.$refs.map.$$getInstance()); //获取地图实例
-        //   o.getCity(result => {
-        //     console.log(3, result);
-        //   });
-        // }
-      },
+      events: {},
       plugin: [
         // "ToolBar", //手动调焦插件
         {
@@ -476,7 +468,7 @@ export default {
     this.getData();
   },
   methods: {
-    /* 点击第三级目录时触发的事件 */
+    /* 点击第二级目录时触发的事件 */
     async projectChange(value) {
       if (value.length == 2) {
         console.log("选项值", value);

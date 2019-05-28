@@ -67,7 +67,7 @@ export const asyncRouterMap = [
     meta: {
       title: '表格数据',
       icon: 'example',
-      // roles: ['admin']
+      // roles: ['super admin']
     },
     children: [
       {
@@ -93,7 +93,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Echart',
         component: () => import('@/views/echart/index'),
-        meta: { title: '统计信息', icon: 'form' }
+        meta: { title: '统计信息', icon: 'form' , roles: ['super admin']}
       }
     ]
   },
