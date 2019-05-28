@@ -3,10 +3,10 @@ const AllMap = require('../../models/common/Map.js')
 
 const assess_type_Map = new Map([[1, '初次调查'], [2, '详细调查'], [3, '修复调查'] ])
 
-var reference_17_ground_Map, element_Map, unit_Map
+var reference_17_water_Map, element_Map, unit_Map
 
 AllMap.then(data=>{
-reference_17_ground_Map = data.reference_17_ground_Map
+reference_17_water_Map = data.reference_17_water_Map
 element_Map = data.element_Map
 unit_Map = data.unit_Map
 })
@@ -148,12 +148,9 @@ class echart_Controller{
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          AllRadarData.push({ text: element_Map.get(key)})
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          
+          AllRadarData.push({ text: element_Map.get(key) })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+          AllRadarData.push({ text: element_Map.get(key) })
         }
       }
       arr1.push(AllData[1][key]);//只取出来元素的值不要元素名称
@@ -162,10 +159,10 @@ class echart_Controller{
     }//将最大值的元素换成中文显示
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})//将所有数据进行push到一个数组中去
-    console.log("数据库原始数据", all, all[0].max)
+    
     ctx.body = {
       success: true,
-      resDatar_arr:all,
+      res:all,
       msg: '获取成功'
     }
   }else if(assess_type == 2){
@@ -216,6 +213,7 @@ class echart_Controller{
     
     AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0])
     console.log(95689,AllData)
+ 
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
@@ -241,20 +239,13 @@ class echart_Controller{
         }  
       }
     }
-    // console.log(44444444,AllData)
     
     for (let key in AllData[0]) {
-      console.log(44444444,AllData[0],element_Map)
-      // console.log(44444444,AllData[0][key],element_Map.has(key))
       if (AllData[0][key] && element_Map.has(key)) {
-       
-
         if (AllData[0][key] && element_Map.get(key)) {
-          AllRadarData.push({ text: element_Map.get(key)})
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
+          AllRadarData.push({ text: element_Map.get(key) })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+          AllRadarData.push({ text: element_Map.get(key) })
         }
       }
       arr1.push(AllData[1][key]);
@@ -267,8 +258,7 @@ class echart_Controller{
        
       }
     }
-
-    console.log(15266,AllRadarData)
+    console.log(15266,arr2)
     if(arr4.length!=0){
       all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4})
     }else {
@@ -276,11 +266,74 @@ class echart_Controller{
     }
     ctx.body = {
       success: true,
-      resDatar_arr: all,
+      res: all,
       msg: '获取成功'
     }
   }
  };//对应于雷达图里面的在一个调查类型下的一个监测点位中的不同深度的数据值
+
+ static async getAllWaterFoldData(ctx) {
+  
+  let SingleElementOptions = ctx.request.body //从前端传入的数据
+  let { point_num,assess_type,element } = SingleElementOptions //将传入的数据将进行定义
+  let statistic_value= 'mean_value'
+  let res = await AllEchartDataModel.getFoldWaterElement(point_num,assess_type,element)//通过point_num,assess_type,element将数据库中的数据取出
+  let res2 = await AllEchartDataModel.getWaterFoldElementMean(point_num,assess_type,element,statistic_value)//通过point_num,essess_type将数据库中取出 
+  
+  console.log(333333333,  point_num,assess_type,element,statistic_value)
+
+  console.log(2222222, assess_type)
+  let res3 = res2.map(item => {
+    return item = item.dataValues
+  })
+  console.log(666666666, res3)
+
+  let res1 = res.map(item => {
+    return item = item.dataValues
+  })
+  console.log(11111111, res1)
+
+  let sample_num = res.map(item => {
+    return item = item.dataValues.sample_num
+  })//将不同监测点位下以及不同评估类型下的样本取出
+
+
+ 
+  let Sample = []
+  for (let i=0;i<sample_num.length;i++){
+    let x ;
+    x = i + 1 ;
+    Sample.push(x);
+  }//转换形式
+
+  let Element_arr = []
+  let Element_arr2 = []
+  res1.forEach((item)=>{
+    for(let key in item){
+      delete item.sample_num
+      Element_arr.push(item[key])
+    } 
+  })
+  res3.forEach((item)=>{
+    for(let key in item){
+      for(let i=0;i<Element_arr.length;i++){
+        Element_arr2.push(item[key])
+      }
+      
+    } 
+  })
+
+ 
+  let FoldData_arr = []
+  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_17_water_Map.get(element),unit:unit_Map.get(element)})
+  // 监之前的数据全部push到数组里面
+ 
+  ctx.body = {
+    success: true,
+    res:FoldData_arr,
+    msg: '获取成功'
+  }
+};
   
 
   

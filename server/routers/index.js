@@ -56,8 +56,10 @@ router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.
 //其它echarts部分
 router.post('/groundecharts/getHistogramData', echart_ground_Controller.getHistogramData)
 router.post('/groundecharts/getRadarEachDepthValue', echart_ground_Controller.getRadarEachDepthValue)
-router.post('/groundecharts/getRadarWaterEachDepthValue', echart_water_Controller.getRadarWaterEachDepthValue)
-router.post('/groundecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
+router.post('/waterecharts/getRadarWaterEachDepthValue', echart_water_Controller.getRadarWaterEachDepthValue)
+router.post('/waterecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
+router.post('/groundecharts/getAllFoldData', echart_ground_Controller.getAllFoldData)//得到土壤的监测点位下的样本信息的折线图
+router.post('/waterecharts/getAllWaterFoldData', echart_water_Controller.getAllWaterFoldData)//得到水的监测点位下的样本信息的折线图
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo) //1

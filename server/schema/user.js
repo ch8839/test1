@@ -18,11 +18,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     roles: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    project_owner: {
-      type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: true,
+      defaultValue: '1'
     },
     avatar: {
       type: DataTypes.STRING(255),

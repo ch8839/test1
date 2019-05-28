@@ -44,6 +44,41 @@ const getWaterHistogramElement = async function (point_num, element) {
     return AllElementData
 }
 
+const getWaterFoldElementMean = async function (point_num,assess_type,element,statistic_value) {
+    let AllElementData
+    if (element) {
+    
+            AllElementData = await sample_water_histogram_statistic_value_Schema.findAll({
+                attributes: [element],
+                where: {
+                    point_num,
+                    assess_type,
+                    statistic_value,
+          
+                }
+            })
+        
+    }
+    return AllElementData
+}
+
+const getFoldWaterElement = async function (point_num,assess_type,element) {
+    let AllElementData
+    if (element) {
+    
+            AllElementData = await echartWaterSchema.findAll({
+                attributes: [element,'sample_num'],
+                where: {
+                    point_num,
+                    assess_type,
+          
+                }
+            })
+        
+    }
+    return AllElementData
+}
+
 const getRadartype1WaterElementDepthData = async function (point_num,assess_type) {
     const FoldData = await echartWaterSchema.findAll({
         attributes: {exclude: ['id','project_num','sample_num','assess_type','point_num','count','attention','remarks','date']},
@@ -95,6 +130,8 @@ module.exports = {
     getRadartype1WaterElementDepthData,
     getWaterHistogramElement,
     RadarType2EachDepthValue,
-    getWaterRadarThresholdData
+    getWaterRadarThresholdData,
+    getFoldWaterElement,
+    getWaterFoldElementMean
     
 }

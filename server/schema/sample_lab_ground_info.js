@@ -141,10 +141,6 @@ module.exports = function(sequelize, DataTypes) {
     lat: {
       type: "DOUBLE(30,10)",
       allowNull: true
-    },
-    sample_cave: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     }
   }, {
     tableName: 'sample_lab_ground_info'
