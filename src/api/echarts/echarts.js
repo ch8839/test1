@@ -9,18 +9,25 @@ export function getHistogramData(params){
     // 获取barseries of ground
     return request2.post('/groundecharts/getHistogramData', params)
 }
+export function getWaterHistogramData(params){
+    // 获取barseries of water
+    return request2.post('/waterecharts/getWaterHistogramData', params)
+}
 export function getRadarEachDepthValue(params){
     // 获取radarseries of ground
     return request2.post('/groundecharts/getRadarEachDepthValue', params)
 }
 export function getRadarWaterEachDepthValue(params){
     // 获取radarseries of water
-    return request2.post('/groundecharts/getRadarWaterEachDepthValue', params)
+    return request2.post('/waterecharts/getRadarWaterEachDepthValue', params)
 }
-
-export function getWaterHistogramData(params){
-    // 获取barseries of water
-    return request2.post('/groundecharts/getWaterHistogramData', params)
+export function getAllFoldData(params){
+    // 获取lineseries of ground
+    return request2.post('/groundecharts/getAllFoldData', params)
+}
+export function getAllWaterFoldData(params){
+    // 获取lineseries of water
+    return request2.post('/waterecharts/getAllWaterFoldData', params)
 }
 
 /* echarts_0  */
