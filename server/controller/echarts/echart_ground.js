@@ -102,7 +102,7 @@ class echart_Controller{
     let Echart_arr = res.map(item => {
       return item = item.dataValues
     })
-     console.log(55555555555,Echart_arr)
+    //  console.log(55555555555,Echart_arr)
     let sample_depth = res.map(item => {
       return item = item.dataValues.sample_depth
     })
@@ -155,7 +155,7 @@ class echart_Controller{
     let arr4 =[]
     let arr5 =[]
     AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0])
-    console.log(4444444,AllData)
+    
     for(let i=0;i<AllData.length;i++){
             for(let key in AllData[0] ){
               if(AllData[3][key]=='0'&& AllData[4][key] =='0'&& AllData[5][key] =='0'){
@@ -171,26 +171,40 @@ class echart_Controller{
              }
       
     }
+    console.log(3333333333333,AllData)
+    let obj_max = AllData.reduce((acu, cur)=>{
+        for(let key in cur){
+         acu[key] = Number(cur[key])>Number(acu[key]) ?  cur[key]: acu[key]
+            // console.log(999999999,acu)
+        }
+        return acu
+    })
+    console.log(11111111111,obj_max)
+    for(let key in obj_max){
+      obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+    }
+    console.log(222222222222,obj_max)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+           AllRadarData.push({ text: element_Map.get(key), max: Number(obj_max[key]) })
+          // AllRadarData.push({ text: element_Map.get(key) })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+           AllRadarData.push({ text: element_Map.get(key), max:  Number(obj_max[key]) })
+          // AllRadarData.push({ text: element_Map.get(key) })
         }
       }
-      arr1.push(AllData[1][key]);
-      arr2.push(AllData[2][key]);
-      arr3.push(AllData[3][key]);
-      arr4.push(AllData[4][key]);
-      arr5.push(AllData[5][key]);
+      arr1.push( Number(AllData[1][key]));
+      arr2.push( Number(AllData[2][key]));
+      arr3.push( Number(AllData[3][key]));
+      arr4.push( Number(AllData[4][key]));
+      arr5.push( Number(AllData[5][key]));
     }
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5})
-
+    
+   
     ctx.body = {
       success: true,
       res:all,
@@ -286,22 +300,34 @@ class echart_Controller{
       }
     }
 
+    let obj_max = AllData.reduce((acu, cur)=>{
+      for(let key in cur){
+          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+      }
+      return acu
+    })
+    console.log(11111111111111,obj_max)
+   for(let key in obj_max){
+    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+   }
+   console.log(758496,obj_max)
+
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+           AllRadarData.push({ text: element_Map.get(key), max:  Number(obj_max[key]) })
+          // AllRadarData.push({ text: element_Map.get(key) })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+           AllRadarData.push({ text: element_Map.get(key), max:  Number(obj_max[key]) })
+          // AllRadarData.push({ text: element_Map.get(key)})
         }
       }
-      arr1.push(AllData[1][key]);
-      arr2.push(AllData[2][key]);
-      arr3.push(AllData[3][key]);
-      arr4.push(AllData[4][key]);
-      arr5.push(AllData[5][key]);
-      arr6.push(AllData[6][key]);
+      arr1.push( Number(AllData[1][key]));
+      arr2.push( Number(AllData[2][key]));
+      arr3.push( Number(AllData[3][key]));
+      arr4.push( Number(AllData[4][key]));
+      arr5.push( Number(AllData[5][key]));
+      arr6.push( Number(AllData[6][key]));
     }
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5,depth4:arr6})
@@ -350,19 +376,29 @@ class echart_Controller{
       }
     }
 
+    let obj_max = AllData.reduce((acu, cur)=>{
+      for(let key in cur){
+          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+      }
+      return acu
+    })
+    console.log(11111111111111,obj_max)
+   for(let key in obj_max){
+    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+   }
+   console.log(758496,obj_max)
+
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+          AllRadarData.push({ text: element_Map.get(key), max: Number( obj_max[key]) })
         } else {
-          // AllRadarData.push({ text: element_Map.get(key), max: AllData[0][key] })
-          AllRadarData.push({ text: element_Map.get(key)})
+          AllRadarData.push({ text: element_Map.get(key), max:  Number(obj_max[key]) })
         }
       }
-      arr1.push(AllData[1][key]);
-      arr2.push(AllData[2][key]);
-      arr3.push(AllData[3][key]);
+      arr1.push( Number(AllData[1][key]));
+      arr2.push( Number(AllData[2][key]));
+      arr3.push( Number(AllData[3][key]));
      
     }
 
@@ -423,6 +459,9 @@ class echart_Controller{
   res1.forEach((item)=>{
     for(let key in item){
       delete item.sample_num
+      if(item[key]==-1){
+        item[key]='0'
+      }
       Element_arr.push(item[key])
     } 
   })

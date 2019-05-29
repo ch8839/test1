@@ -145,17 +145,29 @@ class echart_Controller{
       }
     }//将深度里面的元素的值==0的元素在最大值和阈值中进行删除
 
+    let obj_max = AllData.reduce((acu, cur)=>{
+      for(let key in cur){
+          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+      }
+      return acu
+    })
+    console.log(11111111111111,obj_max)
+   for(let key in obj_max){
+    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+   }
+   console.log(758496,obj_max)
+
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          AllRadarData.push({ text: element_Map.get(key) })
+          AllRadarData.push({ text: element_Map.get(key), max: Number(obj_max[key]) })
         } else {
-          AllRadarData.push({ text: element_Map.get(key) })
+          AllRadarData.push({ text: element_Map.get(key), max: Number(obj_max[key]) })
         }
       }
-      arr1.push(AllData[1][key]);//只取出来元素的值不要元素名称
-      arr2.push(AllData[2][key]);
-      arr3.push(AllData[3][key]);//只取出来元素的值不要元素名称
+      arr1.push( Number(AllData[1][key]));//只取出来元素的值不要元素名称
+      arr2.push( Number(AllData[2][key]));
+      arr3.push( Number(AllData[3][key]));//只取出来元素的值不要元素名称
     }//将最大值的元素换成中文显示
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})//将所有数据进行push到一个数组中去
@@ -239,22 +251,34 @@ class echart_Controller{
         }  
       }
     }
+
+    let obj_max = AllData.reduce((acu, cur)=>{
+      for(let key in cur){
+          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+      }
+      return acu
+    })
+    console.log(11111111111111,obj_max)
+   for(let key in obj_max){
+    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+   }
+   console.log(758496,obj_max)
     
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
-          AllRadarData.push({ text: element_Map.get(key) })
+          AllRadarData.push({ text: element_Map.get(key),max: Number(obj_max[key]) })
         } else {
-          AllRadarData.push({ text: element_Map.get(key) })
+          AllRadarData.push({ text: element_Map.get(key),max: Number(obj_max[key]) })
         }
       }
-      arr1.push(AllData[1][key]);
-      arr2.push(AllData[2][key]);
+      arr1.push( Number(AllData[1][key]));
+      arr2.push( Number(AllData[2][key]));
       if(AllData[4][key]!==null){
-        arr3.push(AllData[3][key]);
-        arr4.push(AllData[4][key]);
+        arr3.push( Number(AllData[3][key]));
+        arr4.push( Number(AllData[4][key]));
       }else {
-        arr3.push(AllData[3][key]);
+        arr3.push( Number(AllData[3][key]));
        
       }
     }

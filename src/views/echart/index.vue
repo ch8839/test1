@@ -640,10 +640,20 @@ export default {
     /* 画折线图 */
     drawLine(lineid, linedatalist) {
       this.$nextTick(async () => {
-        this.myLineChart = echarts3_0.init(document.getElementById(lineid));
-        this.setLineOptions(linedatalist);
+        if (document.getElementById(lineid) !== null) {
+          if (this.activeName == "earth") {
+            this.myLineChart = echarts3_0.init(document.getElementById(lineid));
+            this.setLineOptions(linedatalist);
+            this.charts.push(this.myEarthLineChart);
+          } else {
+            this.myLineChart = echarts3_0.init(document.getElementById(lineid));
+            this.charts.push(this.myWaterLineChart);
+          }
+          this.setLineOptions(linedatalist);
+          /* 将所有charts放入数组，以实现缩放 */
+        }
         /* 将所有charts放入数组，以实现缩放 */
-        this.charts.push(this.myLineChart);
+        // this.charts.push(this.myLineChart);
       });
     },
     setLineOptions(lineseriesvalue) {
