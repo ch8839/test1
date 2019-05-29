@@ -384,7 +384,7 @@ class echart_Controller{
     })
     console.log(11111111111111,obj_max)
    for(let key in obj_max){
-    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+    obj_max[key] = (Number(obj_max[key])*0.8).toFixed(4)
    }
    console.log(758496,obj_max)
 

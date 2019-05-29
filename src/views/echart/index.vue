@@ -77,11 +77,16 @@
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
             <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
-                <el-tag
-                  type="danger"
-                  v-for="(item, index) in scope.row.attention"
-                  :key="index"
-                >{{scope.row.attention[index]}}</el-tag>
+                <template v-if="scope.row.attention[0]!=='无'">
+                  <el-tag
+                    type="danger"
+                    v-for="(item, index) in scope.row.attention"
+                    :key="index"
+                  >{{scope.row.attention[index]}}</el-tag>
+                </template>
+                <template v-else>
+                  <el-tag type="success">无超标元素</el-tag>
+                </template>
               </template>
             </el-table-column>
             <el-table-column prop="status" label="点位情况" align="center"></el-table-column>
@@ -144,11 +149,16 @@
             <el-table-column prop="point_num" label="监测点位编号" align="center"></el-table-column>
             <el-table-column prop="attention" label="超标元素" align="center">
               <template slot-scope="scope">
-                <el-tag
-                  type="danger"
-                  v-for="(item, index) in scope.row.attention"
-                  :key="index"
-                >{{scope.row.attention[index]}}</el-tag>
+                <template v-if="scope.row.attention[0]!=='无'">
+                  <el-tag
+                    type="danger"
+                    v-for="(item, index) in scope.row.attention"
+                    :key="index"
+                  >{{scope.row.attention[index]}}</el-tag>
+                </template>
+                <template v-else>
+                  <el-tag type="success">无超标元素</el-tag>
+                </template>
               </template>
             </el-table-column>
             <el-table-column prop="status" label="点位情况" align="center"></el-table-column>
@@ -408,14 +418,23 @@ export default {
       let api_tableData = await getTableItemsByPN(project_num);
       let res_tableData = api_tableData.data.res;
       res_tableData.map(element => {
-        let templistquery1 = [];        
-        for (let i of element.attention) {
-          this.barElementOptions.map(item => {
-            if (item.label == i) {
-              templistquery1.push(item);
-              return;
+        let templistquery1 = [];
+        if (element.attention[0] == "无") {
+          templistquery1 = [
+            {
+              label: "无超标元素",
+              value: -1
             }
-          });
+          ];
+        } else {
+          for (let i of element.attention) {
+            this.barElementOptions.map(item => {
+              if (item.label == i) {
+                templistquery1.push(item);
+                return;
+              }
+            });
+          }
         }
         this.tableData.push({
           point_name: element.point_name,
@@ -423,11 +442,8 @@ export default {
           assess_type: element.assess_type,
           status: element.status,
           attention: element.attention,
-          // point_name: element.point_intro,
-          // remarks: element.remarks,
           lineseries: this.temp_lineseries,
           listQueryOptions: templistquery1,
-          lineElementListQuery: templistquery1[0].value,
           barseries: this.temp_barseries,
           radarseries: this.temp_radarseries
         });
@@ -439,25 +455,32 @@ export default {
       let res_water_tableData = api_water_tableData.data.res;
       res_water_tableData.map(element => {
         let templistquery2 = [];
-        for (let i of element.attention) {
-          this.barElementOptions.map(item => {
-            if (item.label == i) {
-              templistquery2.push(item);
-              return;
+        if (element.attention[0] == "无") {
+          templistquery2 = [
+            {
+              label: "无超标元素",
+              value: -1
             }
-          });
+          ];
+        } else {
+          for (let i of element.attention) {
+            this.barElementOptions.map(item => {
+              if (item.label == i) {
+                templistquery2.push(item);
+                return;
+              }
+            });
+          }
         }
+
         this.water_tableData.push({
           point_name: element.point_name,
           point_num: element.point_num,
           assess_type: element.assess_type,
           status: element.status,
           attention: element.attention,
-          // point_name: element.point_intro,
-          // remarks: element.remarks,
           lineseries: this.temp_lineseries,
           listQueryOptions: templistquery2,
-          lineElementListQuery: templistquery2[0].value,
           barseries: this.temp_barseries,
           radarseries: this.temp_radarseries
         });
@@ -484,7 +507,6 @@ export default {
 
     /* 处理 */
     async handleBarElementSelect() {
-      // console.log("选中的barselect", this.barElementListQuery);
       this.getBarOptions(this.temp_barPointnum);
     },
 
@@ -753,7 +775,7 @@ export default {
                   }
                 ] //如何获取grid上侧最大值，目前是写死的
               ]
-            } 
+            }
           },
           {
             name: "平均值",
@@ -773,14 +795,7 @@ export default {
     },
     async getEarthLineOptions(listquery, pointnum) {
       //getAllFoldData
-      let combined_pn_at_e = {
-        point_num: pointnum,
-        assess_type: this.assessListQuery,
-        element: listquery
-      };
-      let res = await getAllFoldData(combined_pn_at_e);
-      if (typeof res.data.res[0] == "undefined") {
-        //如果数据库不含雷达图的数据——很有可能
+      if (listquery == -1 || listquery == null) {
         let p = this.temp_tableItems.findIndex(
           item => item.point_num == pointnum
         );
@@ -791,80 +806,118 @@ export default {
         this.temp_tableItems[p].lineseries["mean_value"] = [];
         this.temp_tableItems[p].lineseries["unit"] = null;
       } else {
-        let p = this.temp_tableItems.findIndex(
-          item => item.point_num == pointnum
-        );
-        let temp_res = res.data.res[0];
-        // this.temp_tableItems[p].lineseries = {};
-        //把选中的元素的中文名称push到barSeries[4]
-        let elementname = null;
-        this.barElementOptions.find(item => {
-          if (item.value === this.lineElementListQuery) {
-            elementname = item.label;
-          }
-        });
-        this.temp_tableItems[p].lineseries["xAxis"] = temp_res.sample;
-        this.temp_tableItems[p].lineseries["data"] = temp_res.data1;
-        this.temp_tableItems[p].lineseries["Threshold17"] =
-          temp_res.reference_value;
-        this.temp_tableItems[p].lineseries["mean_value"] = temp_res.mean_value;
-        this.temp_tableItems[p].lineseries["unit"] = temp_res.unit;
-        this.temp_tableItems[p].lineseries["elementname"] = elementname;
+        let combined_pn_at_e = {
+          point_num: pointnum,
+          assess_type: this.assessListQuery,
+          element: listquery
+        };
+        let res = await getAllFoldData(combined_pn_at_e);
+        if (typeof res.data.res[0] == "undefined") {
+          //如果数据库不含雷达图的数据——很有可能
+          let p = this.temp_tableItems.findIndex(
+            item => item.point_num == pointnum
+          );
+          // this.temp_tableItems[p].lineseries = {};
+          this.temp_tableItems[p].lineseries["xAxis"] = [];
+          this.temp_tableItems[p].lineseries["data"] = [];
+          this.temp_tableItems[p].lineseries["Threshold17"] = null;
+          this.temp_tableItems[p].lineseries["mean_value"] = [];
+          this.temp_tableItems[p].lineseries["unit"] = null;
+        } else {
+          let p = this.temp_tableItems.findIndex(
+            item => item.point_num == pointnum
+          );
+          let temp_res = res.data.res[0];
+          // this.temp_tableItems[p].lineseries = {};
+          //把选中的元素的中文名称push到barSeries[4]
+          let elementname = null;
+          this.barElementOptions.find(item => {
+            if (item.value === this.lineElementListQuery) {
+              elementname = item.label;
+            }
+          });
+          this.temp_tableItems[p].lineseries["xAxis"] = temp_res.sample;
+          this.temp_tableItems[p].lineseries["data"] = temp_res.data1;
+          this.temp_tableItems[p].lineseries["Threshold17"] =
+            temp_res.reference_value;
+          this.temp_tableItems[p].lineseries["mean_value"] =
+            temp_res.mean_value;
+          this.temp_tableItems[p].lineseries["unit"] = temp_res.unit;
+          this.temp_tableItems[p].lineseries["elementname"] = elementname;
+        }
       }
     },
     async getWaterLineOptions(listquery, pointnum) {
       //getAllWaterFoldData
-      let combined_pn_at_e = {
-        point_num: pointnum,
-        assess_type: this.assessListQuery,
-        element: listquery
-      };
-      let res = await getAllWaterFoldData(combined_pn_at_e);
-      if (typeof res.data.res[0] == "undefined") {
-        //如果数据库不含雷达图的数据——很有可能
+      if (listquery == -1 || listquery == null) {
         let p = this.temp_water_tableItems.findIndex(
           item => item.point_num == pointnum
         );
-        // this.temp_water_tableItems[p].lineseries = {};
+        // this.temp_tableItems[p].lineseries = {};
         this.temp_water_tableItems[p].lineseries["xAxis"] = [];
         this.temp_water_tableItems[p].lineseries["data"] = [];
         this.temp_water_tableItems[p].lineseries["Threshold17"] = null;
         this.temp_water_tableItems[p].lineseries["mean_value"] = [];
         this.temp_water_tableItems[p].lineseries["unit"] = null;
-        this.temp_water_tableItems[p].lineseries["elementname"] = null;
       } else {
-        let p = this.temp_water_tableItems.findIndex(
-          item => item.point_num == pointnum
-        );
-        let temp_res = res.data.res[0];
-        let elementname = null;
-        this.barElementOptions.find(item => {
-          if (item.value === this.lineElementListQuery) {
-            elementname = item.label;
-          }
-        });
-        // this.temp_water_tableItems[p].lineseries = {};
-        this.temp_water_tableItems[p].lineseries["xAxis"] = temp_res.sample;
-        this.temp_water_tableItems[p].lineseries["data"] = temp_res.data1;
-        this.temp_water_tableItems[p].lineseries["Threshold17"] =
-          temp_res.reference_value;
-        this.temp_water_tableItems[p].lineseries["mean_value"] =
-          temp_res.mean_value;
-        this.temp_water_tableItems[p].lineseries["unit"] = temp_res.unit;
-        this.temp_water_tableItems[p].lineseries["elementname"] = elementname;
+        let combined_pn_at_e = {
+          point_num: pointnum,
+          assess_type: this.assessListQuery,
+          element: listquery
+        };
+        let res = await getAllWaterFoldData(combined_pn_at_e);
+        if (typeof res.data.res[0] == "undefined") {
+          //如果数据库不含雷达图的数据——很有可能
+          let p = this.temp_water_tableItems.findIndex(
+            item => item.point_num == pointnum
+          );
+          // this.temp_water_tableItems[p].lineseries = {};
+          this.temp_water_tableItems[p].lineseries["xAxis"] = [];
+          this.temp_water_tableItems[p].lineseries["data"] = [];
+          this.temp_water_tableItems[p].lineseries["Threshold17"] = null;
+          this.temp_water_tableItems[p].lineseries["mean_value"] = [];
+          this.temp_water_tableItems[p].lineseries["unit"] = null;
+          this.temp_water_tableItems[p].lineseries["elementname"] = null;
+        } else {
+          let p = this.temp_water_tableItems.findIndex(
+            item => item.point_num == pointnum
+          );
+          let temp_res = res.data.res[0];
+          let elementname = null;
+          this.barElementOptions.find(item => {
+            if (item.value === this.lineElementListQuery) {
+              elementname = item.label;
+            }
+          });
+          // this.temp_water_tableItems[p].lineseries = {};
+          this.temp_water_tableItems[p].lineseries["xAxis"] = temp_res.sample;
+          this.temp_water_tableItems[p].lineseries["data"] = temp_res.data1;
+          this.temp_water_tableItems[p].lineseries["Threshold17"] =
+            temp_res.reference_value;
+          this.temp_water_tableItems[p].lineseries["mean_value"] =
+            temp_res.mean_value;
+          this.temp_water_tableItems[p].lineseries["unit"] = temp_res.unit;
+          this.temp_water_tableItems[p].lineseries["elementname"] = elementname;
+        }
       }
     },
 
     /* 土壤表格折线图的选择器响应 */
     async handleEarthLineElementSelect(pointnum) {
       if (this.lineElementListQuery !== -1) {
+        //如果有超标元素
         await this.getEarthLineOptions(this.lineElementListQuery, pointnum);
         let p = this.temp_tableItems.findIndex(
           earthitems => earthitems.point_num == pointnum
         );
-        this.drawLine("myEarthLineChart" + pointnum, this.temp_tableItems[p].lineseries)
-      }else{
-        this.drawLine("myEarthLineChart" + pointnum, null)
+        this.drawLine(
+          "myEarthLineChart" + pointnum,
+          this.temp_tableItems[p].lineseries
+        );
+      } else {
+        //如果没有超标元素，则不执行
+        alert("没有超标元素");
+        // this.drawLine("myEarthLineChart" + pointnum, null);
       }
     },
 
@@ -875,9 +928,13 @@ export default {
         let p = this.temp_water_tableItems.findIndex(
           wateritems => wateritems.point_num == pointnum
         );
-        this.drawLine("myWaterLineChart" + pointnum, this.temp_water_tableItems[p].lineseries)
-      }else{
-        this.drawLine("myWaterLineChart" + pointnum, null)
+        this.drawLine(
+          "myWaterLineChart" + pointnum,
+          this.temp_water_tableItems[p].lineseries
+        );
+      } else {
+        alert("没有超标元素");
+        // this.drawLine("myWaterLineChart" + pointnum, null);
       }
     },
 
@@ -1067,7 +1124,6 @@ export default {
         this.temp_water_tableItems[p].radarseries["legend"] = [];
         this.temp_water_tableItems[p].radarseries["max"] = [];
         this.temp_water_tableItems[p].radarseries["data"] = [];
-        // console.log(this.temp_water_tableItems[p].radarseries) //雷达图测试
       } else {
         let res1_radarseries = res1.data.res["0"];
         let p = this.temp_water_tableItems.findIndex(
@@ -1151,7 +1207,6 @@ export default {
         this.temp_water_tableItems[p].radarseries["legend"] = legend; //0——作为雷达图的legend
         this.temp_water_tableItems[p].radarseries["max"] = res1_radarseries.max;
         this.temp_water_tableItems[p].radarseries["data"] = combined_data;
-        // console.log(this.temp_water_tableItems[p].radarseries) //雷达图测试
       }
     },
     setRadarOptions(radarserisevalue) {
@@ -1232,7 +1287,12 @@ export default {
     },
 
     async handleEarthLineElementData(row) {
-      this.handleElementSelector("expand", row.attention, row.listQueryOptions, row.point_num);
+      this.handleElementSelector(
+        "expand",
+        row.attention,
+        row.listQueryOptions,
+        row.point_num
+      );
       await this.getEarthRadarOptions(row.point_num);
       await this.getEarthLineOptions(this.lineElementListQuery, row.point_num);
       let p = this.temp_tableItems.findIndex(
@@ -1249,7 +1309,12 @@ export default {
       );
     },
     async handleWaterLineElementData(row) {
-      this.handleElementSelector("expand", row.attention, row.listQueryOptions, row.point_num);
+      this.handleElementSelector(
+        "expand",
+        row.attention,
+        row.listQueryOptions,
+        row.point_num
+      );
       await this.getWaterRadarOptions(row.point_num);
       await this.getWaterLineOptions(this.lineElementListQuery, row.point_num);
       let p = this.temp_water_tableItems.findIndex(
@@ -1283,12 +1348,12 @@ export default {
             }
           });
         }
-      }
-      if (expand == "expand") {
-        this.lineElementListQuery = listqueryoptions[0].value
-      } else {
-        //如果expand 等于bar
-        this.barElementListQuery = listqueryoptions[0].value;
+        if (expand == "expand") {
+          this.lineElementListQuery = listqueryoptions[0].value;
+        } else {
+          //如果expand 等于bar
+          this.barElementListQuery = listqueryoptions[0].value;
+        }
       }
     }
   },
