@@ -86,14 +86,12 @@ class echart_Controller{
 
     let Threshold17 = []
     let Threshold18 = []
-    let ThresholdMax = []
+  
     Datar_arr.forEach((item) =>{
       if(item.reference_num == '17国标'){
         delete item.reference_num;
         Threshold17.push(item)
-      }else if(item.reference_num == 'max'){
-        delete item.reference_num;
-        ThresholdMax.push(item)
+    
       }else if(item.reference_num == '18国标'){
         delete item.reference_num;
         Threshold18.push(item)
@@ -130,17 +128,17 @@ class echart_Controller{
     let AllData =[]
     let AllRadarData = []
    
-    AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0])//将最大值和阈值以及深度的值统一放在一个数组里
+    AllData.push(Threshold17[0],Threshold18[0],depth1[0])//将最大值和阈值以及深度的值统一放在一个数组里
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[3][key]=='0'){
+        if(AllData[2][key]=='0'){
           // console.log(85239,AllData[0][key]) 
         //  arr119.push({text:key,max:AllData[0][key]});
           delete AllData[0][key];
           delete AllData[1][key];
           delete AllData[2][key];
-          delete AllData[3][key];
+          
         }  
       }
     }//将深度里面的元素的值==0的元素在最大值和阈值中进行删除
@@ -151,11 +149,11 @@ class echart_Controller{
       }
       return acu
     })
-    console.log(11111111111111,obj_max)
-   for(let key in obj_max){
-    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-   }
-   console.log(758496,obj_max)
+  //   console.log(11111111111111,obj_max)
+  //  for(let key in obj_max){
+  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+  //  }
+  //  console.log(758496,obj_max)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -165,9 +163,9 @@ class echart_Controller{
           AllRadarData.push({ text: element_Map.get(key), max: Number(obj_max[key]) })
         }
       }
-      arr1.push( Number(AllData[1][key]));//只取出来元素的值不要元素名称
-      arr2.push( Number(AllData[2][key]));
-      arr3.push( Number(AllData[3][key]));//只取出来元素的值不要元素名称
+      arr1.push( Number(AllData[0][key]));//只取出来元素的值不要元素名称
+      arr2.push( Number(AllData[1][key]));
+      arr3.push( Number(AllData[2][key]));//只取出来元素的值不要元素名称
     }//将最大值的元素换成中文显示
 
     all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})//将所有数据进行push到一个数组中去
@@ -223,14 +221,14 @@ class echart_Controller{
     let arr3 =[]
     let arr4 =[]
     
-    AllData.push(ThresholdMax[0],Threshold17[0],Threshold18[0],depth1[0],depth2[0])
+    AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0])
     console.log(95689,AllData)
  
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[4][key]!==null){
-          if(AllData[3][key]== 0 && AllData[4][key] == 0){
+        if(AllData[3][key]!==null){
+          if(AllData[2][key]== 0 && AllData[3][key] == 0){
             // console.log(95689,AllData[0][key])
           //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
@@ -240,13 +238,13 @@ class echart_Controller{
             delete AllData[4][key];
           }
         }else {
-          if(AllData[3][key]== 0 ){
+          if(AllData[2][key]== 0 ){
             console.log(95689,AllData[0][key])
           //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
             delete AllData[1][key];
             delete AllData[2][key];
-            delete AllData[3][key];
+           
           }
         }  
       }
@@ -259,10 +257,10 @@ class echart_Controller{
       return acu
     })
     console.log(11111111111111,obj_max)
-   for(let key in obj_max){
-    obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-   }
-   console.log(758496,obj_max)
+  //  for(let key in obj_max){
+  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
+  //  }
+  //  console.log(758496,obj_max)
     
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -272,13 +270,13 @@ class echart_Controller{
           AllRadarData.push({ text: element_Map.get(key),max: Number(obj_max[key]) })
         }
       }
-      arr1.push( Number(AllData[1][key]));
-      arr2.push( Number(AllData[2][key]));
-      if(AllData[4][key]!==null){
-        arr3.push( Number(AllData[3][key]));
-        arr4.push( Number(AllData[4][key]));
+      arr1.push( Number(AllData[0][key]));
+      arr2.push( Number(AllData[1][key]));
+      if(AllData[3][key]!==null){
+        arr3.push( Number(AllData[2][key]));
+        arr4.push( Number(AllData[3][key]));
       }else {
-        arr3.push( Number(AllData[3][key]));
+        arr3.push( Number(AllData[2][key]));
        
       }
     }
