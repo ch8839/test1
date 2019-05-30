@@ -70,4 +70,5 @@ router.get('/data/ComputeAttention',ComputeController.ComputeAttention)
 router.post('/data/AddData' , dataController.addTableData)
 router.get('/data/getMoreDataByPointnum/:point_num',mapController.getMoreDataByPointnum)  //4
 router.get('/data/getCircleByProjectnum/:project_num',mapController.getCircleByProjectnum) //5
+router.post('/data/excel',mapController.getExcel) //6
 module.exports= router;

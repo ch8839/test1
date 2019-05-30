@@ -253,10 +253,36 @@ if (list) {
 
 };
 
+
+const getExcel = async function (ctx) {
+ 
+  
+  let res3 = ctx.request.body
+  
+  
+  console.log('res3', res3)
+  
+  // if (list) {
+  //   ctx.body = {
+  //     success: true,
+  //     res: list,
+  //     msg: '获取成功'
+  //   }
+  // } else {
+  //   ctx.body = {
+  //     success: true,
+  //     res: [],
+  //     msg: '获取失败'
+  //   }
+  // }
+  
+  };
+
 module.exports = {
   getMarkerInfo,
   getpointMarkerInfo,
   getGroundList,
   getMoreDataByPointnum,
-  getCircleByProjectnum
+  getCircleByProjectnum,
+  getExcel
 }

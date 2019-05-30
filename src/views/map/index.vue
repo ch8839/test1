@@ -64,20 +64,6 @@
 
       <el-amap-info-window v-if="window" :position="window.position" :visible="window.visible" autoMove="true" scope> <!--项目体点击表格显示 -->
         <div>
-          <!-- <div class="jBox-container"><div class="jBox-content" style="width: auto; height: auto;"><div class="smog-aqi-box" data-id="_110112"> <div class="title"> 
-            <h3>{{window.ground_name+ "项目体"}} <span class="lv-str lv3" >轻度污染</span></h3> </div> 
-            <ul class="detail-list" v-for="item in groundData" :key="item.id" :vid="item.id"> 
-              <li><span float:leftstyle="font-size:12px;display:block;border=20px">{{item.point_num}}</span>
-              <span style="font-size:12px;;display:block;border=3px">{{item.introduction}}</span>
-              <span float:right>{{item.attention}}</span></li> 
-              <li><span>PM2.5</span><span>68ug/m3</span></li> 
-              <li><span>SO2</span><span>15ug/m3</span></li> 
-              <li><span>NO2</span><span>31ug/m3</span></li> 
-              <li><span>O3</span><span>183ug/m3</span></li> 
-              <li><span>CO</span><span>862ug/m3</span></li>
-              <li><span>PM10</span><span>188ug/m3</span></li>
-            </ul> 
-              </div></div></div> -->
           <div class="windows_title" align="center" >{{window.ground_name + "项目体"}}</div>            
           <div class="windows_content">
           <el-table 
@@ -234,7 +220,7 @@ export default {
           //this.window.visible=false
           //this.window1.visible=false
           //this.$refs.map.$$getInstance().setFitView()
-          if(this.$refs.map.$$getInstance().getZoom()>15){
+          if(this.$refs.map.$$getInstance().getZoom()>15){  //监控比例尺变化，实现地图缩放
             this.projectWindow.visible = false
             this.window.visible=false
             this.pointWindow.visible = true
@@ -683,77 +669,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.jBox-title,
-.jBox-content,
-.jBox-container {
-	position: relative;
-	word-break: break-word;
-}
-.smog-aqi-box {
-    padding: 7px 8px;
-}
-.smog-aqi-box .title {
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ccc;
-    overflow: hidden;
-}
-.smog-aqi-box .detail-list li {
-    padding: 3px 0;
-    overflow: hidden;
-    font-size: 10px;
-    line-height:5px;
-}
-
-.smog-aqi-box .detail-list li span:first-child {
-    float: left;
-    font-size: 10px;
-    line-height:5px;
-}
-
-.smog-aqi-box .detail-list li span:last-child {
-    float: right;
-    font-size: 10px;
-    line-height:5px;
-}
-.smog-aqi-box .title .lv-str {
-    float: right;
-    margin-left: 60px;
-    font-size:10px;
-    line-height:5px;
-}
-.smog-marker.lv1 .maker-aqi,
-.smog-marker.lv1.circle {
-    background-color: #69cb04;
-}
-
-.smog-marker.lv2 .maker-aqi,
-.smog-marker.lv2.circle {
-    background-color: #ffbb00;
-}
-
-.smog-marker.lv3 .maker-aqi,
-.smog-marker.lv3.circle {
-    background-color: #fe8902;
-}
-.smog-marker.lv4 .maker-aqi,
-.smog-marker.lv4.circle {
-    background-color: #fe6767;
-}
-
-.smog-marker.lv5 .maker-aqi,
-.smog-marker.lv5.circle {
-    background-color: #cd0102;
-}
-
-.smog-marker.lv6 .maker-aqi,
-.smog-marker.lv6.circle {
-    background-color: #980555;
-}
-
-.smog-marker.lv7 .maker-aqi,
-.smog-marker.lv7.circle {
-    background-color: #62011d;
-}
 
 .map_container {
   margin: 5px;
