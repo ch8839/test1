@@ -180,10 +180,10 @@ class echart_Controller{
         return acu
     })
     console.log(11111111111,obj_max)
-    for(let key in obj_max){
+    /* for(let key in obj_max){
       obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
     }
-    console.log(222222222222,obj_max)
+    console.log(222222222222,obj_max) */
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -306,11 +306,11 @@ class echart_Controller{
       }
       return acu
     })
-    console.log(11111111111111,obj_max)
-   for(let key in obj_max){
+    // console.log(11111111111111,obj_max)
+   /* for(let key in obj_max){
     obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
    }
-   console.log(758496,obj_max)
+   console.log(758496,obj_max) */
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -383,10 +383,10 @@ class echart_Controller{
       return acu
     })
     console.log(11111111111111,obj_max)
-   for(let key in obj_max){
+   /* for(let key in obj_max){
     obj_max[key] = (Number(obj_max[key])*0.8).toFixed(4)
-   }
-   console.log(758496,obj_max)
+   } */
+  //  console.log(758496,obj_max)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
