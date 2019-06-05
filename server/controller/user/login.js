@@ -10,7 +10,9 @@ class User_Controller {
 
 	static async login(ctx) {
 		const req_userInfo = ctx.request.body
+		console.log("username", req_userInfo.username)
 		let userInfo = await UserModel.login(req_userInfo.username)
+		console.log("userInfo", userInfo)		
 		if (userInfo) {
 			let password = aesDecrypt(req_userInfo.password, key) //解密
 			if (userInfo.password == password) {
@@ -82,7 +84,6 @@ class User_Controller {
 		}
 
 	}
-
 
 }
 

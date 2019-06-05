@@ -19,8 +19,7 @@ app.use(json())
 
 app.use(async function (ctx, next) {
   
-  try {
-   
+  try {  
     let url = ctx.request.url
     // 登录 不用检查
     if (url == "/user2/login"){

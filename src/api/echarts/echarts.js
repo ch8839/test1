@@ -32,9 +32,9 @@ export function getAllWaterFoldData(params){
 
 /* echarts_0  */
 export function getCascader(){
-    // 获取级联选择器 
-    return request2.get('/project/getRawCascader')
+    return request2.get('/project/getProjectInfo')
 }
+
 export function getAssessData(project_num){
     // 获取类型选择器数据
     return request2.get('/project/getRawAssessData/'+project_num)
