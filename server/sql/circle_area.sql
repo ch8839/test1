@@ -2,12 +2,12 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50641
+Source Server Version : 50528
 Source Host           : localhost:3306
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50641
+Target Server Version : 50528
 File Encoding         : 65001
 
 Date: 2019-06-05 15:29:23
