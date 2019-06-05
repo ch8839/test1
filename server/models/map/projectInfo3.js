@@ -71,11 +71,13 @@ const getCountByProjectnum = async function(project_num){
 const getDataByProjectnum = async function(project_num){
     var Alldata=[]
     for(let i of project_num){
+        console.log(22222222222,i)
     const AllProjectData = await projectInfoSchema.findAll({
-    where:{
-    project_num: i
-    }
+        where:{
+            project_num: i
+        }
     })
+    console.log(333333333,AllProjectData)
     
     let res2 = AllProjectData.map(item=>{
     return item = item.dataValues

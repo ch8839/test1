@@ -50,11 +50,12 @@
                   </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <!-- 折线图div -->
+                    <!-- 土壤折线图div -->
                     <el-select
-                      v-model="lineElementListQuery"
+                      v-model="lineElementListQuery[props.row.point_num]"
                       placeholder="请选择元素"
                       class="filter-item"
+                      focus
                       @change="handleEarthLineElementSelect(props.row.point_num)"
                     >
                       <el-option
@@ -124,7 +125,7 @@
                   <el-col :xs="24" :sm="24" :lg="12">
                     <!-- 折线图div -->
                     <el-select
-                      v-model="lineElementListQuery"
+                      v-model="lineElementListQuery[props.row.point_num]"
                       placeholder="请选择元素"
                       class="filter-item"
                       @change="handleWaterLineElementSelect(props.row.point_num)"
@@ -263,7 +264,7 @@ export default {
       myDialogChart: null,
       dialogFormVisible: false,
       barElementListQuery: null,
-      lineElementListQuery: null,
+      lineElementListQuery: {},
       barElementOptions: [
         { label: "PH值", value: "PH" },
         { label: "砷", value: "arsenic" },
@@ -377,7 +378,14 @@ export default {
           for (let i of element.attention) {
             this.barElementOptions.map(item => {
               if (item.label == i) {
-                templistquery1.push(item);
+                // templistquery1.push(item);
+                let elementvalue = null;
+                this.barElementOptions.find(j => {
+                  if (j.label === i) {
+                    elementvalue = j.value;
+                  }
+                });
+                templistquery1.push({label:i, value: elementvalue});
                 return;
               }
             });
@@ -772,7 +780,7 @@ export default {
           //把选中的元素的中文名称push到barSeries[4]
           let elementname = null;
           this.barElementOptions.find(item => {
-            if (item.value === this.lineElementListQuery) {
+            if (item.value === this.lineElementListQuery[pointnum]) {
               elementname = item.label;
             }
           });
@@ -825,7 +833,7 @@ export default {
           let temp_res = res.data.res[0];
           let elementname = null;
           this.barElementOptions.find(item => {
-            if (item.value === this.lineElementListQuery) {
+            if (item.value === this.lineElementListQuery[pointnum]) {
               elementname = item.label;
             }
           });
@@ -844,9 +852,10 @@ export default {
 
     /* 土壤表格折线图的选择器响应 */
     async handleEarthLineElementSelect(pointnum) {
-      if (this.lineElementListQuery !== -1) {
+      if (this.lineElementListQuery[pointnum] !== -1) {
         //如果有超标元素
-        await this.getEarthLineOptions(this.lineElementListQuery, pointnum);
+        // 
+        await this.getEarthLineOptions(this.lineElementListQuery[pointnum], pointnum);
         let p = this.temp_tableItems.findIndex(
           earthitems => earthitems.point_num == pointnum
         );
@@ -863,8 +872,8 @@ export default {
 
     /* 水表格折线图的选择器响应 */
     async handleWaterLineElementSelect(pointnum) {
-      if (this.lineElementListQuery !== -1) {
-        await this.getWaterLineOptions(this.lineElementListQuery, pointnum);
+      if (this.lineElementListQuery[pointnum] !== -1) {
+        await this.getWaterLineOptions(this.lineElementListQuery[pointnum], pointnum);
         let p = this.temp_water_tableItems.findIndex(
           wateritems => wateritems.point_num == pointnum
         );
@@ -1234,7 +1243,7 @@ export default {
         row.point_num
       );
       await this.getEarthRadarOptions(row.point_num);
-      await this.getEarthLineOptions(this.lineElementListQuery, row.point_num);
+      await this.getEarthLineOptions(this.lineElementListQuery[row.point_num], row.point_num);
       let p = this.temp_tableItems.findIndex(
         earthitems => earthitems.point_num == row.point_num
       );
@@ -1256,7 +1265,7 @@ export default {
         row.point_num
       );
       await this.getWaterRadarOptions(row.point_num);
-      await this.getWaterLineOptions(this.lineElementListQuery, row.point_num);
+      await this.getWaterLineOptions(this.lineElementListQuery[row.point_num], row.point_num);
       let p = this.temp_water_tableItems.findIndex(
         earthitems => earthitems.point_num == row.point_num
       );
@@ -1289,7 +1298,13 @@ export default {
           });
         }
         if (expand == "expand") {
-          this.lineElementListQuery = listqueryoptions[0].value;
+          let elementname = null;
+          this.barElementOptions.find(item => {
+            if (item.value === listqueryoptions[0].value) {
+              elementname = item.label;
+            }
+          });
+          // this.lineElementListQuery[pointnum] = listqueryoptions[0].value;
         } else {
           //如果expand 等于bar
           this.barElementListQuery = listqueryoptions[0].value;

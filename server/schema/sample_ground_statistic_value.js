@@ -1,14 +1,14 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('sample_lab_ground_info', {
+  return sequelize.define('sample_ground_statistic_value', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    sample_num: {
+    statistic_value: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
@@ -16,25 +16,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: true
     },
+    sample_cave: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
     point_num: {
       type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    project_num: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    sample_depth: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    count: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: false
     },
     PH: {
       type: DataTypes.STRING(255),
@@ -125,28 +113,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true,
       defaultValue: '-1'
-    },
-    attention: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    remarks: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    lng: {
-      type: "DOUBLE(30,10)",
-      allowNull: true
-    },
-    lat: {
-      type: "DOUBLE(30,10)",
-      allowNull: true
-    },
-    sample_cave: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     }
   }, {
-    tableName: 'sample_lab_ground_info'
+    tableName: 'sample_ground_statistic_value'
   });
 };

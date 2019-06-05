@@ -126,14 +126,15 @@ const getMarkerInfo = async function (ctx) {
   const token = ctx.header['shu-token']
   const secret = 'shu-project'
   if (token) {
-    console.log(11,token)
+    console.log(11, token)
     var playload = await jwt.verify(token, secret)
     console.log('playload', playload)
     var project_num = await UserModel.getProjectnumByUser(playload.username)
   }
   var project_num_List = project_num.split('、')
-  const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
+  console.log(11111111,project_num_List)
 
+  const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
   ctx.body = {
     success: true,
     res: res11,
