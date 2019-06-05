@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50641
+Source Server Version : 50528
 Source Host           : localhost:3306
 Source Database       : tank
 
 Target Server Type    : MYSQL
-Target Server Version : 50641
+Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2019-05-30 11:24:44
+Date: 2019-06-05 15:12:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,7 +47,7 @@ INSERT INTO `circle_area` VALUES ('14', '31010720190005', '1', '121.387013', '31
 INSERT INTO `circle_area` VALUES ('15', '31010720190005', '2', '121.401282', '31.32118');
 INSERT INTO `circle_area` VALUES ('16', '31010720190005', '3', '121.399566', '31.312216');
 INSERT INTO `circle_area` VALUES ('17', '31010720190005', '4', '121.38785', '31.311318');
-INSERT INTO `circle_area` VALUES ('18', '31010720190005', '1', '121.42038', '31.307115');
+INSERT INTO `circle_area` VALUES ('18', '31010720190006', '1', '121.42038', '31.307115');
 INSERT INTO `circle_area` VALUES ('19', '31010720190006', '2', '121.423255', '31.306895');
 INSERT INTO `circle_area` VALUES ('20', '31010720190006', '3', '121.422547', '31.305209');
 INSERT INTO `circle_area` VALUES ('21', '31010720190006', '4', '121.42141', '31.304824');
