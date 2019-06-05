@@ -125,7 +125,7 @@
                   <el-col :xs="24" :sm="24" :lg="12">
                     <!-- 折线图div -->
                     <el-select
-                      v-model="lineElementListQuery[props.row.point_num]"
+                      v-model="waterlineElementListQuery[props.row.point_num]"
                       placeholder="请选择元素"
                       class="filter-item"
                       @change="handleWaterLineElementSelect(props.row.point_num)"
@@ -265,6 +265,7 @@ export default {
       dialogFormVisible: false,
       barElementListQuery: null,
       lineElementListQuery: {},
+      waterlineElementListQuery: {},
       barElementOptions: [
         { label: "PH值", value: "PH" },
         { label: "砷", value: "arsenic" },
@@ -833,7 +834,7 @@ export default {
           let temp_res = res.data.res[0];
           let elementname = null;
           this.barElementOptions.find(item => {
-            if (item.value === this.lineElementListQuery[pointnum]) {
+            if (item.value === this.waterlineElementListQuery[pointnum]) {
               elementname = item.label;
             }
           });
@@ -872,8 +873,8 @@ export default {
 
     /* 水表格折线图的选择器响应 */
     async handleWaterLineElementSelect(pointnum) {
-      if (this.lineElementListQuery[pointnum] !== -1) {
-        await this.getWaterLineOptions(this.lineElementListQuery[pointnum], pointnum);
+      if (this.waterlineElementListQuery[pointnum] !== -1) {
+        await this.getWaterLineOptions(this.waterlineElementListQuery[pointnum], pointnum);
         let p = this.temp_water_tableItems.findIndex(
           wateritems => wateritems.point_num == pointnum
         );
@@ -1265,7 +1266,7 @@ export default {
         row.point_num
       );
       await this.getWaterRadarOptions(row.point_num);
-      await this.getWaterLineOptions(this.lineElementListQuery[row.point_num], row.point_num);
+      await this.getWaterLineOptions(this.waterlineElementListQuery[row.point_num], row.point_num);
       let p = this.temp_water_tableItems.findIndex(
         earthitems => earthitems.point_num == row.point_num
       );
