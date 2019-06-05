@@ -49,7 +49,6 @@ router.get('/water/getLabWaterReference/:sample_num' , waterInfo_Controller.getL
 //echart_0部分
 router.get('/database/ComputeLabAttention',echart_Controller_0.ComputeLabAttention)
 router.get('/database/ComputeLabWaterAttention',echart_Controller_0.ComputeLabWaterAttention)
-router.get('/project/getRawCascader' , echart_Controller_0.getRawCascader) 
 router.get('/project/getRawAssessData/:project_num' , echart_Controller_0.getRawAssessData) 
 router.get('/project/getTableItemsByPN/:project_num' , echart_Controller_0.getTableItemsByPN) 
 router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.getWaterTableItemsByPN) 

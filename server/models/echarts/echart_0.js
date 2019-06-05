@@ -1,16 +1,9 @@
 const theDatabase = require('../../config/db.js').theDb; //引入数据库
-const projectInfoSchema = theDatabase.import('../../schema/project_info.js');
 const pointInfoSchema = theDatabase.import('../../schema/point_info.js');
-const radarSchema = theDatabase.import('../../schema/reference_info.js');
 const sample_detector_ground_info_Schema = theDatabase.import('../../schema/sample_lab_ground_info.js');
 const sample_lab_water_info_Schema = theDatabase.import('../../schema/sample_lab_water_info.js');
 
 class Echart_0_Model {
-    static async getAllProjectData() {
-        const AllProjectData = await projectInfoSchema.findAll()
-        return AllProjectData
-    }
-
     static async getAllAssessTypeData(project_num) {
         const AllProjectData = await sample_detector_ground_info_Schema.findAll({
             where: {
@@ -44,17 +37,6 @@ class Echart_0_Model {
     static async getSpecifiedPointIntro() {
         const SpecifiedPointIntro = await pointInfoSchema.findAll()
         return SpecifiedPointIntro
-    }
-
-    static async getAllRadarData(id) {
-        const AllDatarData = await radarSchema.findAll(
-            {
-                where: {
-                    id: id
-                }
-            }
-        )
-        return AllDatarData
     }
 
     static async getAlldata() {

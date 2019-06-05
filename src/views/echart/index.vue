@@ -193,7 +193,6 @@
       <div id="myDialogChart" :class="className" :style="{height:height, width:width}"></div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关闭</el-button>
-        <!-- <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button> -->
       </div>
     </el-dialog>
   </div>
@@ -206,6 +205,7 @@ require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 
 import {
+  // getCascader,
   getCascader,
   getTableItemsByPN,
   getAssessData,
@@ -216,7 +216,6 @@ import {
   getHistogramData,
   getRadarEachDepthValue,
   getRadarWaterEachDepthValue,
-  GroundRadarThresholdData,
   WaterRadarThresholdData,
   getWaterHistogramData,
   getAllFoldData,
@@ -255,6 +254,7 @@ export default {
   },
   data() {
     return {
+      options:[],
       activeName: "earth",
       selectedOptions: [],
       assessOptions: [],
@@ -298,69 +298,16 @@ export default {
     };
   },
   methods: {
-    /* 生成三级选择器的树形数据 */
-    async getData() {
-      // 获取级联选择器的第三级
-      let CasData = await getCascader();
-      let ground_name = CasData.data.res;
-
-      ground_name.forEach(element => {
-        switch (element.project_area) {
-          case "0001":
-            this.options[0].children.push({
-              value: element.project_num,
-              label: element.project_name
-            });
-            break;
-          case "0002":
-            this.options[1].children.push({
-              value: element.project_num,
-              label: element.project_name
-            });
-            break;
-          case "0003":
-            this.options[2].children.push({
-              value: element.project_num,
-              label: element.project_name
-            });
-            break;
-          case "0004":
-            this.options[3].children.push({
-              value: element.project_num,
-              label: element.project_name
-            });
-            break;
-          default:
-            console.log("没有读取到cascader的第二级目录");
-        }
-        this.element_Map = new Map([
-          ["PH", "PH值"],
-          ["arsenic", "砷"],
-          ["cadmium", "镉"],
-          ["chromium", "铬"],
-          ["copper", "铜"],
-          ["lead", "铅"],
-          ["mercury", "汞"],
-          ["nickel", "镍"],
-          ["antimony", "锑"],
-          ["beryllium", "铍"],
-          ["cobalt", "钴"],
-          ["zinc", "锌"],
-          ["silver", "银"],
-          ["thallium", "铊"],
-          ["tin", "锡"],
-          ["selenium", "硒"],
-          ["molybdenum", "钼"],
-          ["Alum", "矾"]
-        ]);
-      });
-      //初始选项
-      this.selectedOptions = [
-        this.options[0].value,
-        this.options[0].children[0].value
-      ];
-
-      this.handleCascaderChange(this.selectedOptions);
+    /* 涉及权限_级联选择器*/
+    async getNewCascaderData() {
+        let res = await getCascader();
+        this.options = res.data.res;
+        console.log("Accessable Project", this.options); //树形格式
+        this.selectedOptions = [
+          this.options[0].value,
+          this.options[0].children[0].value
+        ];
+        this.handleCascaderChange(this.selectedOptions);
     },
 
     /* 生成类型选择器的数据 */
@@ -502,7 +449,6 @@ export default {
         }
       });
 
-      // }
     },
 
     /* 处理 */
@@ -527,7 +473,6 @@ export default {
     /* 画柱状图 */
     drawBar(bardatalist) {
       // 基于准备好的dom，初始化echarts实例
-
       this.$nextTick(async () => {
         this.myBarChart = echarts3_0.init(
           document.getElementById("myDialogChart")
@@ -605,11 +550,6 @@ export default {
           }
         ],
         series: [
-          // {
-          //   name: "深度1",
-          //   type: "bar",
-          //   data: [2.0, 4.9, 7.0]
-          // },
           {
             name: seriesvalue[2].mean_value,
             type: "bar",
@@ -1167,7 +1107,7 @@ export default {
             },
             {
               value: res1_radarseries.depth2,
-              name: "深度二"
+              name: "深度二" 
             }
           ];
         } else {
@@ -1358,7 +1298,8 @@ export default {
     }
   },
   mounted() {
-    this.getData();
+    // this.getData();
+    this.getNewCascaderData();
     if (this.autoResize) {
       this.__resizeHandler = debounce(() => {
         if (this.charts) {
@@ -1370,39 +1311,6 @@ export default {
       window.addEventListener("resize", this.__resizeHandler);
     }
   },
-  computed: {
-    options() {
-      let arr = [
-        {
-          value: "0001",
-          label: "静安区",
-          children: []
-        },
-        {
-          value: "0002",
-          label: "长宁区",
-          children: []
-        },
-        {
-          value: "0003",
-          label: "宝山区",
-          children: []
-        },
-        {
-          value: "0004",
-          label: "普陀区",
-          children: []
-        },
-        {
-          value: "0005",
-          label: "嘉定区",
-          children: []
-        }
-      ];
-
-      return arr;
-    }
-  }
 };
 </script>
 
