@@ -6,19 +6,20 @@ const bodyparser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 const json = require('koa-json')
 const static = require('koa-static')
+const jwt = require('jsonwebtoken')
+
 const app = new Koa()
 const router = new Router()
+
 const secret = 'shu-project'
 
-const echart_Controller_0 = require('./controller/echarts/echart_0.js')
 app.use(cors()) //use cors一定要挂载到路由之前
 app.use(bodyparser()) //use bodyparser要挂载到路由之前
 app.use(json())
 
 app.use(async function (ctx, next) {
   
-  try {
-   
+  try {  
     let url = ctx.request.url
     // 登录 不用检查
     if (url == "/user2/login"){
@@ -26,17 +27,20 @@ app.use(async function (ctx, next) {
       await next();
     }else {
       // 规定token写在header 的 'autohrization' 
-      let token = ctx.request.headers['shu-token'];
+      let token = ctx.request.headers['shu-token']
+      if(token){
       // 解码
       try{
         let payload = await jwt.verify(token, secret)
+        await next()
       } catch{
+        console.log("token 已过期")
         ctx.body = {
           code: 50014,
           msg: 'token 已过期'
         }
-      }  
-      await next()   
+      }          
+      }
     }
   } catch (err) {
     ctx.body = {

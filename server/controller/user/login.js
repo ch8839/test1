@@ -83,7 +83,6 @@ class User_Controller {
 
 	}
 
-
 }
 
 module.exports = User_Controller
