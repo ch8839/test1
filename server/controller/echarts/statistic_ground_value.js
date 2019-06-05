@@ -110,11 +110,9 @@ class echartCompute_Controller{
         let ele_list = obj2[key]
         let obj_total = ele_list.reduce((acu, cur)=>{
          for(let key2 in cur){
-          // console.log(131, cur[key2])
-           
+           // console.log(131, cur[key2])
             acu[key2] = Number(acu[key2]) + Number(cur[key2])
-            // console.log(acu[key2])
-           
+           // console.log(acu[key2])
          }
          return acu
         })
@@ -122,14 +120,15 @@ class echartCompute_Controller{
         
         // console.log(obj_total)
     for(let ele in obj_total){
+        console.log(8956,ele_list.length)
         obj_total[ele] /=ele_list.length
         obj_total[ele] = obj_total[ele].toFixed(2)
     }
-    obj_total['point_num'] = key
+      obj_total['point_num'] = key
+      
+      arr_average.push(obj_total)
     
-    arr_average.push(obj_total)
-    
-    } 
+   } 
     for(let o=0;o<arr_max.length;o++){
      
       let  item = arr_max[o]
@@ -315,7 +314,9 @@ class echartCompute_Controller{
   }
 
 }
-  module.exports = echartCompute_Controller
+
+
+module.exports = echartCompute_Controller
 
 
 

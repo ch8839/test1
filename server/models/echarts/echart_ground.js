@@ -92,7 +92,7 @@ const getFoldData = async function (sample_depth,assess_type) {
 
 const getData = async function (point_num,assess_type) {
     const FoldData = await echartSchema.findAll({
-        attributes: {exclude: ['id','project_num','sample_num','assess_type','count','remarks','date','attention','lat','lng']},
+        attributes: {exclude: ['id','project_num','sample_num','assess_type','count','remarks','date','attention','point_num','lat','lng']},
         where: {
             point_num,
             assess_type,

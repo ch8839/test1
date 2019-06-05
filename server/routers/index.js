@@ -63,7 +63,6 @@ router.post('/excel/uploadExcel' , excel_Controller.uploadExcel)
 //echart_0部分
 router.get('/database/ComputeLabAttention',echart_Controller_0.ComputeLabAttention)
 router.get('/database/ComputeLabWaterAttention',echart_Controller_0.ComputeLabWaterAttention)
-router.get('/project/getRawCascader' , echart_Controller_0.getRawCascader) 
 router.get('/project/getRawAssessData/:project_num' , echart_Controller_0.getRawAssessData) 
 router.get('/project/getTableItemsByPN/:project_num' , echart_Controller_0.getTableItemsByPN) 
 router.get('/project/getWaterTableItemsByPN/:project_num' , echart_Controller_0.getWaterTableItemsByPN) 
@@ -84,4 +83,6 @@ router.get('/data/ComputeAttention',ComputeController.ComputeAttention)
 router.post('/data/AddData' , dataController.addTableData)
 router.get('/data/getMoreDataByPointnum/:point_num',mapController.getMoreDataByPointnum)  //4
 router.get('/data/getCircleByProjectnum/:project_num',mapController.getCircleByProjectnum) //5
+router.post('/data/excel',mapController.getExcel) //6
+router.post('/data/test',dataController.test) //7
 module.exports= router;
