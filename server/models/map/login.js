@@ -9,7 +9,7 @@ class UserModel {
                 username
             }
         })
-        return userInfo.roles
+        return userInfo.project_owner
     }
 }
 
