@@ -33,14 +33,15 @@ app.use(async function (ctx, next) {
       try{
         let payload = await jwt.verify(token, secret)
         await next()
-      } catch{
+      } catch(err){
+        console.log(err)
         console.log("token 已过期")
         ctx.body = {
           code: 50014,
           msg: 'token 已过期'
         }
       }  
-        
+     
     }
   }
   } catch (err) {
