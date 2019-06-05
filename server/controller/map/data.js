@@ -126,9 +126,9 @@ const getMarkerInfo = async function (ctx) {
   const token = ctx.header['shu-token']
   const secret = 'shu-project'
   if (token) {
-    console.log(11,token)
+
     var playload = await jwt.verify(token, secret)
-    console.log('playload', playload)
+
     var project_num = await UserModel.getProjectnumByUser(playload.username)
   }
   var project_num_List = project_num.split('、')
@@ -165,7 +165,7 @@ const getGroundList = async function (ctx) {
 
     for (let i of attention1_List) {
       if (i != -1) {//不要把null当作attentionde
-        console.log(112, i)
+
 
         attention.push(element_Map.get(i))
       }
