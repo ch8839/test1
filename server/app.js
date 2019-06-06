@@ -18,32 +18,33 @@ app.use(bodyparser()) //use bodyparser要挂载到路由之前
 app.use(json())
 
 app.use(async function (ctx, next) {
-  
-  try {  
+
     let url = ctx.request.url
     // 登录 不用检查
     if (url == "/user2/login"){
       console.log("登陆路由")
-      await next();
-    }else {
+      await next()
+      return false
+    }
+
+    try {
       // 规定token写在header 的 'autohrization' 
       let token = ctx.request.headers['shu-token']
       if(token){
       // 解码
-      try{
-        let payload = await jwt.verify(token, secret)
-        await next()
-      } catch(err){
-        console.log(err)
-        console.log("token 已过期")
-        ctx.body = {
-          code: 50014,
-          msg: 'token 已过期'
-        }
-      }  
-     
+        try{
+          let payload = await jwt.verify(token, secret)
+          // await next()
+        } catch(err){
+          console.log(err)
+          console.log("token 已过期")
+          ctx.body = {
+            code: 50014,
+            msg: 'token 已过期'
+          }
+        }    
     }
-  }
+    await next()
   } catch (err) {
     ctx.body = {
       success: false

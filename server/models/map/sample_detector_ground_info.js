@@ -12,19 +12,36 @@ const getDataByPointnum = async function(point_num){
 }
 
 const getAttentionByPointnum = async function(point_num){
-    const list=new Set()
+    // const list=new Set()
+    var list=[]
+    var returnlist=[]
     const AllProjectData = await sample_detector_ground_info_Schema.findAll({
         where:{
             point_num: point_num
         }
     })
-    
-    for(let item of AllProjectData){
+    let res2 = AllProjectData.map(item=>{
+        return item = item.dataValues
+      })
+    for(let item of res2){
         
         
-        list.add(item.attention)
+        list.push(item.attention)
     }
-    return list
+    // console.log(1122,list)
+    for(let i of list){
+        var temp=i.split(',')
+        for(let y of temp){
+            returnlist.push(y)
+        }
+    }
+    // console.log(returnlist)
+    var x = new Set(returnlist);
+// console.log(22212,x)
+var xlist=Array.from(x)
+// console.log(01,xlist)
+    return xlist
+
 }
 
 const getAlldata = async function(){

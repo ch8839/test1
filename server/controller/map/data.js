@@ -130,9 +130,12 @@ const getMarkerInfo = async function (ctx) {
 
   }//此处循环结束
   const token = ctx.header['shu-token']
+  var playload
+  var roles
   if (token) {
-      var playload = await jwt.verify(token, secret)
-      var roles = await UserModel.getRolesByUser(playload.username)
+      playload = await jwt.verify(token, secret)
+      console.log('playload', playload)
+      roles = await UserModel.getRolesByUser(playload.username)
   }
   if(roles=='super admin'){
 
@@ -145,7 +148,8 @@ const getMarkerInfo = async function (ctx) {
     }
   }
   else{
-    var project_num_List=project_num.split('、')
+    var project_owner = playload.project_owner
+    var project_num_List=project_owner.split('、')
     const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
    
   
@@ -184,7 +188,7 @@ const getGroundList =async function(ctx) {
      let Intro = await PointInfoModel.getIntroByPointnum(item)
      var attention1_List=attention1[0].split(',')     
 
-     for (let i of attention1_List){
+     for (let i of attention1){
     
        if (i!=-1){//不要把null当作attentionde
         console.log(112,i)
@@ -214,57 +218,68 @@ const getGroundList =async function(ctx) {
 
 
 const getMoreDataByPointnum = async function (ctx) {
-const point_num = ctx.params.point_num
-var list=[]
-var id=1
-
-// 拿到Projectnum和Intro
-let Projectnum = await PointInfoModel.getProjectnumByPointnum(point_num)
-let Intro = await PointInfoModel.getIntroByPointnum(point_num)
-
-let res = await sample_detector_ground_info_model.getDataByPointnum(point_num)
-let res2 = res.map(item=>{
-  return item = item.dataValues
-})
-let res3 = await sample_detector_ground_info_model.getAttentionByPointnum(point_num)
-
-for (let i of res3){//遍历每个attention元素 为i
-  let res4 = await sample_detector_ground_info_model.getmaxbyattention(point_num,i)
-  let res5 = res4.map(item=>{
+  const point_num = ctx.params.point_num
+  var list=[]
+  var id=1
+  var maxlist={}
+  // 拿到Projectnum和Intro
+  let Projectnum = await PointInfoModel.getProjectnumByPointnum(point_num)
+  let Intro = await PointInfoModel.getIntroByPointnum(point_num)
+  let res = await sample_detector_ground_info_model.getDataByPointnum(point_num)
+  let res2 = res.map(item=>{
     return item = item.dataValues
   })
-  var max_value=0
-  var count=0
-  for (let x of res5){
-    if (x[i]>max_value){
-      max_value=x[i]
-      count+=1
+  // console.log(12333,res2)
+  //res2 样本数据
+  let res3 = await sample_detector_ground_info_model.getAttentionByPointnum(point_num)
+  //res3为attention元素
+  // res3=Array.from(res3)
+  // ccc=res3.split(',')
+  // console.log(2222,ccc)
+  for (let i of res3){//遍历每个attention元素 为i
+  
+    var max_value=0
+    var count=0
+  
+    for (let x of res2){
+      
+      if (x[i]>max_value){
+        max_value=x[i]
+       
+      }
+      
+      var attentionlist=x['attention'].split(',')
+      if(attentionlist.indexOf(i)!=-1){
+        count+=1
+      }
+    }
+  
+    console.log(3,count)
+  
+    if (max_value!=0){
+      list.push({id:id++,count:count,max_value:max_value,element:element_Map.get(i),Project_num:Projectnum,Intro:Intro,point_num:point_num})
+    }
+  
+  }
+  
+  
+  
+  if (list) {
+    ctx.body = {
+      success: true,
+      res: list,
+      msg: '获取成功'
+    }
+  } else {
+    ctx.body = {
+      success: true,
+      res: [],
+      msg: '获取失败'
     }
   }
- 
-  if (max_value!=0){
-    list.push({id:id++,count:count,max_value:max_value,element:element_Map.get(i),Project_num:Projectnum,Intro:Intro,point_num:point_num})
-  }
-}
-
-
-
-if (list) {
-  ctx.body = {
-    success: true,
-    res: list,
-    msg: '获取成功'
-  }
-} else {
-  ctx.body = {
-    success: true,
-    res: [],
-    msg: '获取失败'
-  }
-}
-
-};
-
+  
+  };
+  
 
 
 
