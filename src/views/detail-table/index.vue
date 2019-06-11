@@ -56,7 +56,7 @@
                   </div>
                   <div class="chart_contain">
                     <ve-histogram :data="handleChartData(props.row.labGround_element)" :settings="chartSettings3"
-                      width="450px" />
+                    :extend="chartExtend"  />
                   </div>
                 </div>
               </template>
@@ -162,7 +162,7 @@
                   </div>
                   <div class="chart_contain">
                     <ve-histogram :data="handleChartData(props.row.labWater_element)" :settings="chartSettings3"
-                      width="450px" />
+                       :extend="chartExtend"/>
                   </div>
                 </div>
               </template>
@@ -307,6 +307,14 @@
             reference: '参考值'
           }
         },
+        chartExtend: {
+          xAxis:{
+            axisLabel: {
+              interval: 0
+            }
+            // position: 'top'
+          }
+        },
         markers: [],
         allMarkers: [],
         zoom: 17,
@@ -441,6 +449,7 @@
           delete item.ispollution
           return item
         })
+        console.log('rows_arr', rows_arr)
         return {
           columns: ['element', 'value', 'reference'],
           rows: rows_arr
@@ -596,6 +605,7 @@
 
     .chart_contain {
       margin-left: 30px;
+      flex: 1
     }
 
     .nodata {
@@ -603,7 +613,8 @@
     }
 
     .pollution-row {
-      background: rgba(245, 75, 75, 0.933);
+      background: rgba(245,108,108,.1);
+      color: rgba(245, 75, 75, 0.933);
     }
 
     .notdetector-row {

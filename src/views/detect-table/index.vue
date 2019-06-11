@@ -82,7 +82,7 @@
                     <ve-histogram
                       :data="handleChartData(det_ground_reference)"
                       :settings="chartSettings3"
-                      width="450px"
+                      :extend="chartExtend"
                     ></ve-histogram>
                   </div>
                 </div>
@@ -218,7 +218,7 @@
                     <ve-histogram
                       :data="handleChartData(det_water_reference)"
                       :settings="chartSettings3"
-                      width="450px"
+                      :extend="chartExtend"
                     ></ve-histogram>
                   </div>
                 </div>
@@ -374,6 +374,14 @@ export default {
           element: '元素',
           value: '数值',
           lab_reference: '实验数据参考值'
+        }
+      },
+      chartExtend: {
+        xAxis:{
+          axisLabel: {
+            interval: 0
+          }
+          // position: 'top'
         }
       },
       markers: [],
@@ -676,6 +684,7 @@ export default {
 
   .chart_contain {
     margin-left: 30px;
+    flex: 1
   }
 
   .nodata {
