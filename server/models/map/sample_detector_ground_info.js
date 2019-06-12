@@ -11,12 +11,13 @@ const getDataByPointnum = async function(point_num){
     return AllProjectData
 }
 
-const getAttentionByPointnum = async function(point_num){
+const getAttentionByPointnum = async function(assess_type,point_num){
     // const list=new Set()
     var list=[]
     var returnlist=[]
     const AllProjectData = await sample_detector_ground_info_Schema.findAll({
         where:{
+            assess_type:assess_type,
             point_num: point_num
         }
     })
