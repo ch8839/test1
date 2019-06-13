@@ -67,7 +67,7 @@ const getFoldWaterElement = async function (point_num,assess_type,element) {
     if (element) {
     
             AllElementData = await echartWaterSchema.findAll({
-                attributes: [element,'sample_num'],
+                attributes: [element,'sample_num','sample_depth'],
                 where: {
                     point_num,
                     assess_type,
