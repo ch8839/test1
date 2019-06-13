@@ -30,6 +30,7 @@ service.interceptors.response.use(
      * code为非20000是抛错 可结合自己业务进行修改
      */
     // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
+    // console.log('response.data',response)
     if (response.data.code == 50008 || response.data.code == 50012 || response.data.code == 50014) {
       MessageBox.confirm(
         '你已被登出，可以取消继续留在该页面，或者重新登录',

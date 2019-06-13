@@ -11,6 +11,14 @@ class UserModel {
         })
         return userInfo.project_owner
     }
+    static async getRolesByUser(username) {
+        const userInfo = await userInfoSchema.findOne({
+            where:{
+                username
+            }
+        })
+        return userInfo.roles
+    }
 }
 
 module.exports = UserModel

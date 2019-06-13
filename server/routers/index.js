@@ -6,10 +6,14 @@ const router = new Router()
 // const testController = require('../controller/test/test.js')
 //登陆模块
 const User_Controller = require('../controller/user/login.js')
+
+const UserManage_Controller = require('../controller/user/usermanage.js')
+
 //table模块
 const projectInfo_Controller = require('../controller/table/projectInfo.js')
 const groundInfo_Controller = require('../controller/table/groundInfo.js')
 const waterInfo_Controller = require('../controller/table/waterInfo.js')
+const excel_Controller = require('../controller/table/uploadExcel.js')
 
 //echarts模块
 const echart_Controller_0 = require('../controller/echarts/echart_0.js')
@@ -35,6 +39,13 @@ const dataController = require('../controller/map/adddata.js')
 router.post('/user2/login' , User_Controller.login)
 router.get('/user2/info/:token' , User_Controller.getUserInfo)
 
+router.get('/user2/getUserList' , UserManage_Controller.getUserList)
+router.get('/user2/getProjectList' , UserManage_Controller.getProjectList)
+
+router.post('/user2/addUser' , UserManage_Controller.addUser)
+router.post('/user2/updateUser/:id' , UserManage_Controller.updateUser)
+router.delete('/user2/deleteUser/:id' , UserManage_Controller.deleteUser)
+
 //table部分
 router.get('/project/getProjectInfo' , projectInfo_Controller.getProjectInfo)
 router.get('/project/getPointOptions/:project_num' , projectInfo_Controller.getPointOptions)
@@ -47,6 +58,9 @@ router.get('/ground/getLabGroundReference/:sample_num' , groundInfo_Controller.g
 router.post('/water/getLabWaterList' , waterInfo_Controller.getLabWaterList)
 router.post('/water/getDetWaterList' , waterInfo_Controller.getDetWaterList)
 router.get('/water/getLabWaterReference/:sample_num' , waterInfo_Controller.getLabWaterReference)
+
+router.post('/excel/uploadExcel' , excel_Controller.uploadExcel)
+
 
 //echart_0部分
 router.get('/database/ComputeLabAttention',echart_Controller_0.ComputeLabAttention)
@@ -73,6 +87,6 @@ router.get('/data/ComputeAttention',ComputeController.ComputeAttention)
 router.post('/data/AddData' , dataController.addTableData)
 router.get('/data/getMoreDataByPointnum/:point_num',mapController.getMoreDataByPointnum)  //4
 router.get('/data/getCircleByProjectnum/:project_num',mapController.getCircleByProjectnum) //5
-router.post('/data/excel',mapController.getExcel) //6
+
 router.post('/data/test',dataController.test) //7
 module.exports= router;

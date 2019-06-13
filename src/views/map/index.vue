@@ -121,8 +121,8 @@
             </el-table>
           </div>
           <el-badge class="badge_style">
-            <el-button size="small" type="info" icon="el-icon-message" round>
-              <a href="/table/index">详细信息</a>
+            <el-button size="small" type="info" icon="el-icon-message" round @click="toTable">
+              详细信息
             </el-button>
           </el-badge>
         </div>
@@ -405,8 +405,16 @@ export default {
         return item;
       });
       this.pointData = pointData;
+    },
+
+    toTable(){
+      this.$router.push({path: '/table/detail-table'})
     }
   },
+
+  
+
+  
 
   async mounted() {
     let res1 = await getMarkerInfo();

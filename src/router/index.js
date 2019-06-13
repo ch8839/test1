@@ -81,6 +81,12 @@ export const asyncRouterMap = [
         name: 'DetectTable',
         component: () => import('@/views/detect-table/index'),
         meta: { title: '检测数据', icon: 'form' }
+      },
+      {
+        path: 'upload-excel',
+        name: 'UploadExcel',
+        component: () => import('@/views/upload-excel/index'),
+        meta: { title: 'Excel导入', icon: 'form' }
       }
     ]
   },
@@ -93,11 +99,24 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Echart',
         component: () => import('@/views/echart/index'),
-        // meta: { title: '统计信息', icon: 'form' , roles: ['super admin']}
         meta: { title: '统计信息', icon: 'form' }
       }
     ]
   },
+
+  {
+    path: '/user-manage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'UserManage',
+        component: () => import('@/views/userManage/index'),
+        meta: { title: '用户管理', icon: 'peoples', roles: ['super admin']}
+      }
+    ]
+  },
+
   
 
   // {

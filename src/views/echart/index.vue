@@ -260,7 +260,7 @@ export default {
       myDialogChart: null,
       dialogFormVisible: false,
       barElementListQuery: null,
-      lineElementListQuery: {},
+      lineElementListQuery:{},
       waterlineElementListQuery: {},
       barElementOptions: [
         { label: "PH值", value: "PH" },
@@ -791,6 +791,7 @@ export default {
           this.temp_tableItems[p].lineseries["mean_value"] = [];
           this.temp_tableItems[p].lineseries["unit"] = null;
         }
+        
       }
     },
     /* 获得水折线图数据——通过listquery & pointnum & this.assessListQuery */
