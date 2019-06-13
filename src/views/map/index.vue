@@ -114,7 +114,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="assess_type" label="调查类型" width="95px" align="center" 
-                :filters="[{text: '初步调查', value: '初步调查'}, {text: '详细调查', value: '详细调查'}, {text: '治理修复', value: '治理修复'}]"
+                :filters="[{text: '初步调查', value: '初步调查'}, {text: '详细调查', value: '详细调查'}, {text: '修复调查', value: '修复调查'}]"
                 :filter-method="filterTag"
                 filter-placement="bottom-end">
                 <template slot-scope="scope">
@@ -122,7 +122,7 @@
                   disable-transitions>{{assess_type_options[scope.row.assess_type].label }}</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column prop="attention" label="主要污染物" width="130px" align="center">
+              <el-table-column prop="attention" label="主要污染物" width="135px" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.attention.length">
                     <el-tag

@@ -186,8 +186,10 @@ const getGroundList =async function(ctx) {
       attention='-1'
      }
      else{
-
       for (let i of attentionlist){
+        if(i==''){
+          continue
+        }
         attention.push(element_Map.get(i))
 
       }

@@ -92,10 +92,11 @@ class echart_Controller{
         delete item.reference_num;
         Threshold17.push(item)
     
-      }else if(item.reference_num == '18国标'){
-        delete item.reference_num;
-        Threshold18.push(item)
       }
+      // else if(item.reference_num == '18国标'){
+      //   delete item.reference_num;
+      //   Threshold18.push(item)
+      // }
     })//取出在土壤的国标值以及最大值
  
     let sample_depth = res.map(item => {
@@ -128,32 +129,41 @@ class echart_Controller{
     let AllData =[]
     let AllRadarData = []
    
-    AllData.push(Threshold17[0],Threshold18[0],depth1[0])//将最大值和阈值以及深度的值统一放在一个数组里
+    // AllData.push(Threshold17[0],Threshold18[0],depth1[0])//将最大值和阈值以及深度的值统一放在一个数组里
+    AllData.push(Threshold17[0],depth1[0])//将最大值和阈值以及深度的值统一放在一个数组里
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[2][key]=='0'){
+        if(AllData[1][key]=='0'){
           // console.log(85239,AllData[0][key]) 
         //  arr119.push({text:key,max:AllData[0][key]});
           delete AllData[0][key];
           delete AllData[1][key];
-          delete AllData[2][key];
+          // delete AllData[2][key];
           
         }  
       }
     }//将深度里面的元素的值==0的元素在最大值和阈值中进行删除
 
-    let obj_max = AllData.reduce((acu, cur)=>{
-      for(let key in cur){
-          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    // let obj_max = AllData.reduce((acu, cur)=>{
+    //   for(let key in cur){
+    //       acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    //   }
+    //   return acu
+    // })
+    let obj_max = []
+    for(let key in AllData[0]){
+      obj_max[key] = (AllData[0][key]*5).toFixed(3)
+      
+    }
+
+    AllData.forEach((item)=>{
+      for(let key in item ){
+        if(Number(item[key])> Number(obj_max[key])){
+          item[key] = obj_max[key]
+        }
       }
-      return acu
     })
-  //   console.log(11111111111111,obj_max)
-  //  for(let key in obj_max){
-  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-  //  }
-  //  console.log(758496,obj_max)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -165,10 +175,10 @@ class echart_Controller{
       }
       arr1.push( Number(AllData[0][key]));//只取出来元素的值不要元素名称
       arr2.push( Number(AllData[1][key]));
-      arr3.push( Number(AllData[2][key]));//只取出来元素的值不要元素名称
+      // arr3.push( Number(AllData[2][key]));//只取出来元素的值不要元素名称
     }//将最大值的元素换成中文显示
 
-    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})//将所有数据进行push到一个数组中去
+    all.push({max:AllRadarData,Threshold17:arr1,depth1:arr2})//将所有数据进行push到一个数组中去
     
     ctx.body = {
       success: true,
@@ -221,47 +231,57 @@ class echart_Controller{
     let arr3 =[]
     let arr4 =[]
     
-    AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0])
+    // AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0])
+    AllData.push(Threshold17[0],depth1[0],depth2[0])
     console.log(95689,AllData)
  
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[3][key]!==null){
-          if(AllData[2][key]== 0 && AllData[3][key] == 0){
+        if(AllData[2][key]!==null){
+          if(AllData[1][key]== 0 && AllData[2][key] == 0){
             // console.log(95689,AllData[0][key])
           //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
             delete AllData[1][key];
             delete AllData[2][key];
-            delete AllData[3][key];
+            // delete AllData[3][key];
             // delete AllData[4][key];
           }
         }else {
-          if(AllData[2][key]== 0 ){
+          if(AllData[1][key]== 0 ){
             console.log(95689,AllData[0][key])
           //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
             delete AllData[1][key];
-            delete AllData[2][key];
+            // delete AllData[2][key];
            
           }
         }  
       }
     }
 
-    let obj_max = AllData.reduce((acu, cur)=>{
-      for(let key in cur){
-          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    // let obj_max = AllData.reduce((acu, cur)=>{
+    //   for(let key in cur){
+    //       acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    //   }
+    //   return acu
+    // })
+    // console.log(11111111111111,obj_max)
+    let obj_max = []
+    for(let key in AllData[0]){
+      obj_max[key] = (AllData[0][key]*5).toFixed(3)
+      
+    }
+
+    AllData.forEach((item)=>{
+      for(let key in item ){
+        if(Number(item[key])> Number(obj_max[key])){
+          item[key] = obj_max[key]
+        }
       }
-      return acu
     })
-    console.log(11111111111111,obj_max)
-  //  for(let key in obj_max){
-  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-  //  }
-  //  console.log(758496,obj_max)
-    
+
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
         if (AllData[0][key] && element_Map.get(key)) {
@@ -271,20 +291,21 @@ class echart_Controller{
         }
       }
       arr1.push( Number(AllData[0][key]));
-      arr2.push( Number(AllData[1][key]));
-      if(AllData[3][key]!==null){
-        arr3.push( Number(AllData[2][key]));
-        arr4.push( Number(AllData[3][key]));
+      // arr2.push( Number(AllData[1][key]));
+      if(AllData[2][key]!==null){
+        arr3.push( Number(AllData[1][key]));
+        arr4.push( Number(AllData[2][key]));
       }else {
-        arr3.push( Number(AllData[2][key]));
+        arr3.push( Number(AllData[1][key]));
        
       }
     }
-    console.log(15266,arr2)
+    // console.log(15266,arr2)
     if(arr4.length!=0){
-      all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4})
+      // all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4})
+      all.push({max:AllRadarData,Threshold17:arr1,depth1:arr3,depth2:arr4})
     }else {
-      all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})
+      all.push({max:AllRadarData,Threshold17:arr1,depth1:arr3})
     }
     ctx.body = {
       success: true,
@@ -309,7 +330,10 @@ class echart_Controller{
     return item = item.dataValues
   })
   console.log(666666666, res3)
-
+  let sample_depth = res.map(item => {
+    return item = item.dataValues.sample_depth
+  })
+  console.log(77777777, sample_depth)
   let res1 = res.map(item => {
     return item = item.dataValues
   })
@@ -324,15 +348,16 @@ class echart_Controller{
   let Sample = []
   for (let i=0;i<sample_num.length;i++){
     let x ;
-    x = i + 1 ;
-    Sample.push(x);
-  }//转换形式
+    x = i  ;
+    Sample.push('样本'+'-'+ sample_depth[x]);
+  }
 
   let Element_arr = []
   let Element_arr2 = []
   res1.forEach((item)=>{
     for(let key in item){
       delete item.sample_num
+      delete item.sample_depth
       Element_arr.push(item[key])
     } 
   })
@@ -345,9 +370,16 @@ class echart_Controller{
     } 
   })
 
+  let reference_value = []
+  for(let i=0;i<Element_arr.length;i++){
+    reference_value.push(reference_17_water_Map.get(element))
+  }
+  console.log(4444444,reference_value)
+   
+
  
   let FoldData_arr = []
-  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_17_water_Map.get(element),unit:unit_Map.get(element)})
+  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_value,unit:unit_Map.get(element)})
   // 监之前的数据全部push到数组里面
  
   ctx.body = {
