@@ -113,7 +113,6 @@
                     >
                       <el-amap-marker
                         :position="[scope.row.lng, scope.row.lat]"
-                        animation="AMAP_ANIMATION_DROP"
                         :vid="scope.row.id"
                       ></el-amap-marker>
                     </el-amap>
@@ -595,12 +594,47 @@ export default {
         this.ProjectOptions[0].value,
         this.ProjectOptions[0].children[0].value
       ]
+
+       if(this.$route.params.project_num) {
+      console.log("mouted路由",this.$route.params)
+      
+      let ProjectOptions = this.ProjectOptions.filter(item=>{
+        let arr =  item.children.filter(item=>{
+          return item.value == this.$route.params.project_num
+        })
+        return arr.length?true:false
+      })
+      console.log('ProjectOptions1', ProjectOptions)
+      this.selectedProject = [ProjectOptions[0].value, this.$route.params.project_num]
+      // this.projectChange(this.selectedProject)
+    }
       this.projectChange(this.selectedProject)
     }
   },
 
   mounted() {
     this.getData()
+    
+  },
+
+  watch: {
+    '$route'(){
+
+      if(this.$route.params.project_num) {
+        console.log('watch路由',this.$route.params.project_num)
+        
+        let ProjectOptions = this.ProjectOptions.filter(item=>{
+          let arr =  item.children.filter(item=>{
+            return item.value == this.$route.params.project_num
+          })
+          return arr.length?true:false
+        })
+        console.log('ProjectOptions1', ProjectOptions)
+        this.selectedProject = [ProjectOptions[0].value, this.$route.params.project_num]
+        this.projectChange(this.selectedProject)
+      }
+      
+    }
   },
 
   computed: {
@@ -710,6 +744,11 @@ export default {
   .map_container {
     height: 480px;  
   }
+
+  // .map_container2{
+  //   width: 200px;
+  //   height: 200px
+  // }
   
 }
 </style>

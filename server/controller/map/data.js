@@ -152,6 +152,7 @@ const getMarkerInfo = async function (ctx) {
     var project_num_List=project_owner.split('、')
     const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
    
+   
   
     ctx.body = {
       success: true,
@@ -170,36 +171,43 @@ const getMarkerInfo = async function (ctx) {
 
 
 const getGroundList =async function(ctx) {
-  
   // const element_Map = await getUnit() //通过这种方式每回请求都要执行生成Map映射，所以直接定义全局变量，并立即执行生成Map映射函数，之后取映射时不用再执行
   const project_num = ctx.params.project_num
   // console.log(4,project_num)
   let ground_name_point = await AllGroundDataModel.getPointnumByGroundnum(project_num)
-  // console.log(5,ground_name_point)
   var id=0
   var Alldata=[]
   for (let item of ground_name_point[project_num]) {
-    //  取出监测点位编号，然后开始统计attention元素的值
-    //  console.log(6,item)
-     let attentionlist = await sample_detector_ground_info_model.getAttentionByPointnum(item)
-    //  console.log(7,attentionlist)
-     var attention1=Array.from(attentionlist)
-     var attention=[]
+    //  取出监测点位编号item，然后开始统计attention元素的值
+    //  得到监测点位编号item 每个item下面有三个类型
+     assess_type=[1,2,3]
+     for (let i of assess_type){
+     let attentionlist = await sample_detector_ground_info_model.getAttentionByAssessTypePointnum(i,item)
      let Intro = await PointInfoModel.getIntroByPointnum(item)
-     var attention1_List=attention1[0].split(',')     
+     var attention=[]
+     if(!attentionlist){
+      attention='-1'
+     }
+     else{
+        
+      for (let i of attentionlist){
+        if(i==''){
+          continue
+          }
+        attention.push(element_Map.get(i))
 
-     for (let i of attention1){
-    
-       if (i!=-1){//不要把null当作attentionde
-        console.log(112,i)
+      }
+     }
+     Alldata.push({id:++id,point_num:item,attention:attention,introduction:Intro,assess_type:i})
+     
+     
+     
+  }
+     }
 
-       attention.push(element_Map.get(i))
+   
+
      
-    }
-  }
-     Alldata.push({id:++id,point_num:item,attention:attention,introduction:Intro})
-     
-  }
   if (Alldata) {
 
     ctx.body = {
@@ -218,68 +226,69 @@ const getGroundList =async function(ctx) {
 
 
 const getMoreDataByPointnum = async function (ctx) {
-  const point_num = ctx.params.point_num
-  var list=[]
-  var id=1
-  var maxlist={}
-  // 拿到Projectnum和Intro
-  let Projectnum = await PointInfoModel.getProjectnumByPointnum(point_num)
-  let Intro = await PointInfoModel.getIntroByPointnum(point_num)
-  let res = await sample_detector_ground_info_model.getDataByPointnum(point_num)
-  let res2 = res.map(item=>{
-    return item = item.dataValues
-  })
-  // console.log(12333,res2)
-  //res2 样本数据
+const point_num = ctx.params.point_num
+var list=[]
+var id=1
+var maxlist={}
+// 拿到Projectnum和Intro
+let Projectnum = await PointInfoModel.getProjectnumByPointnum(point_num)
+let Intro = await PointInfoModel.getIntroByPointnum(point_num)
+let res = await sample_detector_ground_info_model.getDataByPointnum(point_num)
+let res2 = res.map(item=>{
+  return item = item.dataValues
+})
+//res2 样本数据
   let res3 = await sample_detector_ground_info_model.getAttentionByPointnum(point_num)
-  //res3为attention元素
-  // res3=Array.from(res3)
-  // ccc=res3.split(',')
-  // console.log(2222,ccc)
-  for (let i of res3){//遍历每个attention元素 为i
-  
-    var max_value=0
-    var count=0
-  
-    for (let x of res2){
-      
-      if (x[i]>max_value){
-        max_value=x[i]
-       
-      }
+//res3为attention元素
+
+res3=Array.from(res3)
+for (let i of res3){//遍历每个attention元素 为i
+  var max_value=0
+  var count=0
+  if(i==''){
+    continue
+  }
+  for (let x of res2){
       
       var attentionlist=x['attention'].split(',')
+      if([attentionlist[0]]==''){
+        continue
+      }
       if(attentionlist.indexOf(i)!=-1){
         count+=1
+        if (x[i]>max_value){
+          max_value=x[i]
+        }
       }
-    }
-  
-    console.log(3,count)
-  
-    if (max_value!=0){
-      list.push({id:id++,count:count,max_value:max_value,element:element_Map.get(i),Project_num:Projectnum,Intro:Intro,point_num:point_num})
-    }
-  
+    
+    
   }
-  
-  
-  
-  if (list) {
-    ctx.body = {
-      success: true,
-      res: list,
-      msg: '获取成功'
-    }
-  } else {
-    ctx.body = {
-      success: true,
-      res: [],
-      msg: '获取失败'
-    }
+
+  // console.log(3,count)
+  if (max_value!=0){
+    list.push({id:id++,count:count,max_value:max_value,element:element_Map.get(i),Project_num:Projectnum,Intro:Intro,point_num:point_num})
   }
-  
-  };
-  
+
+}
+
+
+
+if (list) {
+  ctx.body = {
+    success: true,
+    res: list,
+    msg: '获取成功'
+  }
+} else {
+  ctx.body = {
+    success: true,
+    res: [],
+    msg: '获取失败'
+  }
+}
+
+};
+
 
 
 

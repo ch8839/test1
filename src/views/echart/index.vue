@@ -53,7 +53,7 @@
                     <!-- 土壤折线图div -->
                     <el-select
                       v-model="lineElementListQuery[props.row.point_num]"
-                      :placeholder="props.row.listQueryOptions[0].label"                   
+                      :placeholder="props.row.listQueryOptions[0].label"
                       class="filter-item"
                       @change="handleEarthLineElementSelect(props.row.point_num)"
                     >
@@ -122,7 +122,7 @@
                   </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <!-- 折线图div -->
+                    <!-- 水折线图div -->
                     <el-select
                       v-model="waterlineElementListQuery[props.row.point_num]"
                       :placeholder="props.row.listQueryOptions[0].label"
@@ -205,18 +205,15 @@ require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 
 import {
-  // getCascader,
+  // echart_0
   getCascader,
   getTableItemsByPN,
   getAssessData,
-  // 水数据
-  getWaterTableItemsByPN
-} from "@/api/echarts/echarts";
-import {
+  getWaterTableItemsByPN,
+  //echart
   getHistogramData,
   getRadarEachDepthValue,
   getRadarWaterEachDepthValue,
-  WaterRadarThresholdData,
   getWaterHistogramData,
   getAllFoldData,
   getAllWaterFoldData
@@ -254,7 +251,7 @@ export default {
   },
   data() {
     return {
-      options:[],
+      options: [],
       activeName: "earth",
       selectedOptions: [],
       assessOptions: [],
@@ -301,14 +298,14 @@ export default {
   methods: {
     /* 涉及权限_级联选择器*/
     async getNewCascaderData() {
-        let res = await getCascader();
-        this.options = res.data.res;
-        console.log("Accessable Project", this.options); //树形格式
-        this.selectedOptions = [
-          this.options[0].value,
-          this.options[0].children[0].value
-        ];
-        this.handleCascaderChange(this.selectedOptions);
+      let res = await getCascader();
+      this.options = res.data.res;
+      console.log("Accessable Project", this.options); //树形格式
+      this.selectedOptions = [
+        this.options[0].value,
+        this.options[0].children[0].value
+      ];
+      this.handleCascaderChange(this.selectedOptions);
     },
 
     /* 生成类型选择器的数据 */
@@ -343,10 +340,6 @@ export default {
     /* 级联选择器的触发函数 */
     async handleCascaderChange(options) {
       console.log("this.selectedOptions", this.selectedOptions);
-      this.tableData = [];
-      this.water_tableData = [];
-      this.temp_tableItems = [];
-      this.temp_water_tableItems = [];
       await this.selectTableItemsByPN(options[1]);
       await this.getATData();
       this.handleAssessFilter();
@@ -388,7 +381,7 @@ export default {
                     elementvalue = j.value;
                   }
                 });
-                templistquery1.push({label:i, value: elementvalue});
+                templistquery1.push({ label: i, value: elementvalue });
                 return;
               }
             });
@@ -459,17 +452,16 @@ export default {
           return true;
         }
       });
-
     },
 
-    /* 处理 */
+    /* 响应柱状图元素选择器 */
     async handleBarElementSelect() {
       this.getBarOptions(this.temp_barPointnum);
     },
 
     /* 获取监测点位_ground_柱状图的详细数据 */
     async getDetailInfo(attention, listqueryoptions, pointnum) {
-      this.handleElementSelector("bar", attention, listqueryoptions, pointnum);
+      this.handleElementSelector(attention, listqueryoptions, pointnum);
       this.barElementListQuery = this.temp_barElementOptions[0].value;
       // 获取柱状图的选择器数据
       // this.barElementOptions
@@ -477,8 +469,7 @@ export default {
         this.dialogFormVisible = true;
       }
       this.temp_barPointnum = pointnum; //存储点位编号以便选择器传参使用
-      this.handleBarElementSelect();
-      // this.getBarOptions(pointnum);
+      this.getBarOptions(pointnum);
     },
 
     /* 画柱状图 */
@@ -518,10 +509,10 @@ export default {
           x2: "2%",
           y: "120",
           feature: {
-            dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ["line", "bar"] },
-            restore: { show: true },
-            saveAsImage: { show: true }
+            // dataView: { show: true, readOnly: false },
+            // magicType: { show: true, type: ["line", "bar"] },
+            // restore: { show: true },
+            // saveAsImage: { show: true }
           }
         },
         grid: {
@@ -614,19 +605,11 @@ export default {
     drawLine(lineid, linedatalist) {
       this.$nextTick(async () => {
         if (document.getElementById(lineid) !== null) {
-          if (this.activeName == "earth") {
-            this.myLineChart = echarts3_0.init(document.getElementById(lineid));
-            this.setLineOptions(linedatalist);
-            this.charts.push(this.myEarthLineChart);
-          } else {
-            this.myLineChart = echarts3_0.init(document.getElementById(lineid));
-            this.charts.push(this.myWaterLineChart);
-          }
+          this.myLineChart = echarts3_0.init(document.getElementById(lineid));
           this.setLineOptions(linedatalist);
-          /* 将所有charts放入数组，以实现缩放 */
         }
         /* 将所有charts放入数组，以实现缩放 */
-        // this.charts.push(this.myLineChart);
+        this.charts.push(this.myLineChart);
       });
     },
     setLineOptions(lineseriesvalue) {
@@ -651,7 +634,8 @@ export default {
         color: ["#CCCC99", "#9999CC"],
         // color: ["#9999cc"],
         legend: {
-          data: ["样本值", "平均值"],
+          // data: ["样本值", "平均值"],
+          data: ["样本值","17国标值"],
           x: "center",
           y: "55"
         },
@@ -668,11 +652,11 @@ export default {
           x2: "2%",
           y: "120",
           feature: {
-            mark: { show: true },
-            dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ["line", "bar"] },
-            restore: { show: true },
-            saveAsImage: { show: true }
+            // mark: { show: true },
+            // dataView: { show: true, readOnly: false },
+            // magicType: { show: true, type: ["line", "bar"] },
+            // restore: { show: true },
+            // saveAsImage: { show: true }
           }
         },
         calculable: true,
@@ -686,8 +670,10 @@ export default {
         yAxis: [
           {
             type: "value",
+            name: "单位: " + lineseriesvalue.unit,
             axisLabel: {
-              formatter: "{value}" + lineseriesvalue.unit
+              // formatter: "{value}" + lineseriesvalue.unit
+              // formatter: "{value}" 
             }
           }
         ],
@@ -709,7 +695,7 @@ export default {
                 { type: "min", name: "最小值" }
               ]
             },
-            markLine: {
+            /* markLine: {
               data: [
                 [
                   {
@@ -726,13 +712,14 @@ export default {
                   }
                 ] //如何获取grid上侧最大值，目前是写死的
               ]
-            }
+            } */
           },
           {
-            name: "平均值",
+            name: "17国标值",
             type: "line",
             // data: [4, 5, 6, 16, 3, 1, 20, 12, 12, 11],
-            data: lineseriesvalue.mean_value,
+            // data: lineseriesvalue.mean_value,
+            data: lineseriesvalue.Threshold17,
             itemStyle: {
               normal: {
                 lineStyle: {
@@ -744,9 +731,8 @@ export default {
         ]
       });
     },
+    /* 获得土壤折线图数据——通过listquery & pointnum & this.assessListQuery */
     async getEarthLineOptions(listquery, pointnum) {
-      //getAllFoldData
-      // if (listquery == -1 || listquery == null) {
       if (listquery == -1) {
         let p = this.temp_tableItems.findIndex(
           item => item.point_num == pointnum
@@ -759,12 +745,12 @@ export default {
         this.temp_tableItems[p].lineseries["unit"] = null;
       } else {
         let p = this.temp_tableItems.findIndex(
-            item => item.point_num == pointnum
-          );
-        if(listquery == null){
+          item => item.point_num == pointnum
+        );
+        if (listquery == null) {
           listquery = this.temp_tableItems[p].listQueryOptions[0].value;
         }
-        if(listquery !== null && listquery !== -1){
+        if (listquery !== null && listquery !== -1) {
           let combined_pn_at_e = {
             point_num: pointnum,
             assess_type: this.assessListQuery,
@@ -783,8 +769,6 @@ export default {
               item => item.point_num == pointnum
             );
             let temp_res = res.data.res[0];
-            // this.temp_tableItems[p].lineseries = {};
-            //把选中的元素的中文名称push到barSeries[4]
             let elementname = null;
             this.barElementOptions.find(item => {
               if (item.value === listquery) {
@@ -800,7 +784,7 @@ export default {
             this.temp_tableItems[p].lineseries["unit"] = temp_res.unit;
             this.temp_tableItems[p].lineseries["elementname"] = elementname;
           }
-        }else{
+        } else {
           this.temp_tableItems[p].lineseries["xAxis"] = [];
           this.temp_tableItems[p].lineseries["data"] = [];
           this.temp_tableItems[p].lineseries["Threshold17"] = null;
@@ -810,14 +794,12 @@ export default {
         
       }
     },
+    /* 获得水折线图数据——通过listquery & pointnum & this.assessListQuery */
     async getWaterLineOptions(listquery, pointnum) {
-      //getAllWaterFoldData
-      // if (listquery == -1 || listquery == null) {
       if (listquery == -1) {
         let p = this.temp_water_tableItems.findIndex(
           item => item.point_num == pointnum
         );
-        // this.temp_tableItems[p].lineseries = {};
         this.temp_water_tableItems[p].lineseries["xAxis"] = [];
         this.temp_water_tableItems[p].lineseries["data"] = [];
         this.temp_water_tableItems[p].lineseries["Threshold17"] = null;
@@ -825,12 +807,12 @@ export default {
         this.temp_water_tableItems[p].lineseries["unit"] = null;
       } else {
         let p = this.temp_water_tableItems.findIndex(
-            item => item.point_num == pointnum
-          );
-        if(listquery == null){
+          item => item.point_num == pointnum
+        );
+        if (listquery == null) {
           listquery = this.temp_water_tableItems[p].listQueryOptions[0].value;
         }
-        if(listquery !== null && listquery !== -1){
+        if (listquery !== null && listquery !== -1) {
           let combined_pn_at_e = {
             point_num: pointnum,
             assess_type: this.assessListQuery,
@@ -849,7 +831,7 @@ export default {
             let p = this.temp_water_tableItems.findIndex(
               item => item.point_num == pointnum
             );
-            listquery = this.temp_water_tableItems[p].listQueryOptions[0].value
+            listquery = this.temp_water_tableItems[p].listQueryOptions[0].value;
             let temp_res = res.data.res[0];
             let elementname = null;
             this.barElementOptions.find(item => {
@@ -857,7 +839,6 @@ export default {
                 elementname = item.label;
               }
             });
-            // this.temp_water_tableItems[p].lineseries = {};
             this.temp_water_tableItems[p].lineseries["xAxis"] = temp_res.sample;
             this.temp_water_tableItems[p].lineseries["data"] = temp_res.data1;
             this.temp_water_tableItems[p].lineseries["Threshold17"] =
@@ -865,10 +846,11 @@ export default {
             this.temp_water_tableItems[p].lineseries["mean_value"] =
               temp_res.mean_value;
             this.temp_water_tableItems[p].lineseries["unit"] = temp_res.unit;
-            this.temp_water_tableItems[p].lineseries["elementname"] = elementname;
-          } 
-        }else{
-          // this.temp_tableItems[p].lineseries = {};
+            this.temp_water_tableItems[p].lineseries[
+              "elementname"
+            ] = elementname;
+          }
+        } else {
           this.temp_water_tableItems[p].lineseries["xAxis"] = [];
           this.temp_water_tableItems[p].lineseries["data"] = [];
           this.temp_water_tableItems[p].lineseries["Threshold17"] = null;
@@ -882,7 +864,10 @@ export default {
     async handleEarthLineElementSelect(pointnum) {
       if (this.lineElementListQuery[pointnum] !== -1) {
         //如果有超标元素
-        await this.getEarthLineOptions(this.lineElementListQuery[pointnum], pointnum);
+        await this.getEarthLineOptions(
+          this.lineElementListQuery[pointnum],
+          pointnum
+        );
         let p = this.temp_tableItems.findIndex(
           earthitems => earthitems.point_num == pointnum
         );
@@ -900,7 +885,10 @@ export default {
     /* 水表格折线图的选择器响应 */
     async handleWaterLineElementSelect(pointnum) {
       if (this.waterlineElementListQuery[pointnum] !== -1) {
-        await this.getWaterLineOptions(this.waterlineElementListQuery[pointnum], pointnum);
+        await this.getWaterLineOptions(
+          this.waterlineElementListQuery[pointnum],
+          pointnum
+        );
         let p = this.temp_water_tableItems.findIndex(
           wateritems => wateritems.point_num == pointnum
         );
@@ -914,24 +902,19 @@ export default {
       }
     },
 
-    /* 画雷达图 */
     drawRadar(radarid, radardatalist) {
       this.$nextTick(async () => {
         if (document.getElementById(radarid) !== null) {
-          if (this.activeName == "earth") {
-            this.myRadarChart = echarts.init(document.getElementById(radarid));
-            this.charts.push(this.myEarthRadarChart);
-          } else {
-            this.myRadarChart = echarts.init(document.getElementById(radarid));
-            this.charts.push(this.myWaterRadarChart);
-          }
-
+          // 获取要渲染的雷达dom
+          this.myRadarChart = echarts.init(document.getElementById(radarid));
+          // 设置数据
           this.setRadarOptions(radardatalist);
-          /* 将所有charts放入数组，以实现缩放 */
-          // this.charts.push(this.myRadarChart);
+          // 将所有charts放入数组，以实现缩放
+          this.charts.push(this.myRadarChart);
         }
       });
     },
+    /* 获取土壤雷达图数据 */
     async getEarthRadarOptions(pointnum) {
       let combined_pn_at = {
         point_num: pointnum,
@@ -961,7 +944,8 @@ export default {
           res1_radarseries.hasOwnProperty("depth3") == true &&
           res1_radarseries.hasOwnProperty("depth4") == false
         ) {
-          legend = ["17国标", "18国标", "深度一", "深度二", "深度三"];
+          legend = ["17国标", "深度一", "深度二", "深度三"];
+          // legend = ["17国标", "18国标", "深度一", "深度二", "深度三"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -975,7 +959,7 @@ export default {
                 }
               }
             },
-            {
+/*             {
               value: res1_radarseries.Threshold18,
               name: "18国标",
               itemStyle: {
@@ -986,7 +970,7 @@ export default {
                   }
                 }
               }
-            },
+            }, */
             {
               value: res1_radarseries.depth1,
               name: "深度一"
@@ -1001,7 +985,8 @@ export default {
             }
           ];
         } else if (res1_radarseries.hasOwnProperty("depth4") == true) {
-          legend = ["17国标", "18国标", "深度一", "深度二", "深度三", "深度四"];
+          legend = ["17国标", "深度一", "深度二", "深度三", "深度四"];
+          // legend = ["17国标", "18国标", "深度一", "深度二", "深度三", "深度四"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -1015,7 +1000,7 @@ export default {
                 }
               }
             },
-            {
+ /*            {
               value: res1_radarseries.Threshold18,
               name: "18国标",
               itemStyle: {
@@ -1026,7 +1011,7 @@ export default {
                   }
                 }
               }
-            },
+            }, */
             {
               value: res1_radarseries.depth1,
               name: "深度一"
@@ -1045,7 +1030,8 @@ export default {
             }
           ];
         } else {
-          legend = ["17国标", "18国标", "深度一"];
+          legend = ["17国标", "深度一"];
+          // legend = ["17国标", "18国标", "深度一"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -1059,7 +1045,7 @@ export default {
                 }
               }
             },
-            {
+/*             {
               value: res1_radarseries.Threshold18,
               name: "18国标",
               itemStyle: {
@@ -1070,7 +1056,7 @@ export default {
                   }
                 }
               }
-            },
+            }, */
             {
               value: res1_radarseries.depth1,
               name: "深度一"
@@ -1083,6 +1069,7 @@ export default {
         this.temp_tableItems[p].radarseries["data"] = combined_data;
       }
     },
+    /* 获取水雷达图数据 */
     async getWaterRadarOptions(pointnum) {
       let combined_pn_at = {
         point_num: pointnum,
@@ -1111,7 +1098,8 @@ export default {
           res1_radarseries.hasOwnProperty("depth2") &&
           res1_radarseries.hasOwnProperty("depth1")
         ) {
-          legend = ["17国标", "18国标", "深度一", "深度二"];
+          legend = ["17国标", "深度一", "深度二"];
+          // legend = ["17国标", "18国标", "深度一", "深度二"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -1125,7 +1113,7 @@ export default {
                 }
               }
             },
-            {
+/*             {
               value: res1_radarseries.Threshold18,
               name: "18国标",
               itemStyle: {
@@ -1136,18 +1124,19 @@ export default {
                   }
                 }
               }
-            },
+            }, */
             {
               value: res1_radarseries.depth1,
               name: "深度一"
             },
             {
               value: res1_radarseries.depth2,
-              name: "深度二" 
+              name: "深度二"
             }
           ];
         } else {
-          legend = ["17国标", "18国标", "深度一"];
+          legend = ["17国标", "深度一"];
+          // legend = ["17国标", "18国标", "深度一"];
           combined_data = [
             {
               value: res1_radarseries.Threshold17,
@@ -1161,7 +1150,7 @@ export default {
                 }
               }
             },
-            {
+/*             {
               value: res1_radarseries.Threshold18,
               name: "18国标",
               itemStyle: {
@@ -1172,7 +1161,7 @@ export default {
                   }
                 }
               }
-            },
+            }, */
             {
               value: res1_radarseries.depth1,
               name: "深度一"
@@ -1185,6 +1174,7 @@ export default {
         this.temp_water_tableItems[p].radarseries["data"] = combined_data;
       }
     },
+    /* 画雷达图 */
     setRadarOptions(radarserisevalue) {
       this.myRadarChart.setOption({
         title: {
@@ -1211,9 +1201,9 @@ export default {
           y: "150",
           feature: {
             // mark: { show: true },
-            dataView: { show: true, readOnly: false },
-            restore: { show: true },
-            saveAsImage: { show: true }
+            // dataView: { show: true, readOnly: false },
+            // restore: { show: true },
+            // saveAsImage: { show: true }
           }
         },
         polar: [
@@ -1249,7 +1239,7 @@ export default {
             name: "17国标 vs 实际值",
             type: "radar",
             symbol: "rect", // 拐点的样式，还可以取值'rect','angle'等
-            symbolSize: 4, // 拐点的大小
+            symbolSize: 1, // 拐点的大小
             areaStyle: {
               normal: {
                 width: 1,
@@ -1261,20 +1251,17 @@ export default {
         ]
       });
     },
-
+    /* 响应土壤表格的下拉按钮 ——获取雷达图和折线图的数据，并画图*/
     async handleEarthLineElementData(row) {
-      this.handleElementSelector(
-        "expand",
-        row.attention,
-        row.listQueryOptions,
+      await this.getEarthRadarOptions(row.point_num); //获取雷达图的数据，并存储于this.temp_tableItems[p].radarseries
+      await this.getEarthLineOptions(
+        this.lineElementListQuery[row.point_num],
         row.point_num
-      );
-      await this.getEarthRadarOptions(row.point_num);
-      await this.getEarthLineOptions(this.lineElementListQuery[row.point_num], row.point_num);
+      ); //获取雷达图的数据，并存储于this.temp_tableItems[p].lineseries
       let p = this.temp_tableItems.findIndex(
         earthitems => earthitems.point_num == row.point_num
       );
-      // :data="drawRadar('myRadarChart'+props.row.point_num, props.row.radarseries)"
+      //画雷达图和折线图
       this.drawRadar(
         "myEarthRadarChart" + row.point_num,
         this.temp_tableItems[p].radarseries
@@ -1284,15 +1271,13 @@ export default {
         this.temp_tableItems[p].lineseries
       );
     },
+    /* 响应水表格的下拉按钮 ——获取雷达图和折线图的数据，并画图*/
     async handleWaterLineElementData(row) {
-      this.handleElementSelector(
-        "expand",
-        row.attention,
-        row.listQueryOptions,
+      await this.getWaterRadarOptions(row.point_num); //获取雷达图的数据，并存储于this.temp_water_tableItems[p].radarseries
+      await this.getWaterLineOptions(
+        this.waterlineElementListQuery[row.point_num],
         row.point_num
-      );
-      await this.getWaterRadarOptions(row.point_num);
-      await this.getWaterLineOptions(this.waterlineElementListQuery[row.point_num], row.point_num);
+      ); //获取雷达图的数据，并存储于this.temp_water_tableItems[p].lineseries
       let p = this.temp_water_tableItems.findIndex(
         earthitems => earthitems.point_num == row.point_num
       );
@@ -1306,9 +1291,11 @@ export default {
       );
     },
 
-    handleElementSelector(expand, attention, listqueryoptions, pointnum) {
+    /* 柱状图选择器选项生成 */
+    handleElementSelector(attention, listqueryoptions, pointnum) {
       this.temp_barElementOptions = [];
       if (attention[0] == "无") {
+        // 如果没有超标元素，则给temp_barElementOptions赋值为无超标元素
         this.temp_barElementOptions = [
           {
             label: "无超标元素",
@@ -1316,6 +1303,7 @@ export default {
           }
         ];
       } else {
+        // 如果有超标元素，对temp_barElementOptions赋值
         for (let i of attention) {
           this.barElementOptions.map(item => {
             if (item.label == i) {
@@ -1324,40 +1312,27 @@ export default {
             }
           });
         }
-        if (expand == "expand") {
-          let elementname = null;
-          this.barElementOptions.find(item => {
-            if (item.value === listqueryoptions[0].value) {
-              elementname = item.label;
-            }
-          });
-          if(this.activeName == "earth"){
-            // this.lineElementListQuery[pointnum] = listqueryoptions[0].value;
-          }else{
-            // this.waterlineElementListQuery[pointnum] = listqueryoptions[0].value;
-          }
-          
-        } else {
-          //如果expand 等于bar
-          this.barElementListQuery = listqueryoptions[0].value;
-        }
+        this.barElementListQuery = listqueryoptions[0].value;
       }
     }
   },
   mounted() {
-    // this.getData();
+    // 渲染之前先获得级联选择器的数据
     this.getNewCascaderData();
+    // 定义窗口的监听事件
     if (this.autoResize) {
       this.__resizeHandler = debounce(() => {
         if (this.charts) {
+          console.log("this.charts", this.charts);
           this.charts.forEach(item => {
             item.resize();
           });
         }
       }, 100);
+      // 事件监听
       window.addEventListener("resize", this.__resizeHandler);
     }
-  },
+  }
 };
 </script>
 
