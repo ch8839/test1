@@ -28,6 +28,37 @@ const getAttentionByPointnum = async function(point_num){
         
         list.push(item.attention)
     }
+    for(let i of list){
+        var temp=i.split(',')
+        for(let y of temp){
+            returnlist.push(y)
+        }
+    }
+    // console.log(returnlist)
+    var x = new Set(returnlist);
+var xlist=Array.from(x)
+
+    return xlist
+
+}
+const getAttentionByAssessTypePointnum = async function(assess_type,point_num){
+    // const list=new Set()
+    var list=[]
+    var returnlist=[]
+    const AllProjectData = await sample_detector_ground_info_Schema.findAll({
+        where:{
+            assess_type:assess_type,
+            point_num: point_num
+        }
+    })
+    let res2 = AllProjectData.map(item=>{
+        return item = item.dataValues
+      })
+    for(let item of res2){
+        
+        
+        list.push(item.attention)
+    }
     // console.log(1122,list)
     for(let i of list){
         var temp=i.split(',')
@@ -43,7 +74,6 @@ var xlist=Array.from(x)
     return xlist
 
 }
-
 const getAlldata = async function(){
     const AllProjectData = await sample_detector_ground_info_Schema.findAll({
        
@@ -53,25 +83,26 @@ const getAlldata = async function(){
 }
 
 
-const UpdateCount = async function(id,sample_num,count){
+const UpdateCount = async function(id,sample_num,assess_type,count){
     await sample_detector_ground_info_Schema.update({
         count:count,      
     },{
         where:{
             point_num:id,
             sample_num:sample_num,
+            assess_type:assess_type,
         }
     })
     return true
 }
 
 
-const UpdateAttention = async function(sample_num,attention){
+const UpdateAttention = async function(point_num,sample_num,attention){
     await sample_detector_ground_info_Schema.update({
         attention:attention,      
     },{
         where:{
-            
+            point_num:point_num,
             sample_num:sample_num,
         }
     })
@@ -144,5 +175,6 @@ module.exports = {
     UpdateAttention,
     AddNewData,
     getmaxbyattention,
+    getAttentionByAssessTypePointnum,
 
 }

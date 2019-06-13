@@ -85,26 +85,44 @@
       >
         <!--项目体点击表格显示 -->
         <div>
-          <div class="windows_title" align="center">{{window.ground_name + "项目体"}}</div>
+          <div class="windows_title" align="center">
+            <span style="margin-left: 1px;">{{window.ground_name + "项目体"}}</span>
+            <el-button size="small" type="info" icon="el-icon-message" round style="margin-left: 30px;" @click="transfer_table(window.project_num)">
+            详细信息
+            </el-button>
+            </div>
+          <!-- <el-button @click="resetGroundFilter">清除地块过滤器</el-button> -->
           <div class="windows_content">
+
+            <!-- <el-button @click="clearFilter">清除所有过滤器</el-button> -->
             <el-table
               :data="groundData"
-              height="280"
+              height="300"
               size:mimi
               style="width: 100% height: 100%"
               rules="none"
             >
-              <el-table-column prop="point_num" label="点位编号" align="center" width="185px" sortable>
+              <el-table-column prop="point_num" label="点位编号" align="center" width="160px" sortable>
                 <template slot-scope="scope">
-                  <span style="margin-left: 2px">{{ scope.row.point_num }}</span>
+                  <span style="margin-left: 1px">{{ scope.row.point_num }}</span>
+                  <!-- <i class="el-icon-view el-icon--right" @click="transfer_table(window.project_num,scope.row.point_num)"></i> -->
                 </template>
               </el-table-column>
-              <el-table-column prop="introduction" label="点位描述" width="160px" align="center">
+              <el-table-column prop="introduction" label="点位描述" width="95px" align="center">
                 <template slot-scope="scope">
                   <span style="margin-left: 1px;">{{ scope.row.introduction }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="attention" label="主要污染物" width="125px" align="center">
+              <el-table-column prop="assess_type" label="调查类型" width="95px" align="center" 
+                :filters="[{text: '初步调查', value: '初步调查'}, {text: '详细调查', value: '详细调查'}, {text: '治理修复', value: '治理修复'}]"
+                :filter-method="filterTag"
+                filter-placement="bottom-end">
+                <template slot-scope="scope">
+                  <el-tag :type="scope.row.assess_type == '0' ? 'primary' :(scope.row.assess_type == '1'?'danger':'success')" 
+                  disable-transitions>{{assess_type_options[scope.row.assess_type].label }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="attention" label="主要污染物" width="130px" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.attention.length">
                     <el-tag
@@ -120,11 +138,11 @@
               </el-table-column>
             </el-table>
           </div>
-          <el-badge class="badge_style">
-            <el-button size="small" type="info" icon="el-icon-message" round @click="toTable">
-              详细信息
+          <!-- <el-badge class="badge_style">
+            <el-button size="small" type="info" icon="el-icon-message" round>
+              <a @click="transfer_table(window.project_num)">详细信息</a>
             </el-button>
-          </el-badge>
+          </el-badge> -->
         </div>
       </el-amap-info-window>
 
@@ -172,24 +190,6 @@ window.onload = function() {
 
 export default {
   name: "amap-page",
-  props: {
-    className: {
-      type: String,
-      default: "chart"
-    },
-    width: {
-      type: String,
-      default: "450px"
-    },
-    height: {
-      type: String,
-      default: "450px"
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
-    }
-  },
 
   data: function() {
     return {
@@ -205,17 +205,22 @@ export default {
       point_markers: [],
       zoom: 12,
       center: [121.457624, 31.27586],
+     selectedAssessType : 0,
       events: {
         init: o => {
           this.$refs.map.$$getInstance().setFitView();
           //console.log(1, o.getCenter()); //获取地图中心
           //console.log(2, this.$refs.map.$$getInstance()); //获取地图实例
           o.getCity(result => {
-            console.log(3, result);
+            // console.log(3, result);
           });
         },
         moveend: () => {},
+        zoomstart:() => {
+          this.window.visible = false            
+          this.window1.visible = false},
         zoomchange: () => {
+          
           if (this.$refs.map.$$getInstance().getZoom() > 15) {
             //监控比例尺变化，实现地图缩放
             this.projectWindow.visible = false;
@@ -228,6 +233,7 @@ export default {
             this.projectWindow.visible = true;
             this.polygons_window = false;
           }
+
         },
         click: e => {
           //this.$refs.map.$$getInstance().setFitView()
@@ -306,7 +312,18 @@ export default {
   },
 
   methods: {
+    resetGroundFilter() {
+        this.$refs.filterTable.clearFilter('date');
+      },
+    //表格过滤器
+    filterTag(value, row) {
+        return this.assess_type_options[row.assess_type].label === value;
+      },
 
+    // 转移到陈刚表格详细信息
+    transfer_table(project_num){
+      console.log("转移测试",project_num)
+    },
     async show_point(index, project_number) {
       //显示监测点一级信息
       this.windows.forEach(item => {
@@ -314,13 +331,13 @@ export default {
       });
       this.window = this.windows[index];
       this.center = this.windows[index].position;
-      this.zoom = 16;
+      this.zoom = 15;
       this.projectWindow.visible = true;
       this.pointWindow.visible = true;
       this.$nextTick(() => {
-        this.window.visible = false;
+        this.window1.visible = false;
         this.projectWindow.visible = false;
-        this.center = this.window.positions;
+        this.center = this.window.position2;
         this.zoom = 17;
       });
 
@@ -352,27 +369,28 @@ export default {
       // })
       this.window.visible = false;
       this.window = this.windows[index];
-      this.center = this.windows[index].positions;
-      this.zoom = 13;
+      this.center = this.windows[index].position;
+      this.zoom = 11;
       this.$nextTick(() => {
         this.window.visible = true;
         this.pointWindow.visible = false;
         this.center = this.window.positions;
         console.log("项目体坐标点", this.center);
-        this.zoom = 14;
+        this.zoom = 13;
         console.log("zoom", this.$refs.map.$$getInstance().getZoom());
         //console.log("center", this.$refs.map.$$getInstance().target.getPosition());
       });
       let res3 = await getGroundList(project_number);
-      console.log(res3);
+      console.log("getGroundList",res3);
       let ground_data = res3.data.res;
       let groundData = [];
       ground_data.forEach((item, index) => {
         groundData.push({
           id: index,
           point_num: item.point_num,
-          introduction: item.introduction,
-          attention: item.attention
+          introduction: item.introduction.substring(4),
+          attention: item.attention,
+          assess_type :item.assess_type-1
         });
       });
       this.groundData = groundData;
@@ -387,13 +405,13 @@ export default {
       });
       console.log(this.$refs.map.$$getInstance().getZoom());
       this.window1 = this.point_window[index];
-      //this.center = this.window1.position;
-      //this.zoom=16;
+      this.center = this.window1.position;
+      this.zoom=15;
       this.$nextTick(() => {
         this.window1.visible = true;
-        //this.center = this.window1.position;
+        this.center = this.window1.position;
         console.log("监测点坐标点", this.center);
-        //this.zoom=17
+        this.zoom=17
       });
 
       let res4 = await getMoreDataByPointnum(point_num);
@@ -405,16 +423,8 @@ export default {
         return item;
       });
       this.pointData = pointData;
-    },
-
-    toTable(){
-      this.$router.push({path: '/table/detail-table'})
     }
   },
-
-  
-
-  
 
   async mounted() {
     let res1 = await getMarkerInfo();
@@ -428,14 +438,6 @@ export default {
       ground_markers.push({
         id: index,
         position: [item.project_lng, item.project_lat],
-
-        path: [
-          [item.project_lng - 0.005, item.project_lat + 0.005],
-          [item.project_lng + 0.005, item.project_lat + 0.005],
-          [item.project_lng + 0.005, item.project_lat - 0.005],
-          [item.project_lng - 0.005, item.project_lat - 0.005]
-        ],
-
         ground_name: item.project_name,
         ground_num: item.project_num,
         count: item.all_count,
@@ -446,10 +448,11 @@ export default {
 
       ground_windows.push({
         visible: false,
-        position: [item.project_lng + 0.001, item.project_lat + 0.001],
+        position: [item.project_lng + 0.003, item.project_lat + 0.003],
         ground_name: item.project_name,
         project_num: item.project_num,
-        positions: [item.project_lng, item.project_lat]
+        positions: [item.project_lng, item.project_lat + 0.015],
+        position2: [item.project_lng, item.project_lat]   //地块轮廓中心
       });
     });
     console.log("markers", ground_markers);
@@ -490,6 +493,24 @@ export default {
     });
     this.point_markers = point_markers;
     this.point_window = point_window;
+  },
+  computed: {
+    assess_type_options() {
+      return [
+        {
+          value: 1,
+          label: '初步调查'
+        },
+        {
+          value: 2,
+          label: '详细调查'
+        },
+        {
+          value: 3,
+          label: '修复调查'
+        }
+      ]
+    }
   }
 };
 </script>
@@ -625,11 +646,12 @@ export default {
 
 .windows_title {
   white-space: nowrap;
-  background-color: #cccccc;
+  background-color:#409EFF;
   padding: 3px 0px;
   width: 100%;
-  color: #333333;
-  font-size: 15px;
+  color: #f8f5f5;
+  font-family: sans-serif;
+  font-size: 16px;
   font-weight: bold;
   line-height: 35px;
 }

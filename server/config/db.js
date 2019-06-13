@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-const theDb = new Sequelize('tank', 'root', 'admin', {
+const theDb = new Sequelize('tank', 'root', 'helpful', {
     host: 'localhost',
     dialect: 'mysql',
     define:{
