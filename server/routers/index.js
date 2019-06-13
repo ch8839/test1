@@ -16,6 +16,8 @@ const echart_Controller_0 = require('../controller/echarts/echart_0.js')
 const echart_Controller = require('../controller/echarts/echart.js')
 const echart_ground_Controller = require('../controller/echarts/echart_ground.js')
 const echart_water_Controller = require('../controller/echarts/echart_water.js')
+const echart_groundComputer_Controller = require('../controller/echarts/statistic_ground_value.js')
+const echart_waterComputer_Controller = require('../controller/echarts/statistic_water_value.js')
 
 //map模块
 const mapController = require('../controller/map/data.js')
@@ -59,6 +61,8 @@ router.post('/waterecharts/getRadarWaterEachDepthValue', echart_water_Controller
 router.post('/waterecharts/getWaterHistogramData', echart_water_Controller.getWaterHistogramData)
 router.post('/groundecharts/getAllFoldData', echart_ground_Controller.getAllFoldData)//得到土壤的监测点位下的样本信息的折线图
 router.post('/waterecharts/getAllWaterFoldData', echart_water_Controller.getAllWaterFoldData)//得到水的监测点位下的样本信息的折线图
+router.post('/watercharts/ComputeWaterHistogramElementValue', echart_waterComputer_Controller.ComputeWaterHistogramElementValue)//计算水的直方图统计数据
+router.post('/watercharts/ComputeWaterRadarElementEachDepthValue', echart_waterComputer_Controller.ComputeWaterRadarElementEachDepthValue)//计算水类型2下的雷达图统计数据
 
 //map部分
 router.get('/data/getMarkerInfo' , mapController.getMarkerInfo) //1

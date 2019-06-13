@@ -89,10 +89,11 @@ class echart_Controller{
           delete item.reference_num;
           Threshold17.push(item)
         
-        }else if(item.reference_num == '18国标'){
-          delete item.reference_num;
-          Threshold18.push(item)
         }
+        // else if(item.reference_num == '18国标'){
+        //   delete item.reference_num;
+        //   Threshold18.push(item)
+        // }
       
     })
     // console.log(4865963, Threshold) 
@@ -152,36 +153,49 @@ class echart_Controller{
     let arr3 =[]
     let arr4 =[]
     let arr5 =[]
-    AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0])
+    // AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0])
+    AllData.push(Threshold17[0],depth1[0],depth2[0],depth3[0])
     
     for(let i=0;i<AllData.length;i++){
             for(let key in AllData[0] ){
-              if(AllData[2][key]=='0'&& AllData[3][key] =='0'&& AllData[4][key] =='0'){
+              if(AllData[1][key]=='0'&& AllData[2][key] =='0'&& AllData[3][key] =='0'){
               //  arr119.push({text:key,max:AllData[0][key]});
                   delete AllData[0][key];
                   delete AllData[1][key];
                   delete AllData[2][key];
                   delete AllData[3][key];
-                  delete AllData[4][key];
-                 
-               }
-               
+                  // delete AllData[4][key];
+               } 
              }
-      
     }
+    
     console.log(3333333333333,AllData)
-    let obj_max = AllData.reduce((acu, cur)=>{
-        for(let key in cur){
-         acu[key] = Number(cur[key])>Number(acu[key]) ?  cur[key]: acu[key]
-            // console.log(999999999,acu)
+    // let obj_max = AllData.reduce((acu, cur)=>{
+    //     for(let key in cur){
+    //      acu[key] = Number(cur[key])>Number(acu[key]) ?  cur[key]: acu[key]
+    //         // console.log(999999999,acu)
+    //     }
+        
+    //     return acu
+    // })
+    // console.log(11111111,obj_max)
+   
+    let obj_max = []
+    for(let key in AllData[0]){
+      obj_max[key] = (AllData[0][key]*5).toFixed(3)
+    }
+
+    AllData.forEach((item)=>{
+      for(let key in item ){
+        if(Number(item[key])> Number(obj_max[key])){
+          item[key] = obj_max[key]
         }
-        return acu
+      }
     })
-    console.log(11111111111,obj_max)
-    // for(let key in obj_max){
-    //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-    // }
-    // console.log(222222222222,obj_max)
+  
+    console.log(222222222222,obj_max)
+  
+   
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -197,11 +211,12 @@ class echart_Controller{
       arr2.push( Number(AllData[1][key]));
       arr3.push( Number(AllData[2][key]));
       arr4.push( Number(AllData[3][key]));
-      arr5.push( Number(AllData[4][key]));
+      // arr5.push( Number(AllData[4][key]));
      
     }
 
-    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5})
+    // all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5})
+    all.push({max:AllRadarData,Threshold17:arr1,depth1:arr2,depth2:arr3,depth3:arr4})
     
    
     ctx.body = {
@@ -281,35 +296,45 @@ class echart_Controller{
     let arr4 =[]
     let arr5 =[]
     let arr6 =[]
-    AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0],depth4[0])
+    // AllData.push(Threshold17[0],Threshold18[0],depth1[0],depth2[0],depth3[0],depth4[0])
+    AllData.push(Threshold17[0],depth1[0],depth2[0],depth3[0],depth4[0])
     
 
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[2][key]=='0'&& AllData[3][key] =='0'&& AllData[4][key] =='0'&& AllData[5][key] =='0'){
+        if(AllData[1][key]=='0'&& AllData[2][key] =='0'&& AllData[3][key] =='0'&& AllData[4][key] =='0'){
         //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
             delete AllData[1][key];
             delete AllData[2][key];
             delete AllData[3][key];
             delete AllData[4][key];
-            delete AllData[5][key];
+            // delete AllData[5][key];
             
         } 
       }
     }
+    console.log(8888888888888888,AllData)
 
-    let obj_max = AllData.reduce((acu, cur)=>{
-      for(let key in cur){
-          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
-      }
-      return acu
-    })
-  //   console.log(11111111111111,obj_max)
-  //  for(let key in obj_max){
-  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-  //  }
-  //  console.log(758496,obj_max)
+    // let obj_max = AllData.reduce((acu, cur)=>{
+    //   for(let key in cur){
+    //       acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    //   }
+    //   return acu
+    // })
+    
+    let obj_max = []
+    for(let key in AllData[0]){
+      obj_max[key] = (AllData[0][key]*5).toFixed(3)
+      
+    }
+    AllData.forEach((item)=>{
+      for(let key in item ){
+        if(Number(item[key])> Number(obj_max[key])){
+          item[key] = obj_max[key]
+        }
+      }})
+      console.log(66666666666,AllData)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -326,10 +351,11 @@ class echart_Controller{
       arr3.push( Number(AllData[2][key]));
       arr4.push( Number(AllData[3][key]));
       arr5.push( Number(AllData[4][key]));
-      arr6.push( Number(AllData[5][key]));
+      // arr6.push( Number(AllData[5][key]));
     }
 
-    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5,depth4:arr6})
+    // all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3,depth2:arr4,depth3:arr5,depth4:arr6})
+    all.push({max:AllRadarData,Threshold17:arr1,depth1:arr2,depth2:arr3,depth3:arr4,depth4:arr5})
     
 
       ctx.body = {
@@ -360,32 +386,42 @@ class echart_Controller{
     let arr3 =[]
     let AllData =[]
     let AllRadarData = []
-    AllData.push(Threshold17[0],Threshold18[0],type3Data[0])
+    // AllData.push(Threshold17[0],Threshold18[0],type3Data[0])
+    AllData.push(Threshold17[0],type3Data[0])
     
     for(let i=0;i<AllData.length;i++){
       for(let key in AllData[0] ){
-        if(AllData[2][key]=='0'){
+        if(AllData[1][key]=='0'){
         //  arr119.push({text:key,max:AllData[0][key]});
             delete AllData[0][key];
-            delete AllData[1][key];
-            delete AllData[2][key];
+            delete AllData[1][key]; 
+            // delete AllData[2][key];
            
             
         } 
       }
     }
 
-    let obj_max = AllData.reduce((acu, cur)=>{
-      for(let key in cur){
-          acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    // let obj_max = AllData.reduce((acu, cur)=>{
+    //   for(let key in cur){
+    //       acu[key] = Number(cur[key])>Number(acu[key]) ? cur[key]:acu[key]
+    //   }
+    //   return acu
+    // })
+    
+    let obj_max = []
+    for(let key in AllData[0]){
+      obj_max[key] = (AllData[0][key]*5).toFixed(3)
+      
+    }
+
+    AllData.forEach((item)=>{
+      for(let key in item ){
+        if(Number(item[key])> Number(obj_max[key])){
+          item[key] = obj_max[key]
+        }
       }
-      return acu
     })
-  //   console.log(11111111111111,obj_max)
-  //  for(let key in obj_max){
-  //   obj_max[key] = (Number(obj_max[key])/0.8).toFixed(4)
-  //  }
-  //  console.log(758496,obj_max)
 
     for (let key in AllData[0]) {
       if (AllData[0][key] && element_Map.has(key)) {
@@ -397,11 +433,12 @@ class echart_Controller{
       }
       arr1.push( Number(AllData[0][key]));
       arr2.push( Number(AllData[1][key]));
-      arr3.push( Number(AllData[2][key]));
+      // arr3.push( Number(AllData[2][key]));
      
     }
 
-    all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})
+    // all.push({max:AllRadarData,Threshold17:arr1,Threshold18:arr2,depth1:arr3})
+    all.push({max:AllRadarData,Threshold17:arr1,depth1:arr2})
     ctx.body = {
       success: true,
       res:all,
@@ -409,14 +446,6 @@ class echart_Controller{
     }
 
   }
-  
-    
-
-
-
-
-
-
     
  };//对应于雷达图里面的在一个调查类型下的一个监测点位中的不同深度的数据值
 
@@ -438,7 +467,11 @@ class echart_Controller{
   let res1 = res.map(item => {
     return item = item.dataValues
   })
-  console.log(11111111, res1)
+  
+  let sample_depth = res.map(item => {
+    return item = item.dataValues.sample_depth
+  })
+  console.log(11111111, sample_depth)
 
   let sample_num = res.map(item => {
     return item = item.dataValues.sample_num
@@ -449,21 +482,26 @@ class echart_Controller{
   let Sample = []
   for (let i=0;i<sample_num.length;i++){
     let x ;
-    x = i + 1 ;
-    Sample.push(x);
+    x = i  ;
+    Sample.push('样本'+'-'+ sample_depth[x]);
   }//转换形式
+  // sample_depth.forEach((item)=>{
+    
+  // })
 
   let Element_arr = []
   let Element_arr2 = []
   res1.forEach((item)=>{
     for(let key in item){
       delete item.sample_num
+      delete item.sample_depth
       if(item[key]==-1){
         item[key]='0'
       }
       Element_arr.push(item[key])
     } 
   })
+  // console.log(999999,Element_arr)
   res3.forEach((item)=>{
     for(let key in item){
       for(let i=0;i<Element_arr.length;i++){
@@ -473,9 +511,16 @@ class echart_Controller{
     } 
   })
 
+  let reference_value = []
+  for(let i=0;i<Element_arr.length;i++){
+    reference_value.push(reference_17_ground_Map.get(element))
+  }
+  console.log(4444444,reference_value)
+   
+
  
   let FoldData_arr = []
-  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_17_ground_Map.get(element),unit:unit_Map.get(element)})
+  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_value,unit:unit_Map.get(element)})
   // 监之前的数据全部push到数组里面
  
   ctx.body = {
