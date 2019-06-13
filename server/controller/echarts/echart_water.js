@@ -370,9 +370,16 @@ class echart_Controller{
     } 
   })
 
+  let reference_value = []
+  for(let i=0;i<Element_arr.length;i++){
+    reference_value.push(reference_17_water_Map.get(element))
+  }
+  console.log(4444444,reference_value)
+   
+
  
   let FoldData_arr = []
-  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_17_water_Map.get(element),unit:unit_Map.get(element)})
+  FoldData_arr.push({sample: Sample,data1: Element_arr ,mean_value:Element_arr2, reference_value:reference_value,unit:unit_Map.get(element)})
   // 监之前的数据全部push到数组里面
  
   ctx.body = {
