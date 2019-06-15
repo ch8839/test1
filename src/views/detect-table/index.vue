@@ -35,7 +35,7 @@
       <el-tabs v-model="activeName" @tab-click="switchTab">
         <el-tab-pane label="土壤信息" name="first">
           <el-table
-            v-loading="listLoading"
+
             :data="det_ground_list"
             border
             stripe

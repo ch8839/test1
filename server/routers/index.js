@@ -23,7 +23,6 @@ const echart_water_Controller = require('../controller/echarts/echart_water.js')
 const echart_groundComputer_Controller = require('../controller/echarts/statistic_ground_value.js')
 const echart_waterComputer_Controller = require('../controller/echarts/statistic_water_value.js')
 
-
 //map模块
 const mapController = require('../controller/map/data.js')
 const ComputeController = require('../controller/map/compute.js')

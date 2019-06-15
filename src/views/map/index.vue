@@ -87,7 +87,7 @@
         <div>
           <div class="windows_title" align="center">
             <span style="margin-left: 1px;">{{window.ground_name + "项目体"}}</span>
-            <el-button size="small" type="info" icon="el-icon-message" round style="margin-left: 30px;"  @click="transfer_table(window.project_num)">
+            <el-button size="small" type="info" icon="el-icon-message" round style="margin-left: 30px;" @click="transfer_table(window.project_num)">
             详细信息
             </el-button>
             </div>
@@ -651,7 +651,7 @@ export default {
   padding: 3px 0px;
   width: 100%;
   color: #f8f5f5;
-  font-family:"黑体";
+  font-family: sans-serif;
   font-size: 16px;
   font-weight: bold;
   line-height: 35px;

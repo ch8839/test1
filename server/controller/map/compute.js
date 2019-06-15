@@ -25,11 +25,11 @@ const ComputeCount = async function (ctx) {
       for (let x of res2) {
           var count=0
           for (let i in x){
-        if ( (x[i] > reference.get(i))) {
+        if (x[i] && reference.get(i) && (x[i] > reference.get(i))) {
          count+=1
         }
       }
-      const res = await sample_detector_ground_info_model.UpdateCount(x.point_num, x.sample_num, x.assess_type,count)
+      const res = await sample_detector_ground_info_model.UpdateCount(x.point_num, x.sample_num, count)
     }//这个过程结束后sample_detector_ground_info_model每个样本的count都会重新更新一遍
 // 接下来来更新project_info的count数据
        const res3 = await AllProjectDataModel.getAllProjectData()
@@ -105,7 +105,7 @@ const ComputeCount = async function (ctx) {
         }
 
         temp_attention = attention.join(",")
-        let data = await sample_detector_ground_info_model.UpdateAttention(i.point_num,i.sample_num,temp_attention)
+        let data = await sample_detector_ground_info_model.UpdateAttention(i.sample_num,temp_attention)
 
 }
 

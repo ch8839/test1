@@ -130,12 +130,11 @@ const getMarkerInfo = async function (ctx) {
 
   }//此处循环结束
   const token = ctx.header['shu-token']
-  var playload
-  var roles
   if (token) {
-      playload = await jwt.verify(token, secret)
-      console.log('playload', playload)
-      roles = await UserModel.getRolesByUser(playload.username)
+      var playload = await jwt.verify(token, secret)
+      var roles = await UserModel.getRolesByUser(playload.username)
+      var project_num = await UserModel.getProjectnumByUser(playload.username)
+
   }
   if(roles=='super admin'){
 
@@ -148,8 +147,7 @@ const getMarkerInfo = async function (ctx) {
     }
   }
   else{
-    var project_owner = playload.project_owner
-    var project_num_List=project_owner.split('、')
+    var project_num_List=project_num.split('、')
     const res11 = await AllProjectDataModel.getDataByProjectnum(project_num_List)
    
    
