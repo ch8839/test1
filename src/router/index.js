@@ -8,7 +8,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
-
+import display from '@/views/display/index'
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -60,46 +60,47 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/table',
+    path: '/display',
+    hidden: true,
+    name: 'Display',
+    component: display
+  },
+
+  {
+    path: '/ros-data',
     component: Layout,
-    redirect: '/table/detail-table',
-    name: 'Table',
+    redirect: '/ros-data/realtime',
+    name: 'rosData',
     meta: {
-      title: '表格数据',
+      title: '数据展示',
       icon: 'example',
       // roles: ['super admin']
     },
     children: [
       {
-        path: 'detail-table',
-        name: 'DetailTable',
-        component: () => import('@/views/detail-table/index'),
-        meta: { title: '详细数据', icon: 'form' }
+        path: 'realtime',
+        name: 'Realtime',
+        component: () => import('@/views/realtime/index'),
+        meta: { title: '实时数据', icon: 'form' }
       },
       {
-        path: 'detect-table',
-        name: 'DetectTable',
-        component: () => import('@/views/detect-table/index'),
-        meta: { title: '检测数据', icon: 'form' }
-      },
-      {
-        path: 'upload-excel',
-        name: 'UploadExcel',
-        component: () => import('@/views/upload-excel/index'),
-        meta: { title: 'Excel导入', icon: 'form' }
+        path: 'history',
+        name: 'History',
+        component: () => import('@/views/history/index'),
+        meta: { title: '历史数据', icon: 'form' }
       }
     ]
   },
 
   {
-    path: '/echart',
+    path: '/control',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Echart',
-        component: () => import('@/views/echart/index'),
-        meta: { title: '统计信息', icon: 'form' }
+        name: 'Control',
+        component: () => import('@/views/control/index'),
+        meta: { title: '小车监控', icon: 'form' }
       }
     ]
   },
@@ -117,20 +118,6 @@ export const asyncRouterMap = [
     ]
   },
 
-  
-
-  // {
-  //   path: '/tree_table',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Tree_table',
-  //       component: () => import('@/views/tree_table/index'),
-  //       meta: { title: '表格实例', icon: 'form' }
-  //     }
-  //   ]
-  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

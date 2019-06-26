@@ -15,22 +15,27 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import echarts from 'echarts'
+import echarts from "echarts"
 import VeLine from 'v-charts/lib/line.common'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
 import VeGauge from 'v-charts/lib/gauge.common'
 import 'v-charts/lib/style.css'
 
-import VueAMap from 'vue-amap'
+import chartborder from '@/components/display/chart-border'
+// import VueAMap from 'vue-amap'
 
-Vue.use(VueAMap)
-VueAMap.initAMapApiLoader({
-  key: '41566098d1f6cc04ff44f5c827379950',
-  plugin: ['AMap.MapType', 'AMap.Geocoder']
-})
+// Vue.use(VueAMap)
+// VueAMap.initAMapApiLoader({
+//   key: '41566098d1f6cc04ff44f5c827379950',
+//   plugin: ['AMap.MapType', 'AMap.Geocoder']
+// })
+
+Vue.component('chart-border', chartborder )
 
 Vue.use(ElementUI, { locale })
+Vue.prototype.$echarts = echarts 
+
 Vue.component(VeLine.name, VeLine)
 Vue.component(VeHistogram.name, VeHistogram)
 Vue.component(VePie.name, VePie)

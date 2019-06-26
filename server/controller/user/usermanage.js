@@ -22,26 +22,26 @@ class UserManage_Controller {
     }
   }
 
-  static async getProjectList(ctx) {
-    let res = await UserManageModel.getProjectList()
-    let projectList = res.map(item => {
-      return item = item.dataValues
-    })
+  // static async getProjectList(ctx) {
+  //   let res = await UserManageModel.getProjectList()
+  //   let projectList = res.map(item => {
+  //     return item = item.dataValues
+  //   })
 
-    if (projectList) {
-      ctx.body = {
-        success: true,
-        res: projectList,
-        msg: '获取成功'
-      }
-    } else {
-      ctx.body = {
-        success: false,
-        res: '',
-        msg: '获取失败'
-      }
-    }
-  }
+  //   if (projectList) {
+  //     ctx.body = {
+  //       success: true,
+  //       res: projectList,
+  //       msg: '获取成功'
+  //     }
+  //   } else {
+  //     ctx.body = {
+  //       success: false,
+  //       res: '',
+  //       msg: '获取失败'
+  //     }
+  //   }
+  // }
 
 
   static async addUser(ctx) {

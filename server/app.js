@@ -59,7 +59,7 @@ app.use(static(
   path.join(__dirname, '../dist')
 ))
 
-let port = process.env.PORT || 9097
+let port = process.env.PORT || 8080
 app.listen(port, () => {
   console.log(`Koa is listening on port ${port}`);
 });

@@ -1,7 +1,7 @@
 const db = require('../../config/db.js') //引入数据库
 const Sequelize = db.theDb
 const userInfoSchema = Sequelize.import('../../schema/user.js');
-const projectInfoSchema = Sequelize.import('../../schema/project_info.js')
+// const projectInfoSchema = Sequelize.import('../../schema/project_info.js')
 
 class UserManageModel {
   static async getUserList() {
@@ -9,12 +9,12 @@ class UserManageModel {
     return userList
   }
 
-  static async getProjectList() {
-    const projectList = await projectInfoSchema.findAll({
-      attributes: ['project_name', 'project_num'],
-    })
-    return projectList
-  }
+  // static async getProjectList() {
+  //   const projectList = await projectInfoSchema.findAll({
+  //     attributes: ['project_name', 'project_num'],
+  //   })
+  //   return projectList
+  // }
 
 
   static async addUser(data) {
