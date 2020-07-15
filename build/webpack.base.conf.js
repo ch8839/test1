@@ -3,6 +3,8 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+//它的职责是将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。
+//例如，如果你有一条匹配 /\.js$/ 的规则，那么它会应用到 .vue 文件里的 <script> 块
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -25,6 +27,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
+      //因为运行时版本相比完整版体积要小大约 30%，所以应该尽可能使用这个版本。
+      //如果你仍然希望使用完整版，则需要在打包工具里配置一个别名：
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
     }
@@ -36,6 +40,8 @@ module.exports = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
+      // 它会应用到普通的 `.js` 文件
+      // 以及 `.vue` 文件中的 `<script>` 块
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -57,6 +63,8 @@ module.exports = {
           name: utils.assetsPath('media/[name].[hash:7].[ext]')
         }
       },
+      // 它会应用到普通的 `.css` 文件
+      // 以及 `.vue` 文件中的 `<style>` 块
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]

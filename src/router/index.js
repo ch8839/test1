@@ -52,6 +52,10 @@ export default new Router({
           component: () => import('@/pages/form/index')
         },
         {
+          path: 'ui',
+          component: () => import('@/pages/ui/index')
+        },
+        {
           path: 'menu',
           component: () => import('@/pages/menu/index'),
           children: [
@@ -66,19 +70,37 @@ export default new Router({
     },
     {
       path: '/page1',
-      component: Layout,     
+      component: Layout,
+      hidden: true,     
       children: [{        
-        path: 'page',
-        name: 'page1',
-        component: () => import('@/pages/page1/index')
-    }]
+        path: 'index',
+        redirect: 'index/table',
+        component: () => import('@/pages/page1/index'),
+        children: [
+          { 
+            name:'Mytable',       
+            path: 'table',
+            component: () => import('@/pages/table/index')
+          },
+          { 
+            name:'grid',    
+            path: 'grid',
+            component: () => import('@/pages/grid/index')
+          },
+          { 
+            name:'form',    
+            path: 'form',
+            component: () => import('@/pages/form/index')
+          },
+        ]
+      }]
     },
     {
       path: '/page2',
       component: Layout,
       hidden: true,
       children: [{
-        path: '',
+        path: 'index',
         name: 'page2',
         component: () => import('@/pages/page2/index')
     }]
@@ -88,9 +110,19 @@ export default new Router({
       component: Layout,
       hidden: true,
       children: [{
-        path: '',
+        path: 'index',
         name: 'page3',
         component: () => import('@/pages/page3/index')
+    }]
+    },
+    {
+      path: '/page-test',
+      component: Layout,
+      hidden: true,
+      children: [{
+        path: 'index',
+        name: 'Page-Test',
+        component: () => import('@/pages/page-test/index')
     }]
     },
    

@@ -1,6 +1,7 @@
 <template>
   <div>
    {{msg}}
+   <input :value="parseInt('125')" />
   </div>
 </template>
  

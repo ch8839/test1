@@ -24,8 +24,9 @@
   </div>
 </template>
  
-<script type="text/babel">
+<script>
   export default {
+    name:'Mytable',
     data() {
       return {
         msg:'侧边栏',
@@ -34,7 +35,12 @@
     },
     methods: {
      
-    }
+    },
+
+    mounted() {
+      console.log(this.$route.params.color)
+      
+    },
   }
 </script>
  
@@ -44,7 +50,8 @@
       justify-content: center;
       align-items: center;
       padding:20px;
-      flex-direction: column
+      flex-direction: column;
+      
   }
   .table-head{
     display: flex;

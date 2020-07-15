@@ -54,10 +54,11 @@ import { Navbar, Sidebar, AppMain } from './components'
   }
     // 主体区域 Main container
     .main-container {
-      min-height: 100%;
+      min-height: 90%;
       transition: margin-left .28s;
       margin-left: 180px;
       position: relative;
+      height: 90%;
     }
   
     // 侧边栏 Sidebar container

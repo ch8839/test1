@@ -217,6 +217,7 @@
  
 <script type="text/babel">
   export default {
+    name: 'grid',
     data() {
       return {
         msg:'侧边栏'
